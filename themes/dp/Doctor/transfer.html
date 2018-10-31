@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>提现</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<link rel="stylesheet" href="__TMPL__Doctor/css/mui.min.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<tc_include file='Public:form_result' />
+		<form method="post" action="{:U('portal/doctor/wxpay')}">
+			<div class="mui-content">
+				<div class="mui-content">
+					<div class="mui-input-row">
+						{$prepay.err_code}
+						{$prepay.err_code_des}
+						<input type="text" name="money" class="mui-input-clear" placeholder="请输入提现金额" value="">
+					</div>
+				</div>
+				<nav class="mui-bar mui-bar-tab">
+					<div class="zixun-nav">
+						<button type="submit" class="mui-pull-right">确认</button>
+					</div>
+				</nav>
+			</div>
+		</form>
+	</body>
+</html>

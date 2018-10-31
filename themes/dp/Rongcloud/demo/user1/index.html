@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->GetSignPackage();
+?>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="address=no">
+<title></title>
+<link rel="stylesheet" href="__TMPL__Rongcloud/css/bootstrap.css">
+<link rel="stylesheet" href="__TMPL__Rongcloud/vendor/jqueryrebox/jquery-rebox.css">
+<link rel="stylesheet" type="text/css" href="__TMPL__Rongcloud/css/RongIMWidget-h5.css"/>
+<link rel="stylesheet" href="__TMPL__Rongcloud/demo/main.css">
+</head>
+<body ng-controller="main">
+    <div ng-click="show()" id="chat"></div>
+    <div>
+        <rong-widget></rong-widget>
+    </div>
+
+    <script src="__TMPL__Rongcloud/vendor/jquery-2.2.3.js"></script>
+    <script src="__TMPL__Rongcloud/vendor/angular-1.4.8.js"></script>
+
+    <!-- 融云IMLib -->
+    <script src="http://cdn.ronghub.com/RongIMLib-2.2.8.js"></script>
+    <script src="http://cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
+    <script src="http://cdn.ronghub.com/Libamr-2.2.5.min.js"></script>
+
+    <!-- 其他依赖插件 -->
+    <script src="__TMPL__Rongcloud/vendor/jqueryrebox/jquery-rebox.js"></script>
+    <script src="__TMPL__Rongcloud/vendor/isscroll-5.1.3.js"></script>
+    <script src="__TMPL__Rongcloud/vendor/ng-iscroll.js"></script>
+    <script src="__TMPL__Rongcloud/vendor/swipe-2.0.0.js"></script>
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+    <script src="__TMPL__Rongcloud/js/RongIMVoice-2.2.6.js"></script>
+    <script src="__TMPL__Rongcloud/js/RongIMWidget-h5.js"></script>
+    <script src="__TMPL__Rongcloud/demo/user1/index.js"></script>
+
+    <!-- 上传插件 -->
+    <script src="__TMPL__Rongcloud/vendor/plupload.full.min-2.1.1.js"></script>
+    <script src="__TMPL__Rongcloud/vendor/qiniu-1.0.17.js"></script>
+
+</body>
+<script type="text/javascript">
+    window.onload=function(){
+        setTimeout(function(){
+            $("#chat").click();
+        },500);
+    };
+    function enter() {
+        setTimeout(function(){
+            document.body.scrollTop = document.body.scrollHeight;
+        },500);
+    };
+    wx.config({
+        appId: '<?php echo $signPackage["appId"];?>',
+        timestamp: '<?php echo $signPackage["timestamp"];?>',
+        nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+        signature: '<?php echo $signPackage["signature"];?>',
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'uploadVoice',
+            'downloadVoice',
+            'translateVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage'
+        ]
+    });
+</script>
+</html>

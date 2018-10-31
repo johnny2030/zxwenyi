@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->GetSignPackage();
+?>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="__TMPL__Portal/js/mui.min.js"></script>
+    <link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+    <script src="__TMPL__Portal/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+    <link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript">
+        mui.init()
+    </script>
+</head>
+
+<body>
+<div class="mui-content all-pic">
+    <div class="mui-card">
+        <div class="mui-card-header">
+            <span>病例图片</span>
+            <a class="mui-pull-right headdiv" href="#" id="uploadImage">
+                添加
+            </a>
+        </div>
+        <ul class="mui-table-view mui-grid-view">
+            <notempty name="list">
+                <foreach name="list" item="r">
+                    <li class="mui-table-view-cell mui-media mui-col-xs-6">
+                        <notempty name="r.photo_record">
+                            <a href="javascript:void(0);">
+                                <img src="{$r.photo_record}" style="width: 100%; max-height: 7rem;" data-preview-src="" date-preview-group="1"/>
+                            </a>
+                            <else/>
+                            暂无病例图片，请上传！
+                        </notempty>
+                    </li>
+                </foreach>
+                <else/>
+                <li class="mui-table-view-cell mui-media mui-col-xs-12">
+                    暂无病例图片，请上传！
+                </li>
+            </notempty>
+        </ul>
+    </div>
+</div>
+<!--底部开始-->
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item" href="{:U('portal/index/index')}">
+        <span class="mui-icon iconfont icon-shouye8"></span>
+        <span class="mui-tab-label">首页</span>
+    </a>
+    <a class="mui-tab-item" href="{:U('portal/patient/doctor_user')}">
+        <span class="mui-icon iconfont icon-shouye7"></span>
+        <span class="mui-tab-label">医生管理</span>
+    </a>
+    <a class="mui-tab-item" href="{:U('portal/rong/index')}">
+        <span class="mui-icon iconfont icon-shouye3"></span>
+        <span class="mui-tab-label">咨询问诊</span>
+    </a>
+    <a class="mui-tab-item mui-active" href="{:U('portal/patient/record')}">
+        <span class="mui-icon iconfont icon-shouye5"></span>
+        <span class="mui-tab-label">诊断记录</span>
+    </a>
+    <a class="mui-tab-item" href="{:U('portal/patient/patient_user')}">
+        <if condition="$msg_count eq 0">
+            <span class="mui-icon iconfont icon-shouye"></span>
+            <span class="mui-tab-label">个人中心</span>
+            <else />
+            <span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+            <span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+            <span class="mui-tab-label">个人中心</span>
+        </if>
+    </a>
+</nav>
+<!--底部结束-->
+<!--图片点击放大预览主要js开始-->
+<script type="text/javascript" src="__TMPL__Portal/js/mui.zoom.js" ></script>
+<script type="text/javascript" src="__TMPL__Portal/js/mui.previewimage.js" ></script>
+<!--图片点击放大预览主要js结束-->
+<!--点击添加上传图片js-->
+<script type="text/javascript" src="__TMPL__Portal/js/main.js" ></script>
+<script type="text/javascript">
+    mui('body').on('tap', 'a', function() {
+        document.location.href = this.href;
+    });
+    wx.config({
+        appId: '<?php echo $signPackage["appId"];?>',
+        timestamp: '<?php echo $signPackage["timestamp"];?>',
+        nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+        signature: '<?php echo $signPackage["signature"];?>',
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'startRecord',
+            'stopRecord',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage'
+        ]
+    });
+    wx.ready(function () {
+        wx.checkJsApi({
+            jsApiList: [
+                'startRecord',
+                'stopRecord',
+                'chooseImage',
+                'previewImage',
+                'uploadImage',
+                'downloadImage'
+            ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+                if (res.checkResult.getLocation == false) {
+                    alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                    return;
+                }
+            }
+        });
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        $("#uploadImage").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    images.localId = res.localIds;
+                    if (images.localId.length == 0) {
+                        alert('请先选择图片');
+                        return;
+                    }else if (images.localId.length > 9) {
+                        alert('只能上传9张图片');
+                        return;
+                    }else{
+                        syncUpload(images.localId);
+                    }
+                }
+            });
+        });
+        var syncUpload = function(localIds) {
+            var localId = localIds.pop();
+            wx.uploadImage({
+                localId: localId.toString(),
+                isShowProgressTips: 0,
+                success: function (res) {
+                    images.serverId.push(res.serverId);
+                    if (localIds.length > 0) {
+                        syncUpload(localIds);
+                    }else {
+                        $.ajax({
+                            url: 'index.php?g=portal&m=patient&a=uploadImg',
+                            type: 'post',
+                            data: {'fg':'record','media_id': images.serverId},
+                            dataType: "json",
+                            success: function (data) {
+                                images.serverId = [];
+                                if (data.check == 1){
+                                    window.location.href = "index.php?g=portal&m=patient&a=record";
+                                } else {
+                                    alert("修改失败");
+                                }
+                            },
+                            error: function (xhr, errorType, error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                },
+                fail: function (res) {
+                    alert(JSON.stringify(res));
+                }
+            });
+        };
+    });
+    wx.error(function (res) {
+        alert(res.errMsg);
+    });
+</script>
+<script>
+    mui.previewImage();//图片点击放大预览主要js
+</script>
+</body>
+
+</html>

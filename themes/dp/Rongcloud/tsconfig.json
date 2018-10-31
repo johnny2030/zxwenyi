@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "out": "./dist/widget.js"
+  },
+  "filesGlob": [
+    "**/*.ts",
+    "**/*.tsx",
+    "!node_modules/**"
+  ],
+  "files": [
+    "ts/conversation/conversationController.ts",
+    "ts/conversation/conversationDirective.ts",
+    "ts/conversation/conversationServer.ts",
+    "ts/conversationlist/conversationListController.ts",
+    "ts/conversationlist/conversationListDirective.ts",
+    "ts/conversationlist/conversationListServer.ts",
+    "ts/directive.ts",
+    "ts/evaluate/evaluateDirective.ts",
+    "ts/customerservice.ts",
+    "ts/main.ts",
+    "ts/module.ts",
+    "ts/rongimsdk.ts",
+    "typings/angularjs/angular.d.ts",
+    "typings/jquery/jquery.d.ts",
+    "typings/tsd.d.ts",
+    "typings/RongIMLib.d.ts",
+    "typings/window.d.ts",
+    "typings/qiniu/qiniu.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
+}

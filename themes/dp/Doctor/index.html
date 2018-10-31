@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="mui-slider banner">
+				<div class="mui-slider">
+					<div class="mui-slider-group mui-slider-loop">
+						<foreach name="ad_list" item="ad">
+							<div class="mui-slider-item">
+								<php>$smeta=json_decode($ad['photo'],true);</php>
+								<notempty name="smeta.thumb">
+									<a href="#">
+										<img src="{:sp_get_image_preview_url($smeta['thumb'])}"/>
+									</a>
+								</notempty>
+							</div>
+						</foreach>
+					</div>
+					<div class="mui-slider-indicator">
+						<div class="mui-indicator mui-active"></div>
+						<div class="mui-indicator"></div>
+						<div class="mui-indicator"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="income mui-content">
+			<div class="mui-row">
+				<div class="mui-col-xs-6">
+					<div class="today-income">
+						<div class="today">
+							今日收入(元)
+						<h1>
+							{$data.profit}
+						</h1>
+						</div>
+					</div>
+				</div>
+				<div class="mui-col-xs-6">
+					<div class="all-income">
+						<div class="all">
+							总收入(元)
+						<h1>
+							{$data.assets}
+						</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content main">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>最近咨询患者</span>
+				</div>
+				<div class="mui-card-content">
+					<div class="">
+						<ul class="mui-table-view">
+							<notempty name="dp_list">
+								<foreach name="dp_list" item="dp">
+									<li class="mui-table-view-cell mui-media">
+										<a href="{:U('portal/doctor/details',array('id'=>$dp['id']))}">
+											<img class="mui-media-object mui-pull-left" src="{$dp.photo}">
+											<div class="mui-media-body">
+												{$dp.name}
+												<h5 class='mui-ellipsis blue-color'>
+													<notempty name="dp.sex">
+														<if condition="$dp.sex eq 1">
+															男性患者
+															<else />
+															女性患者
+														</if>
+														<else/>
+														保密
+													</notempty>，{$dp.age}岁
+												</h5>
+												<p class="mui-ellipsis-2 mui-h6">{$dp.medical} </p>
+											</div>
+										</a>
+									</li>
+								</foreach>
+								<else/>
+								<li class="mui-table-view-cell mui-media">
+									<div class="mui-media-body">
+										暂无病患咨询
+									</div>
+									</a>
+								</li>
+							</notempty>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="{:U('portal/doctor/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/patient_user')}">
+				<span class="mui-icon iconfont icon-shouye6"></span>
+				<span class="mui-tab-label">病患管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/account')}">
+				<span class="mui-icon iconfont icon-shouye1"></span>
+				<span class="mui-tab-label">账户管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/doctor_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+		<script type="text/javascript">
+			mui.plusReady(function() {
+				//获得slider插件对象
+				var gallery = mui('.banner');
+				gallery.slider({
+					interval: 2000 //自动轮播周期，若为0则不自动播放，默认为0；
+				});
+			});
+		mui('body').on('tap','a',function(){document.location.href=this.href;});
+		</script>
+	</body>
+
+</html>

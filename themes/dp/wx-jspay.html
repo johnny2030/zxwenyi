@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>微信安全支付</title>
+
+<tc_include file='Public:head' />
+
+</head>
+<body>
+
+<script type="text/javascript">
+    //调用微信JS api 支付
+    function jsApiCall(){
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            {$params},
+            function(res){
+                if(res.err_msg == "get_brand_wcpay_request:ok"){
+                    window.location.href = 'index.php?g=portal&m=patient&a=wx_payment_return&pay_id={$pay_id}';
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                    window.location.href = 'index.php?g=portal&m=patient&a=wx_payment_return&pay_id=0';
+                }else{
+                    window.location.href = 'index.php?g=portal&m=patient&a=wx_payment_return&pay_id=1';
+                }
+            }
+        );
+    }
+
+    function callpay(){
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+
+    callpay();
+</script>
+
+</body>
+</html>

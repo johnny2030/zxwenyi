@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>首页</title>
+		<script src="__TMPL__Portal/js/mui.min.js"></script>
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+        <link rel="stylesheet" href="__TMPL__Portal/css/swiper.min.css">
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+	</head>
+	<body>
+        <div class="swiper-container">
+            <div class="swiper-wrapper banner">
+                <foreach name="ad_list" item="ad">
+                    <div class="swiper-slide">
+                        <php>$smeta=json_decode($ad['photo'],true);</php>
+                        <notempty name="smeta.thumb">
+                            <img src="{:sp_get_image_preview_url($smeta['thumb'])}"/>
+                        </notempty>
+                    </div>
+                </foreach>
+                <!--<div class="swiper-slide">
+                    <img src="imgs/banner-pic1.png">
+                </div>
+                <div class="swiper-slide">
+                    <img src="imgs/banner-pic2.png">
+                </div>
+                <div class="swiper-slide">
+                    <img src="imgs/banner-pic3.png">
+                </div>-->
+            </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination"></div>
+        </div>
+		<!--<div class="mui-content">
+			<div class="mui-slider banner">
+				<div class="mui-slider">
+					<div class="mui-slider-group mui-slider-loop">
+						<foreach name="ad_list" item="ad">
+							<div class="mui-slider-item">
+								<php>$smeta=json_decode($ad['photo'],true);</php>
+								<notempty name="smeta.thumb">
+									<a href="#">
+										<img src="{:sp_get_image_preview_url($smeta['thumb'])}"/>
+									</a>
+								</notempty>
+							</div>
+						</foreach>
+					</div>
+					<div class="mui-slider-indicator">
+						<div class="mui-indicator mui-active"></div>
+						<div class="mui-indicator"></div>
+						<div class="mui-indicator"></div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+		<div class="mui-content expert">
+			<div class="mui-slider">
+				<div class="mui-slider-group mui-slider-loop">
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<ul class="mui-table-view mui-grid-view yx-zixun">
+							<foreach name="mp_list" item="mp">
+								<li class="mui-table-view-cell mui-media mui-col-xs-6">
+									<a href="{:U('portal/patient/details',array('id'=>$mp['id']))}">
+										<div class="expert-info" >
+											<h4>{$mp.name}</h4>
+											<h6>{$mp.tag}</h6>
+											<a href="{:U('portal/patient/payment',array('id'=>$mp['id']))}">
+												<button type="button" class="mui-btn">咨询</button><!--&nbsp;&nbsp;¥{$mp.money}/次-->
+											</a>
+										</div>
+										<img style="position: relative;" src="{$mp.photo}" /><i></i>
+									</a>
+								</li>
+							</foreach>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content main">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>名医推荐</span>
+				</div>
+				<div class="mui-card-content">
+					<div class="">
+						<ul class="mui-table-view">
+							<foreach name="rc_list" item="rc">
+								<li class="mui-table-view-cell mui-media">
+									<a href="{:U('portal/patient/details',array('id'=>$rc['id']))}">
+										<img class="mui-media-object mui-pull-left" src="{$rc.photo}">
+										<div class="mui-media-body">
+											<span class="mui-pull-right red-color strong">¥{$rc.money}/次</span> {$rc.name}
+											<span class="blue-color">{$rc.tag}</span>
+											<h5 class='mui-ellipsis'>{$rc.hospital}</h5>
+											<p class="mui-ellipsis-2 mui-h6"><span class="red-color">擅长:</span>{$rc.speciality}</p>
+										</div>
+									</a>
+									<hr>
+									<a href="{:U('portal/patient/payment',array('id'=>$rc['id']))}">
+										<button class="mui-pull-right consult-btn">点击咨询</button>
+									</a>
+								</li>
+							</foreach>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="{:U('portal/patient/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/doctor_user')}">
+				<span class="mui-icon iconfont icon-shouye7"></span>
+				<span class="mui-tab-label">医生管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/record')}">
+				<span class="mui-icon iconfont icon-shouye5"></span>
+				<span class="mui-tab-label">诊断记录</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/patient_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+	</body>
+	<script type="text/javascript">
+        mui('body').on('tap','a',function(){document.location.href=this.href;});
+	</script>
+	<style type="text/css">
+		.yx-zixun li{ height: 130px;}
+	</style>
+    <!--底部结束-->
+    <script type="text/javascript" src="__TMPL__Portal/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__TMPL__Portal/js/swiper.min.js"></script>
+    <script>
+        var mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            loop: true,
+            // 如果需要分页器
+            pagination: '.swiper-pagination',
+        })
+    </script>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+	</head>
+	<body>
+		<script src="__TMPL__Portal/js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<div id="tabbar-with-chat" class="mui-content main">
+			<div class="mui-card-content">
+				<div class="">
+					<ul class="mui-table-view">
+						<foreach name="my_list" item="my">
+							<li class="mui-table-view-cell mui-media">
+								<a href="{:U('portal/patient/details',array('id'=>$my['id']))}">
+									<img class="my-icon" src="__TMPL__Portal/imgs/my_icon.png" />
+									<img class="mui-media-object mui-pull-left" src="{$my.photo}">
+									<div class="mui-media-body">
+										<span class="mui-pull-right red-color strong">¥{$my.money}/次</span> {$my.name}
+										<span class="blue-color">{$my.tag}</span>
+										<h5 class='mui-ellipsis'>{$my.hospital}</h5>
+										<p class="mui-ellipsis-2 mui-h6"><span class="red-color">擅长:</span>{$my.speciality}</p>
+									</div>
+								</a>
+								<hr>
+								<a href="{:U('portal/patient/payment',array('id'=>$my['id']))}">
+									<button class="mui-pull-right consult-btn">点击咨询</button>
+								</a>
+							</li>
+						</foreach>
+						<foreach name="list" item="rc">
+							<li class="mui-table-view-cell mui-media">
+								<a href="{:U('portal/patient/details',array('id'=>$rc['id']))}">
+									<img class="mui-media-object mui-pull-left" src="{$rc.photo}">
+									<div class="mui-media-body">
+										<span class="mui-pull-right red-color strong">¥{$rc.money}/次</span> {$rc.name}
+										<span class="blue-color">{$rc.tag}</span>
+										<h5 class='mui-ellipsis'>{$rc.hospital}</h5>
+										<p class="mui-ellipsis-2 mui-h6"><span class="red-color">擅长:</span>{$rc.speciality}</p>
+									</div>
+								</a>
+								<hr>
+								<a href="{:U('portal/patient/payment',array('id'=>$rc['id']))}">
+									<button class="mui-pull-right consult-btn">点击咨询</button>
+								</a>
+							</li>
+						</foreach>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="{:U('portal/patient/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/patient/doctor_user')}">
+				<span class="mui-icon iconfont icon-shouye7"></span>
+				<span class="mui-tab-label">医生管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/record')}">
+				<span class="mui-icon iconfont icon-shouye5"></span>
+				<span class="mui-tab-label">诊断记录</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/patient_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+		<script type="text/javascript">
+		mui('body').on('tap','a',function(){document.location.href=this.href;});
+		</script>
+	</body>
+</html>

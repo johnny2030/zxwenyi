@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>修改{$menu}</title>
+		<script src="__TMPL__Portal/js/mui.min.js"></script>
+		<script src="__TMPL__Portal/js/jquery.min.js"></script>
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+		<script type="text/javascript" charset="UTF-8">
+            mui.init();
+		</script>
+	</head>
+	<body>
+		<div class="mui-content">
+			<form method="post" action="{:U('portal/patient/modify')}">
+				<if condition="$flg eq sex">
+					<div class="mui-content">
+						<div class="sec_row">
+							<select id="sex" name="sex" class="sec_op">
+								<if condition="$data eq 2">
+									<option value="1">男</option>
+									<option value="2" selected>女</option>
+									<else />
+									<option value="1" selected>男</option>
+									<option value="2">女</option>
+								</if>
+							</select>
+						</div>
+					</div>
+					<elseif condition="$flg eq area"/>
+					<div class="mui-content">
+						<div class="st" style="margin-top:10px;">
+							<select id="province" name="province" class="st" onchange="setCity()">
+								<foreach name="provinceList" item="prov">
+									<if condition="$prov.id eq $province">
+										<option value="{$prov.id}" selected>{$prov.name}</option>
+										<else />
+										<option value="{$prov.id}">{$prov.name}</option>
+									</if>
+								</foreach>
+							</select>
+							<select id="city" name="city" class="st" onchange="setCounty()">
+								<foreach name="cityList" item="cty">
+									<if condition="$cty.id eq $city">
+										<option value="{$cty.id}" selected>{$cty.name}</option>
+										<else />
+										<option value="{$cty.id}">{$cty.name}</option>
+									</if>
+								</foreach>
+							</select>
+							<select id="county" name="county" class="st" style="display: none;">
+								<foreach name="countyList" item="cnty">
+									<if condition="$cnty.id eq $county">
+										<option value="{$cnty.id}" selected>{$cnty.name}</option>
+										<else />
+										<option value="{$cnty.id}">{$cnty.name}</option>
+									</if>
+								</foreach>
+							</select>
+							<input type="hidden" id="ck" value="{$county}">
+						</div>
+					</div>
+					<else/>
+					<div class="mui-content">
+						<div class="mui-input-row">
+							<notempty name="check">
+								<textarea name="{$flg}" id="{$flg}" placeholder="请输入您的{$menu}" >{$data}</textarea>
+								<else/>
+								<input type="text" name="{$flg}" id="{$flg}" class="mui-input-clear" placeholder="请输入{$menu}" value="{$data}">
+							</notempty>
+						</div>
+					</div>
+				</if>
+				<nav class="mui-bar mui-bar-tab">
+					<div class="zixun-nav">
+						<button type="submit" class="mui-pull-right" onclick="return check_form('{$flg}','{$menu}')">确认</button>
+					</div>
+				</nav>
+			</form>
+		</div>
+	</body>
+	<script type="text/javascript">
+        $(function(){
+            var str=$("#ck").val();
+            if (str!=null&&str!=undefined&&str!=""&&str!="0"){
+                var sel = $("#county");
+                sel.css("display","block");
+            }
+        });
+        function check_form(flg,menu) {
+            if (flg == "area" || flg == "sex"){
+                var province = $('#province option:selected').val();
+                var city = $('#city option:selected').val();
+                var sex = $('#sex option:selected').val();
+                if ((province.length!=0&&city.length!=0)||sex.length!=0){
+                    return true;
+                }else{
+                    alert("请选择"+menu);
+                    return false;
+                }
+            } else {
+                var content = $("#"+flg).val();
+                if (content.length!=0) {
+                    return true;
+                }else{
+                    alert("请填写"+menu);
+                    return false;
+                }
+            }
+        }
+        function setCity() {
+            var pid = $('#province option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_data",
+                data : {'pid' : pid},
+                dataType : "json",
+                success : function(data) {
+                    var list = data.list;
+                    var selct = $("#city");
+                    selct.empty();
+                    for (i=0;i<list.length;i++){
+                        var city = list[i];
+                        selct.append("<option value='"+city.id+"'>"+city.name+"</option>");
+                    }
+                    var coty = list[0];
+                    $.ajax({
+                        async:false,
+                        type : "get",
+                        url : "index.php?g=portal&m=commonMethod&a=get_data",
+                        data : {
+                            'pid' : coty.id,
+                            'county' : 1
+                        },
+                        dataType : "json",
+                        success : function(dta) {
+                            var sel = $("#county");
+                            sel.empty();
+                            if(dta.list.length > 0){
+                                var list = dta.list;
+                                for (i=0;i<list.length;i++){
+                                    var county = list[i];
+                                    sel.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                                }
+                                sel.css("display","block");
+                            }else{
+                                sel.css("display","none");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function setCounty() {
+            var cid = $('#city option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_data",
+                data : {
+                    'pid' : cid,
+                    'county' : 1
+                },
+                dataType : "json",
+                success : function(data) {
+                    var selct = $("#county");
+                    selct.empty();
+                    if(data.list.length > 0){
+                        var list = data.list;
+                        for (i=0;i<list.length;i++){
+                            var county = list[i];
+                            selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                        }
+                        selct.css("display","block");
+                    }else{
+                        selct.css("display","none");
+                    }
+                }
+            });
+        }
+	</script>
+</html>

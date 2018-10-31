@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<div class="consumption mui-content">
+			<ul class="mui-table-view">
+				<notempty name="list">
+					<foreach name="list" item="r">
+						<li class="mui-table-view-cell">
+							<span class="mui-pull-right">
+								<if condition="$r.flg eq 1">
+									-
+								<else/>
+									+
+								</if>
+								{$r.money}</span>
+							{$r.pay_name}
+							<p>{$r.time}</p>
+						</li>
+					</foreach>
+					<else/>
+					<li class="mui-table-view-cell mui-media mui-col-xs-12">
+						暂无收支明细
+					</li>
+				</notempty>
+			</ul>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="{:U('portal/doctor/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/patient_user')}">
+				<span class="mui-icon iconfont icon-shouye6"></span>
+				<span class="mui-tab-label">病患管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/doctor/account')}">
+				<span class="mui-icon iconfont icon-shouye1"></span>
+				<span class="mui-tab-label">账户管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/doctor_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+		<script type="text/javascript">
+            mui.plusReady(function() {
+                //获得slider插件对象
+                var gallery = mui('.banner');
+                gallery.slider({
+                    interval: 2000 //自动轮播周期，若为0则不自动播放，默认为0；
+                });
+            });
+            mui('body').on('tap','a',function(){document.location.href=this.href;});
+		</script>
+	</body>
+</html>

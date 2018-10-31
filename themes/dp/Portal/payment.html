@@ -1,0 +1,49 @@
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+	<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+</head>
+
+<body>
+	<tc_include file='Public:form_result' />
+	<form method="post" action="{:U('portal/patient/wxpay')}">
+		<div class="mui-content doctor-confirm">
+			<div class="doctor-photo">
+				<span class="mui-pull-right">咨询费：{$doctor.money}/次</span>
+				<input type="hidden" id="money" name="money" value="{$doctor.money}">
+				<input type="hidden" id="did" name="did" value="{$doctor.id}">
+				<img src="{$doctor.photo}" /> {$doctor.name}
+			</div>
+			<div class="weixin">
+				<div class="mui-input-row mui-radio">
+					<label><img src="__TMPL__Portal/imgs/weixin_icon.png"/>微信支付</label>
+					<input type="radio" checked="checked" />
+				</div>
+			</div>
+			<div class="mui-input-row mui-checkbox mui-left agree">
+				<label>我已同意并阅读<a href="{:U('portal/patient/instructions')}">《健康咨询免责声明》</a></label>
+				<input type="checkbox" id="cb" name="cb" checked="checked" />
+			</div>
+			<div class="zhifu-btn">
+				<button type="submit" class="mui-btn-green" onclick="check()">立即支付</button>
+				<!--<button type="submit" id="btn" style="background: transparent;"></button>-->
+			</div>
+		</div>
+	</form>
+</body>
+<script type="text/javascript">
+    function check() {
+        var $cb = document.getElementById("cb");
+        if($cb.checked){
+            /*$("btn").click();*/
+            return true;
+		}else{
+            alert("请先同意并阅读《健康咨询免责声明》");
+            return false;
+		}
+    }
+</script>
+</html>

@@ -1,0 +1,95 @@
+<div id="rong-conversation"  class="rongcloud-main rongcloud-kefuList" ng-show="showSelf">
+    <evaluatedir type="evaluate.type" display="evaluate.showevaluate" confirm="evaluate.onConfirm(data)" cancle="evaluate.onCancle()"></evaluatedir>
+    <div class="rongcloud-main_inner rongcloud-clearfix">
+        <header class="rongcloud-header">
+            <a class="rongcloud-icon_return" href="javascript:void 0" ng-click="close()"></a>
+            <div class="rongcloud-title">
+                <a class="rongcloud-title_name rongcloud-online"><i class="rongcloud-Presence"></i>{{currentConversation.title}}</a>
+            </div>
+            <a href="javascript:void 0"></a>
+        </header>
+        <!-- <div id="wrapper" class="" ng-style="wrapperbottom"> -->
+          <div id="wrapper" class="" ng-iscroll ng-style="wrapperbottom">
+          <div id="scroller">
+            <div id="Messages" class=""> <!-- empty -->
+                <div class="rongcloud-MessagesInner rongcloud-message-scroll">
+                    <div class="rongcloud-Message-wrapper">
+                        <div ng-repeat="item in messageList"  ng-switch="item.panelType">
+                          <!-- <div class="rongcloud-Messages-date"><b class="">2015 年 8 月 6日</b></div> -->
+
+                          <div class="rongcloud-Messages-date" ng-switch-when="104"><b class="">{{item.sentTime|historyTime}}</b></div>
+                          <div class="rongcloud-Messages-date" ng-switch-when="105"><b class=""  my-tap="getHistory()">查看历史消息</b></b></div>
+                          <div class="rongcloud-Messages-date" ng-switch-when="106"><b class=""  my-tap="getMoreMessage()">获取更多消息</b></div>
+
+                          <div class="rongcloud-sys-tips" ng-switch-when="2" ><span>{{item.content.content}}</span></div>
+                          <div class="rongcloud-Message rongcloud-status1" ng-switch-when="1" ng-class="{'rongcloud-youMsg':item.messageDirection==2,'rongcloud-myMsg':item.messageDirection==1}">
+                              <div class="rongcloud-Messages-unreadLine"></div>
+                              <div>
+                                  <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-u-isActionable rongcloud-Message-avatar rongcloud-avatar" ng-src="{{item.content.userInfo.portraitUri||'/images/webBg.png'}}" src="../themes/dp/Rongcloud/images/barBg.png" alt="">
+                                  </div>
+                              </div>
+                              <div class="rongcloud-Message-body"  ng-switch="item.messageType">
+                                  <!-- <div class="">
+                                      <div class="rongcloud-Message-text">
+                                          <div class="rongcloud-arrow-dialog"></div>
+                                          <i class="rongcloud-sprite"></i>
+                                          <pre class="rongcloud-Message-entry rongcloud-userMsg">开心麻花本周日的话剧票还有嘛？<br></pre>
+                                      </div>
+                                  </div> -->
+                                  <textmessage ng-switch-when="TextMessage" msg="item.content"></textmessage>
+                                  <imagemessage ng-switch-when="ImageMessage" msg="item.content"></imagemessage>
+                                  <voicemessage ng-switch-when="VoiceMessage" msg="item.content"></voicemessage>
+                                  <locationmessage ng-switch-when="LocationMessage" msg="item.content"></locationmessage>
+                                  <richcontentmessage ng-switch-when="RichContentMessage" msg="item.content"></richcontentmessage>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <footer  class="rongcloud-footer rongcloud-clearfix">
+          <div id="funcPanel" style="display: flex;display: -webkit-flex;">
+            <a  id="uploadfile" href="#" class="rongcloud-pull-left rongcloud-message_type_btn" ng-show="_inputPanelState==0">
+                <i class="rongcloud-sprite2 rongcloud-icon_message_type1">
+                </i>
+            </a>
+
+            <a href="#" class="rongcloud-pull-left rongcloud-message_type2_btn" ng-click="switchPerson()" ng-show="_inputPanelState==2">
+                <span class="">转人工服务</span>
+            </a>
+            <div class="rongcloud-message_wrap">
+                <textarea
+                id="inputMsg"
+                ng-focus="showemoji=false"
+                ctrl-enter-keys fun="send()" ctrlenter="false"  ondrop="return false;"
+                ng-model="currentConversation.messageContent"
+                 placeholder="请输入文字..."></textarea>
+                <!-- <pre id="inputMsg" class="rongcloud-text rongcloud-grey" contenteditable contenteditable-dire
+                ng-focus="showemoji=fase"
+                style='background-color: rgba(0,0,0,0);color:black;'
+                ctrl-enter-keys fun="send()" ctrlenter="false" placeholder="请输入文字..." ondrop="return false;"
+                ng-model="currentConversation.messageContent"></pre> -->
+            </div>
+            <a href="#" class="rongcloud-pull-right rongcloud-message_type_btn rongcloud-message_type_btn2"  ng-show="_inputPanelState==0">
+                <i class="rongcloud-sprite2 rongcloud-message_emoji_btn" ng-click="showemoji=!showemoji"></i>
+            </a>
+          </div>
+
+
+            <div class="rongcloud-pub-faces" ng-show="showemoji">
+                  <swipe-emoji content="currentConversation"></swipe-emoji>
+            </div>
+
+            <div class="rongcloud-footerBtn rongcloud-clearfix" ng-show="showemoji">
+                <ul class="rongcloud-clearfix rongcloud-emojiWrap">
+                    <li class="rongcloud-sprite2"></li>
+                </ul>
+                <a href="" class="rongcloud-send_btn" ng-click="send()">发送</a>
+            </div>
+        </footer>
+    </div>
+</div>

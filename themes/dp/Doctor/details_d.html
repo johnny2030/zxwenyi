@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Portal/js/mui.min.js "></script>
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<div class="mui-content detail">
+			<div class="top-bg"></div>
+			<div class="top-card">
+				<div class="photo">
+					<img src="{$doctor.photo}">
+				</div>
+				<div class="text">
+					{$doctor.name}<span class="blue-color">{$doctor.tag}</span>
+					<h5 class='mui-ellipsis'>{$doctor.hospital}－{$doctor.office}</h5>
+					<h6>职业编号：{$doctor.practice_number}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content doctor-introduce">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>医生介绍</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<p>
+						{$doctor.introduce}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>擅长疾病</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<p>
+						{$doctor.speciality}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content siteinfoCredits">
+			<div class="mui-card">
+				<div class="mui-card-content">
+					<ul class="mui-table-view renzheng">
+						<li class="mui-table-view-cell mui-media">
+							<a href="javascript:void(0);">
+								<img class="mui-media-object mui-pull-left" src="__TMPL__Portal/imgs/zige_icon.png">
+								<div class="mui-media-body">
+									职业资格医师认证
+									<p class='mui-ellipsis'>均持有医师证，卫生局官网可查真伪</p>
+								</div>
+							</a>
+						</li>
+						<!--<li class="mui-table-view-cell mui-media">
+							<a href="javascript:void(0);">
+								<img class="mui-media-object mui-pull-left" src="__TMPL__Portal/imgs/doctor_icon.png">
+								<div class="mui-media-body">
+									100%真实医生服务
+									<p class='mui-ellipsis'>专家本人提供服务</p>
+								</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<a href="javascript:void(0);">
+								<img class="mui-media-object mui-pull-left" src="__TMPL__Portal/imgs/photo_icon.png">
+								<div class="mui-media-body">
+									400-111-111
+									<p class='mui-ellipsis'>服务热线：每天8:00～22:00</p>
+								</div>
+							</a>
+						</li>-->
+					</ul>
+				</div>
+			</div>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<div class="zixun-nav">
+				<a href="{:U('portal/patient/payment',array('id'=>$doctor['id']))}">
+					<button type="button" class="mui-pull-right">确认转诊</button>
+				</a>
+			</div>
+		</nav>
+	</body>
+</html>

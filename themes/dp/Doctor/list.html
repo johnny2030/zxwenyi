@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>病患管理</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+	</head>
+
+	<body>
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<div id="tabbar-with-chat" class="mui-content main">
+				<div class="mui-card-content">
+					<div class="">
+						<ul class="mui-table-view">
+							<notempty name="list">
+								<foreach name="list" item="rc">
+									<li class="mui-table-view-cell mui-media">
+										<a href="{:U('portal/doctor/details',array('id'=>$rc['id']))}">
+											<img class="mui-media-object mui-pull-left" src="{$rc.photo}">
+											<div class="mui-media-body">
+												{$rc.name}
+												<h5 class='mui-ellipsis blue-color'>
+													<notempty name="rc.sex">
+														<if condition="$rc.sex eq 1">
+															男性患者
+															<else />
+															女性患者
+														</if>
+														<else/>
+														暂无
+													</notempty>
+													，{$rc.age}岁
+												</h5>
+												<p class="mui-ellipsis-2 mui-h6">{$rc.medical}</p>
+											</div>
+										</a>
+										<hr>
+										<a href="{:U('portal/doctor/transfer_t',array('id'=>$rc['id']))}">
+											<button class="mui-pull-right consult-btn">转诊</button>
+										</a>
+									</li>
+								</foreach>
+								<else/>
+								<li class="mui-table-view-cell mui-media">
+										<div class="mui-media-body">
+											暂无病患咨询
+										</div>
+									</a>
+								</li>
+							</notempty>
+						</ul>
+					</div>
+				</div>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="{:U('portal/doctor/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/doctor/patient_user')}">
+				<span class="mui-icon iconfont icon-shouye6"></span>
+				<span class="mui-tab-label">病患管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/account')}">
+				<span class="mui-icon iconfont icon-shouye1"></span>
+				<span class="mui-tab-label">账户管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/doctor_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+
+		<script type="text/javascript">
+		mui('body').on('tap','a',function(){document.location.href=this.href;});
+		</script>
+	</body>
+
+</html>

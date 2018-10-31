@@ -1,0 +1,31 @@
+
+@font-face {font-family: "iconfont";
+        src:url('../fonts/iconfont.ttf') format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shouye8:before { content: "\e612"; }
+
+.icon-shouye:before { content: "\e615"; }
+
+.icon-shouye1:before { content: "\e61c"; }
+
+.icon-shouye2:before { content: "\e61e"; }
+
+.icon-shouye3:before { content: "\e61f"; }
+
+.icon-shouye4:before { content: "\e629"; }
+
+.icon-shouye5:before { content: "\e62e"; }
+
+.icon-shouye6:before { content: "\e62f"; }
+
+.icon-shouye7:before { content: "\e644"; }
+

@@ -1,0 +1,33 @@
+<!doctype html>
+<html ng-app="demo">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" href="__TMPL__Portal/css/mui.min.css" />
+	<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+</head>
+<body>
+<div class="mui-content doctor-confirm">
+	<div class="pay-ok">
+		<span class="mui-icon mui-icon-checkmarkempty"></span>
+		<p>转诊成功</p>
+		<p style="text-indent: 2em; margin-top: 30px;">系统将在 <span id="time" style="font-size: 20px;">5</span> 秒钟后自动跳转，如果未能跳转，<a href="index.php" title="点击访问">请点击</a>。</p>
+	</div>
+</div>
+<script type="text/javascript">
+    delayURL();
+    function delayURL() {
+        var delay = document.getElementById("time").innerHTML;
+        var t = setTimeout("delayURL()", 1000);
+        if (delay > 0) {
+            delay--;
+            document.getElementById("time").innerHTML = delay;
+        } else {
+            clearTimeout(t);
+            window.location.href = "index.php?g=portal&m=doctor&a=patient_user";
+        }
+    }
+</script>
+</body>
+</html>

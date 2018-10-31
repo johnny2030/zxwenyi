@@ -1,0 +1,21 @@
+<div id="rong-conversation-list"  class="rongcloud-main rongcloud-kefuList" ng-show="conversationListServer.showSelf">
+    <div class="rongcloud-main_inner rongcloud-clearfix">
+        <!-- header -->
+        <header class="rongcloud-header">
+            <a class="rongcloud-icon_return" href="javascript:void 0"  ng-click="minbtn()"></a>
+            <div class="rongcloud-title">
+                <a class="rongcloud-title_name rongcloud-online"><i class="rongcloud-Presence"></i>最近联系人</a>
+            </div>
+            <a href="javascript:void 0"></a>
+        </header>
+        <div class="rongcloud-chatBox" id="chatBox">
+            <div class="rongcloud-chatArea">
+                <div class="rongcloud-chatList">
+
+                  <conversation-item ng-repeat="item in conversationListServer.conversationList" item="item"></conversation-item>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

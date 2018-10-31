@@ -1,0 +1,196 @@
+{:hook('footer')}
+
+<div class="footer-logo">
+	<img src="__TMPL__Public/images/footer-dd2.png" />
+</div>
+<div class="footer">
+	<?php
+	$effected_id = 'footer-menu';
+	$filetpl = "<a href='\$href' target='\$target'>\$label</a>";
+	$foldertpl = "<a href='\$href' target='\$target' class='dropdown-toggle' data-toggle='dropdown'>\$label <b class='caret'></b></a>";
+	$ul_class = 'dropdown-menu';
+	$li_class = '';
+	$style = 'fnav';
+	$showlevel = 1;
+	$dropdown = 'dropdown';
+	echo sp_get_menu( 2, $effected_id, $filetpl, $foldertpl, $ul_class, $li_class, $style, $showlevel, $dropdown );
+	?>
+	<div class="copyright">
+		{$site_copyright}
+	</div>
+</div>
+ 
+<div class="float-qrcode">
+	<ul>
+		<!--
+		<li id="qqbox" style="display: none">
+			群1：516376514<br>
+			群2：156665747<br>
+			群3：253780399
+		</li>
+		<li id="qq" style="cursor: pointer;">合肥坐标QQ群</li>
+		 -->
+		<php>
+			$wechat_ico = sp_getslide( 'wechat_ico', 2 );
+		</php>
+		<foreach name="wechat_ico" item="vo">
+			<li>
+				{$vo['slide_name']}
+				<br />
+				<if condition="$vo.slide_url != ''"><a href="{$vo.slide_url}" target="_blank"></if><img src="{:sp_get_asset_upload_path($vo['slide_pic'])}" /><if condition="$vo.slide_url != ''"></a></if>
+			</li>
+		</foreach>
+	</ul>
+</div>
+
+<script>
+	$('#qq').hover(function () {
+		$('#qqbox').show();
+	}, function () {
+		$('#qqbox').hide();
+	});
+</script>
+
+<div class="pop-box">
+	<div class="pop-box-wrap">
+		<a href="javascript:;" class="close" onclick="$(this).parent().parent().removeClass('on');"><i class="fa fa-close"></i></a>
+		<div class="hd"><img src="__TMPL__Public/images/footer-dd2.png" /></div>
+		<div class="bd">
+			<div class="login-register">
+				<div class="tab">
+					<a href="javascript:;" class="on">登录<em>LOGIN</em></a>
+					<a href="javascript:;">注册<em>REGISTER</em></a>
+				</div>
+				<div class="tab-items">
+					<div class="item">
+						<div class="form form300">
+							<form method="post" action="{:leuu('user/login/index')}">
+								<div class="row"><input type="text" name="phone" value="" class="input-text" placeholder="请输入手机号码" /></div>
+								<div class="row"><input type="password" name="password" value="" class="input-text" placeholder="请输入密码" /></div>
+								<div class="row">
+									<label><input type="checkbox" name="remember" value="1" class="input-checkbox" />记住密码</label>
+									<span class="forgot-password"><a href="{:leuu('user/login/forgot_password')}">忘记密码</a></span>
+								</div>
+								<div class="button">
+									<button type="submit" class="btn3">登 录</button>
+									<p>*还没有账户？点击<a href="javascript:;" onclick="showPopRegister();">立即注册</a></p>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="item" style="display:none;">
+						<div class="form form300">
+							<form method="post" action="{:leuu('user/register/index')}">
+								<div class="row row-phone clearfix"><input type="text" name="phone" value="" class="input-text" placeholder="请输入手机号码" /><button type="button" class="btn3 btn4 code-btn" url="{:leuu('user/register/sendsms')}">获取短信码</button></div>
+								<div class="row"><input type="text" name="verifycode" value="" class="input-text" placeholder="请输入短信验证码" /></div>
+								<div class="row"><input type="password" name="password" value="" class="input-text" placeholder="请输入密码" /></div>
+								<div class="row"><input type="password" name="password2" value="" class="input-text" placeholder="请再次输入密码" /></div>
+								<div class="row">
+									<label><input type="checkbox" name="agree" value="1" class="input-checkbox" />我已经阅读并接受<a href="{:leuu('portal/page/index',array('id' => 20))}" target="_blank">用户协议</a></label>
+								</div>
+								<div class="button">
+									<button type="submit" class="btn3">注 册</button>
+									<p>*已有账户？点击<a href="javascript:;" onclick="showPopLogin();">立即登录</a></p>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="register-success" style="display:none;">
+					<img src="__TMPL__Public/images/bg4.png" />
+					<br />
+					恭喜您注册成功
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	/**
+	 * 全局
+	 */
+	$('.tab').each(function(){
+		$(this).find('a').each(function(i){
+			$(this).click(function(){
+				$(this).addClass('on').siblings().removeClass('on');
+				$(this).parent().next().find('> .item:visible').hide();
+				$(this).parent().next().find('> .item:eq('+ i +')').show();
+				return false;
+			});
+		});
+	});
+
+	function showPopLogin() {
+		$('.pop-box').addClass('on').find('.bd > div').hide();
+		$('.pop-box .login-register').show().find('.tab a:first').click();
+	}
+
+	function showPopRegister() {
+		$('.pop-box').addClass('on').find('.bd > div').hide();
+		$('.pop-box .login-register').show().find('.tab a:last').click();
+	}
+
+	/**
+	 * 验证码
+	 */
+	var time_limit = {$time_limit};
+	var code_limit_time = <?php echo $code_limit_time > 0 ? $code_limit_time : 0; ?>;
+
+	if (code_limit_time > 0) {
+		setBtnTime(code_limit_time);
+	}
+
+	$('.code-btn').click(function(){
+		var btn = $(this);
+		var phoneObj = btn.prev();
+
+		if (phoneObj.attr('name') == 'verifycode') {
+			phoneObj = phoneObj.parent().parent().prev().find('input[name="phone"]');
+		}
+
+		if ($.trim(phoneObj.val()) == '') {
+			alert('请输入手机号码');
+			return false;
+		}
+
+		btn.html('<img src="__TMPL__Public/images/loading.gif" width="20" />').attr('disabled', true);
+
+		$.ajax({
+			type: 'get',
+			url: btn.attr('url'),
+			data: { 'phone': phoneObj.val() },
+			dataType: 'json',
+			success: function(data){
+				if (data.status == 200) {
+					//console.log(data.msg);
+					btn.html(time_limit + '秒后重发');
+					setBtnTime(time_limit);
+				}
+				else {
+					btn.html('获取短信码').attr('disabled', false);
+					alert(data.msg);
+				}
+			},
+			error: function(){
+				btn.html('获取短信码').attr('disabled', false);
+				alert('网络故障，发送短信失败！');
+			}
+		});
+	});
+
+	function setBtnTime(time) {
+		var btn = $('.code-btn');
+		var tt = setInterval(function(){
+			time--;
+			if (time > 0) btn.attr('disabled', true).html(time + '秒后重发');
+			else {
+				btn.attr('disabled', false).html('获取短信码');
+				clearInterval(tt);
+			}
+		}, 1000);
+	}
+</script>
+
+{$site_tongji}
+{:hook('footer_end')}

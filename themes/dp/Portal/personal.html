@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->GetSignPackage();
+?>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="__TMPL__Portal/js/mui.min.js"></script>
+		<script src="__TMPL__Portal/js/jquery.min.js"></script>
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type="text/javascript" charset="UTF-8">
+            mui.init();
+		</script>
+	</head>
+	<body>
+		<div class="mui-content personal">
+			<div class="head">
+				<a href="#" id="uploadImage"><img src="{$patient.photo}"/></a>
+				<h4><a href="{:U('portal/patient/modify',array('data'=>$patient['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">{$patient.name}</a></h4>
+			</div>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('province'=>$patient['province'],'city'=>$patient['city'],'county'=>$patient['county'],'flg'=>area,'menu'=>所属地区))}" class="mui-navigate-right">
+						所属地区
+						<i class="mui-pull-right tips">{$patient.provinceName}&nbsp;&nbsp;{$patient.cityName}&nbsp;&nbsp;{$patient.countyName}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('data'=>$patient['sex'],'flg'=>sex,'menu'=>性别))}" class="mui-navigate-right">
+						性别
+						<i class="mui-pull-right tips">
+							<notempty name="patient.sex">
+								<if condition="$patient.sex eq 1">
+									男
+									<else />
+									女
+								</if>
+								<else/>
+								保密
+							</notempty>
+						</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('data'=>$patient['age'],'flg'=>age,'menu'=>年龄))}" class="mui-navigate-right">
+						年龄
+						<i class="mui-pull-right tips">{$patient.age}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('data'=>$patient['phone'],'flg'=>phone,'menu'=>手机号码))}" class="mui-navigate-right">
+						手机号码
+						<i class="mui-pull-right tips">{$patient.phone}</i>
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('data'=>$patient['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
+                        过敏史
+                        <hr>
+                        <p class="mui-ellipsis-2">{$patient.allergic}</p>
+                    </a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/modify',array('data'=>$patient['medical'],'flg'=>medical,'menu'=>病史,'check'=>check))}" class="mui-navigate-right">
+                        病史
+                        <hr>
+                        <p class="mui-ellipsis-2">{$patient.medical}</p>
+                    </a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/patient/message')}" class="mui-navigate-right">
+						消息通知
+					</a>
+					<if condition="$msg_count neq 0">
+						<span class="mui-badge mui-badge-danger">{$msg_count}</span>
+					</if>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="javascript:void(0)" class="mui-navigate-right" onclick="logout();">
+						清理缓存
+					</a>
+				</li>
+			</ul>
+		</div>
+        <!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="{:U('portal/index/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/doctor_user')}">
+				<span class="mui-icon iconfont icon-shouye7"></span>
+				<span class="mui-tab-label">医生管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/record')}">
+				<span class="mui-icon iconfont icon-shouye5"></span>
+				<span class="mui-tab-label">诊断记录</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/patient/patient_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<script type="text/javascript">
+			mui('body').on('tap', 'a', function() {
+				document.location.href = this.href;
+			});
+            function logout() {
+                if(confirm("您确定清理吗？")){
+                    $.ajax({
+                        async:false,
+                        type : "get",
+                        url : "{:U('patient/clearSession')}",
+                        data : {},
+                        dataType : "json",
+                        success : function() {
+                            alert("清理成功！");
+                            location.href = "{:U('index/index')}";
+                        }
+                    });
+                }else{}
+            }
+            wx.config({
+                appId: '<?php echo $signPackage["appId"];?>',
+                timestamp: '<?php echo $signPackage["timestamp"];?>',
+                nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+                signature: '<?php echo $signPackage["signature"];?>',
+                jsApiList: [
+                    // 所有要调用的 API 都要加到这个列表中
+                    'startRecord',
+                    'stopRecord',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage'
+                ]
+            });
+            wx.ready(function () {
+                wx.checkJsApi({
+                    jsApiList: [
+                        'startRecord',
+                        'stopRecord',
+                        'chooseImage',
+                        'previewImage',
+                        'uploadImage',
+                        'downloadImage'
+                    ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                    success: function (res) {
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }
+                    }
+                });
+                var images = {
+                    localId: [],
+                    serverId: []
+                };
+                $("#uploadImage").click(function () {
+                    wx.chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            images.localId = res.localIds;
+                            if (images.localId.length == 0) {
+                                alert('请先选择图片');
+                                return;
+                            }
+                            if (images.localId.length > 1) {
+                                alert('目前仅支持单张图片上传,请重新上传');
+                                images.localId = [];
+                                return;
+                            }
+                            // 上传照片
+                            wx.uploadImage({
+                                localId: images.localId.toString(),
+                                isShowProgressTips: 0,
+                                success: function (res) {
+                                    images.serverId = res.serverId;
+                                    $.ajax({
+                                        url: 'index.php?g=portal&m=patient&a=uploadImg',
+                                        type: 'post',
+                                        data: {'fg':'head','media_id': images.serverId.toString()},
+                                        dataType: "json",
+                                        success: function (data) {
+                                            if (data.check == 1){
+                                                window.location.href = "index.php?g=portal&m=patient&a=patient_user";
+											} else {
+                                                alert("修改失败");
+											}
+                                        },
+                                        error: function (xhr, errorType, error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                },
+                                fail: function (res) {
+                                    alert(JSON.stringify(res));
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            wx.error(function (res) {
+                alert(res.errMsg);
+            });
+		</script>
+	</body>
+</html>

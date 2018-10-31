@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js "></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<div class="mui-content patient mui-card">
+			<div class="mui-card-content">
+				<div class="patient-brief">
+					<img class="mui-media-object mui-pull-left" src="{$patient.photo}">
+					<div class="mui-media-body">
+						{$patient.name}
+						<h5 class='mui-ellipsis blue-color'>
+							<notempty name="patient.sex">
+								<if condition="$patient.sex eq 1">
+									男性患者
+									<else />
+									女性患者
+								</if>
+								<else/>
+								暂无
+							</notempty>
+							，{$patient.age}岁</h5>
+						<p class="mui-ellipsis mui-h6">联系电话：{$patient.phone} </p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>过敏史</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<p>
+						{$patient.allergic}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>以往病史</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<p>
+						{$patient.medical}
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>最近病例图片</span>
+				</div>
+				<ul class="mui-table-view mui-grid-view">
+					<notempty name="list">
+						<foreach name="list" item="r">
+							<li class="mui-table-view-cell mui-media mui-col-xs-6">
+								<notempty name="r.photo_record">
+									<a href="javascript:void(0);">
+										<img src="__ROOT__{$r.photo_record}" width="100%" data-preview-src="" date-preview-group="1"/>
+									</a>
+									<else/>
+									暂无病例图片，请上传！
+								</notempty>
+							</li>
+						</foreach>
+						<else/>
+						<li class="mui-table-view-cell mui-media mui-col-xs-12">
+							暂无病例图片，请上传！
+						</li>
+					</notempty>
+				</ul>
+			</div>
+		</div>
+		<!--图片点击放大预览主要js开始-->
+		<script type="text/javascript" src="__TMPL__Doctor/js/mui.zoom.js" ></script>
+		<script type="text/javascript" src="__TMPL__Doctor/js/mui.previewimage.js" ></script>
+		<!--图片点击放大预览主要js结束-->
+		<script type="text/javascript">
+			mui.previewImage();//图片点击放大预览主要js
+		</script>
+		<script type="text/javascript">
+            mui('body').on('tap','a',function(){document.location.href=this.href;});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->GetSignPackage();
+?>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script src="__TMPL__Doctor/js/mui.min.js"></script>
+	<script src="__TMPL__Portal/js/jquery.min.js"></script>
+	<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+	<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+	<script type="text/javascript">
+        mui.init()
+	</script>
+</head>
+<body>
+<div class="mui-content personal">
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<button type="button" id="talk_btn" value="">点击录音</button>
+		</li>
+		<li class="mui-table-view-cell">
+			<button type="button" id="playVoice" value="">播放录音</button>
+		</li>
+	</ul>
+</div>
+<!--底部开始-->
+<nav class="mui-bar mui-bar-tab">
+	<a class="mui-tab-item" href="{:U('portal/doctor/index')}">
+		<span class="mui-icon iconfont icon-shouye8"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="mui-tab-item" href="{:U('portal/doctor/patient_user')}">
+		<span class="mui-icon iconfont icon-shouye6"></span>
+		<span class="mui-tab-label">病患管理</span>
+	</a>
+	<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+		<span class="mui-icon iconfont icon-shouye3"></span>
+		<span class="mui-tab-label">咨询问诊</span>
+	</a>
+	<a class="mui-tab-item" href="{:U('portal/doctor/account')}">
+		<span class="mui-icon iconfont icon-shouye1"></span>
+		<span class="mui-tab-label">账户管理</span>
+	</a>
+	<a class="mui-tab-item mui-active" href="{:U('portal/doctor/doctor_user')}">
+			<span class="mui-icon iconfont icon-shouye"></span>
+			<span class="mui-tab-label">个人中心</span>
+	</a>
+</nav>
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    wx.config({
+        appId: '<?php echo $signPackage["appId"];?>',
+        timestamp: '<?php echo $signPackage["timestamp"];?>',
+    	nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+        signature: '<?php echo $signPackage["signature"];?>',
+        jsApiList: [
+        // 所有要调用的 API 都要加到这个列表中
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'uploadVoice',
+            'downloadVoice'
+        ]
+    });
+    wx.ready(function () {
+        wx.checkJsApi({
+            jsApiList: [
+                'startRecord',
+                'stopRecord',
+                'onVoiceRecordEnd',
+                'playVoice',
+                'pauseVoice',
+                'stopVoice',
+                'onVoicePlayEnd',
+                'uploadVoice',
+                'downloadVoice'
+            ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function(res) {
+                if (res.errMsg != "checkJsApi:ok") {
+                    alert(当前设备不支持语音功能);
+                }
+            }
+        });
+        var voice = {
+            localId: '',
+            serverId: ''
+        };
+        $('#talk_btn').on('touchstart', function(event){
+            event.preventDefault();
+            START = new Date().getTime();
+
+            recordTimer = setTimeout(function(){
+                wx.startRecord({
+                    success: function(){
+                        localStorage.rainAllowRecord = 'true';
+                    },
+                    cancel: function () {
+                        alert('用户拒绝授权录音');
+                    }
+                });
+            },300);
+        });
+        $('#talk_btn').on('touchend', function(event){
+            event.preventDefault();
+            END = new Date().getTime();
+            if((END - START) < 300){
+                END = 0;
+                START = 0;
+                //小于300ms，不录音
+                clearTimeout(recordTimer);
+            }else{
+                wx.stopRecord({
+                    success: function (res) {
+                        alert(res.localId);
+                        voice.localId = res.localId;
+                        uploadVoice();
+                    },
+                    fail: function (res) {
+                        alert(JSON.stringify(res));
+                    }
+                });
+            }
+        });
+        $('#playVoice').on('touchstart', function(event){
+            if (voice.localId == '') {
+                alert('请先录制一段声音');
+                return;
+            }
+            wx.playVoice({
+                localId: voice.localId
+            });
+        });
+		//上传录音
+        function uploadVoice(){
+            //调用微信的上传录音接口把本地录音先上传到微信的服务器
+            //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
+            wx.uploadVoice({
+                localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+                    alert('录音成功');
+                    /*$.ajax({
+                        url: '后端处理上传录音的接口',
+                        type: 'post',
+                        data: JSON.stringify(res),
+                        dataType: "json",
+                        success: function (data) {
+                            alert('文件已经保存到七牛的服务器');//这回，我使用七牛存储
+                        },
+                        error: function (xhr, errorType, error) {
+                            console.log(error);
+                        }
+                    });*/
+                }
+            });
+        }
+		//注册微信播放录音结束事件【一定要放在wx.ready函数内】
+        wx.onVoicePlayEnd({
+            success: function (res) {
+                stopWave();
+            }
+        });
+    });
+    wx.error(function (res) {
+        alert(res.errMsg);
+    });
+</script>
+</html>

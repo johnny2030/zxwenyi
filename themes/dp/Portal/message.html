@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>消息提醒</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Portal/js/mui.min.js"></script>
+		<script src="__TMPL__Portal/js/jquery.min.js"></script>
+		<link href="__TMPL__Portal/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Portal/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<div class="mui-content personal">
+			<ul class="mui-table-view mui-table-view-chevron">
+				<notempty name="list">
+					<foreach name="list" item="g">
+						<li class="mui-table-view-cell">
+							<if condition="$g.flg eq 0">
+								您已关注了{$g.name}。
+							</if>
+							<if condition="$g.flg eq 1">
+								{$g.oname}向您推荐了{$g.name}。
+							</if>
+							<i class="mui-pull-right tips">{$g.create_time}</i>
+						</li>
+					</foreach>
+					<else />
+					<li class="mui-table-view-cell">
+						暂无消息提醒
+					</li>
+				</notempty>
+			</ul>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="{:U('portal/patient/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/doctor_user')}">
+				<span class="mui-icon iconfont icon-shouye7"></span>
+				<span class="mui-tab-label">医生管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/patient/record')}">
+				<span class="mui-icon iconfont icon-shouye5"></span>
+				<span class="mui-tab-label">诊断记录</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/patient/patient_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+		<script type="text/javascript">
+			mui('body').on('tap', 'a', function() {
+				document.location.href = this.href;
+			});
+		</script>
+	</body>
+</html>

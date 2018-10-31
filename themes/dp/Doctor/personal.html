@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<script src="__TMPL__Portal/js/jquery.min.js"></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<div class="mui-content personal">
+			<div class="head">
+				<a href="{:U('portal/doctor/uploadImg')}"><img src="{$doctor.photo}"/></a>
+				<h4><a href="{:U('portal/doctor/modify',array('data'=>$doctor['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">{$doctor.name}</a><span>{$doctor.tag}</span></h4>
+			</div>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('province'=>$doctor['province'],'city'=>$doctor['city'],'county'=>$doctor['county'],'flg'=>area,'menu'=>所属地区))}" class="mui-navigate-right">
+						所属地区
+						<i class="mui-pull-right tips">{$doctor.provinceName}&nbsp;&nbsp;{$doctor.cityName}&nbsp;&nbsp;{$doctor.countyName}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['hospital'],'flg'=>hospital,'menu'=>医院))}" class="mui-navigate-right">
+						医院
+						<i class="mui-pull-right tips">{$doctor.hospital}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['office'],'flg'=>office,'menu'=>科室))}" class="mui-navigate-right">
+						科室
+						<i class="mui-pull-right tips">{$doctor.office}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['tag'],'flg'=>tag,'menu'=>职位))}" class="mui-navigate-right">
+						职位
+						<i class="mui-pull-right tips">{$doctor.tag}</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['phone'],'flg'=>phone,'menu'=>电话))}" class="mui-navigate-right">
+						电话
+						<i class="mui-pull-right tips">{$doctor.phone}</i>
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['money'],'flg'=>money,'menu'=>收费标准))}" class="mui-navigate-right">
+						收费标准
+						<i class="mui-pull-right tips">{$doctor.money}元/次</i>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['introduce'],'flg'=>introduce,'menu'=>我的介绍,'check'=>check))}" class="mui-navigate-right">
+						我的介绍
+						<hr>
+						<p class="mui-ellipsis-2">{$doctor.introduce}</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
+						擅长疾病
+						<hr>
+						<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/message')}" class="mui-navigate-right">
+						消息通知
+					</a>
+					<if condition="$msg_count neq 0">
+						<span class="mui-badge mui-badge-danger">{$msg_count}</span>
+					</if>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/shortword')}" class="mui-navigate-right">
+						快捷用语
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{:U('portal/doctor/qrcode')}" class="mui-navigate-right">
+						我的二维码
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a href="javascript:void(0)" class="mui-navigate-right" onclick="logout();">
+						清理缓存
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!--底部开始-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="{:U('portal/doctor/index')}">
+				<span class="mui-icon iconfont icon-shouye8"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/patient_user')}">
+				<span class="mui-icon iconfont icon-shouye6"></span>
+				<span class="mui-tab-label">病患管理</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/rong/index')}">
+				<span class="mui-icon iconfont icon-shouye3"></span>
+				<span class="mui-tab-label">咨询问诊</span>
+			</a>
+			<a class="mui-tab-item" href="{:U('portal/doctor/account')}">
+				<span class="mui-icon iconfont icon-shouye1"></span>
+				<span class="mui-tab-label">账户管理</span>
+			</a>
+			<a class="mui-tab-item mui-active" href="{:U('portal/doctor/doctor_user')}">
+				<if condition="$msg_count eq 0">
+					<span class="mui-icon iconfont icon-shouye"></span>
+					<span class="mui-tab-label">个人中心</span>
+					<else />
+					<span style="position: absolute" class="mui-icon iconfont icon-shouye"></span>
+					<span style="position: relative; top: -6px; left: 15px;" class="mui-badge mui-badge-danger">{$msg_count}</span>
+					<span class="mui-tab-label">个人中心</span>
+				</if>
+			</a>
+		</nav>
+		<!--底部结束-->
+		<script type="text/javascript">
+			mui('body').on('tap', 'a', function() {
+				document.location.href = this.href;
+			});
+            function logout() {
+                if(confirm("您确定清理吗？")){
+                    $.ajax({
+                        async:false,
+                        type : "get",
+                        url : "{:U('doctor/clearSession')}",
+                        data : {},
+                        dataType : "json",
+                        success : function() {
+                            alert("清理成功！");
+                            location.href = "{:U('index/index')}";
+                        }
+                    });
+                }else{}
+            }
+		</script>
+	</body>
+
+</html>

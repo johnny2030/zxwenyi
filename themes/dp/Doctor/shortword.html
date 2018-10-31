@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<script src="__TMPL__Portal/js/jquery.min.js"></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<tc_include file='Public:form_result' />
+		<div class="mui-content">
+			<form method="post" action="{:U('portal/doctor/shortword')}">
+				<div class="mui-input-row">
+					<textarea name="content" placeholder="请输入快捷用语" ></textarea>
+				</div>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<notempty name="list">
+						<foreach name="list" item="sw">
+							<li class="mui-table-view-cell">
+								{$sw.content}
+							</li>
+						</foreach>
+						<else/>
+						<li class="mui-table-view-cell">
+							<div class="mui-media-body">
+								暂无快捷用语
+							</div>
+							</a>
+						</li>
+					</notempty>
+				</ul>
+				<nav class="mui-bar mui-bar-tab">
+					<div class="zixun-nav">
+						<button type="submit" class="mui-pull-right">确认</button>
+					</div>
+				</nav>
+			</form>
+		</div>
+	</body>
+</html>

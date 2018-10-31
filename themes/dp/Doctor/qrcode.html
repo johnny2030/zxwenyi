@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="__TMPL__Doctor/js/mui.min.js"></script>
+		<link href="__TMPL__Doctor/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/master.css" />
+		<link rel="stylesheet" href="__TMPL__Doctor/css/iconfont.css" />
+		<style type="text/css">
+			body{
+				margin: 0;
+				background-color: #f1f1f1;
+			}
+			.qrimg{
+				position:absolute;
+				width:80%;
+				background-color: #f1f1f1;
+				z-index:-1;
+				left: 50%;
+				margin-left: -150px;
+				top: 50%;
+				margin-top: -150px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="qrimg" >
+			<img src="{$qrcode}" height="100%" width="100%"/>
+		</div>
+	</body>
+</html>
