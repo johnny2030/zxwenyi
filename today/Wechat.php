@@ -5,11 +5,11 @@
 */
 define("TOKEN", "cxCd8c0sh");
 $wechatObj = new Wechat();
-if (isset($_GET['echostr'])) {
+/*if (isset($_GET['echostr'])) {
     $wechatObj->valid();
 }else{
     $wechatObj->responseMsg();
-}
+}*/
 require_once 'today/class.today.php';
 class Wechat {
 	/**

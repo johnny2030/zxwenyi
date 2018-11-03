@@ -1,0 +1,288 @@
+
+
+.main{ padding-bottom: 51px;}
+.mui-table-view .mui-media-object{ max-width: 85px; height: 85px;}
+.red-color{ color: #f8361c;}
+.blue-color{ color: #0290ff; font-size: 13px;}
+.grey-color{ color: #999;}
+.strong{ font-weight: bold;}
+.mui-card{ border-radius: 6px;}
+.mui-card-header>img:first-child{ width:3px ; height:auto;}
+.mui-card-header span{ border-left: 3px solid #0290FF; padding: 0 7px;}
+/*.expert .mui-table-view{ background: none;}*/
+.expert .expert-info{ width: 100%; padding-top: 18px; color: #FFFFFF;position: absolute; top: 10px; left: 10px; z-index: 99999999999;}
+.expert .expert-info h4{ font-weight: normal;}
+.expert .expert-info h6{ color: #FFFFFF; margin: 10px 0;}
+.expert .expert-info h6 span{ padding-left: 4px;}
+.expert img{ position: relative; border-radius: 4px;}
+.expert button{ width: 80px; background: #0290FF; border-radius: 40px; border: none; color: #FFFFFF; font-size: 14px; height: 24px; line-height: 12px;}
+.expert i{position: absolute; top: 10px; right: 0; bottom: 5px; left: 13px; background-color: rgba(0, 0, 0, 0.2); transition: background-color .5s; border-radius: 4px;}
+.banner{ background: #FFFFFF;}
+.banner .swiper-slide{ margin: 0 auto; text-align: center}
+.banner img{ width: 96%;}
+
+hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
+.consult-btn{ border-radius: 20px; width: 120px; background: #0290FF; color: #fff; border: none;}
+.help-height{ height: 30px; line-height: 30px;}
+.mui-table-view-cell:after{ background-color: #e1dfdf;}
+
+
+/*诊断记录图片点击预览开始*/
+.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4px;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 18px;
+				margin: 0 auto;
+				padding-top: 20px;
+			}
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+				object-fit: cover;
+			}
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+			.mui-slider-img-content {
+				position: absolute;
+				bottom: 10px;
+				left: 10px;
+				right: 10px;
+				color: white;
+				text-align: center;
+				line-height: 21px
+			}
+/*诊断记录图片点击预览结束*/
+
+
+
+
+/*个人中心开始*/
+.tips{ font-style: normal; color: #999999; margin-right: -30px; font-size: 15px;}
+.personal{ padding-bottom: 61px;}
+.personal .mui-table-view{ margin-top: 20px;}
+.head{ background:url(../imgs/head_bg.jpg) no-repeat; top: 0; left: 0;; width: 100%; height: 190px; background-size: 100%100%; margin: 0 auto; text-align: center; }
+.head img{ width: 75px; height: 75px; border-radius:50%; border: 1px solid #fff; padding: 1px; margin-top: 45px;}
+.head h4{ color: #fff;}
+/*个人中心结束*/
+
+
+
+/*医生详情开始*/
+.detail .top-bg{ height: 160px; width: 100%; background-color: #0290FF; position: absolute; top: 0; left: 0;}
+.top-card{ background: #FFFFFF; height: 150px; width: 95%; position: relative;top: 70px; z-index: 99; margin: 0 auto;  border-radius: 4px;-moz-box-shadow:0px 2px 3px #C4C4C4; -webkit-box-shadow:0px 2px 3px #C4C4C4; box-shadow:0px 2px 3px #C4C4C4;}
+.doctor-introduce{ margin-top: 85px;}
+.photo{  width: 100%; margin: 0 auto;}
+.photo img{ width: 75px; height: 75px; border-radius:50%; position: relative; top: -40px; left: 50%; margin-left: -37.5px;}
+.text{ text-align: center; margin-top: -20px;}
+.text h6{ padding-top: 4px;}
+.zixun-quantity{display: inline-block;
+    color: green;
+	/*background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(206, 45, 11, 1)), t.doctor-introduceo(rgba(252, 211, 127, 1)));*/
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.fuwu-quantity{display: inline-block;
+    color: green;
+    background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(2, 144, 255, 1)), to(rgba(3, 201, 255, 1)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;}
+.haoping-quantity{display: inline-block;
+    color: green;
+    background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(225, 0, 25, 1)), to(rgba(241, 115, 146, 1)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;}
+.detail .mui-row{ position: relative; top: -10px; z-index: 999; width: 95%; margin: 0 auto;}
+.mui-row .mui-col-xs-4{ text-align: center;}
+.mui-row .mui-col-xs-4 h2{ font-weight: normal;}
+.briefing{ margin: 0 auto; padding:12px; line-height: 24px;}
+.siteinfoCredits{ padding-bottom: 51px;}
+
+.renzheng .mui-media img{ height: 35px; }
+.zixun-nav{ vertical-align: middle; padding-top: 15px; padding-left: 20px;}
+.zixun-nav span{ color: #F8361C;}
+.zixun-nav button{ background: #0290FF; border:none; margin-top: -15px; color: #FFFFFF; height: 50px; border-radius:0; width: 100px;}
+/*医生详情结束*/
+
+
+
+
+.consumption span{ margin-top: 10px;}
+.doctor-confirm{ }
+.doctor-photo{padding-left: 20px;height: 60px; line-height: 60px; vertical-align: middle;width: 100%;}
+.doctor-photo span{ padding-right: 20px; color: #F8361C;}
+.doctor-photo img{margin-right: 10px; border-radius: 50%; border: 1px solid #FFFFFF; width: 45px; height: 45px;vertical-align:middle;display:inline-block;}
+.weixin img{ width: 40px; height: 40px;vertical-align:middle;
+   display:inline-block;}
+.weixin{ background: #FFFFFF; vertical-align: middle; height: 80px;}
+.weixin label{  height: 80px; margin-top:20px; margin-left: 12px;}
+.weixin img{ margin-right: 10px;}
+.weixin input{ display:inline-block; margin-top: 25px;}
+.weixin .mui-input-row label{ padding: 0;;}
+.weixin .mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before{ color: #2AC845;}
+.agree{ padding-top: 8px; margin-left: -10px;}
+.agree label{ font-size: 13px; margin-left: -10px;}
+.agree input{ margin-top: 10px; }
+.agree input[type=checkbox]:before{font-size: 24px; }
+.zhifu-btn{ width: 100%; margin: 0 auto; text-align: center; margin-top: 30px;}
+.zhifu-btn button{ width: 94%; height: 50px; margin: 0 auto; font-size: 20px; font-weight: bold;}
+
+.pay-ok{ width: 100%; margin: 0 auto; text-align: center; margin-top: 50px;}
+.pay-ok span{ color: white; padding: 0px; background-color: #4cd964; border-radius: 50%; font-size: 60px;}
+.pay-ok p{ color: #4cd964; font-size: 18px; padding-top: 14px;}
+.people-container{ width: 100%; background-color: white;}
+.people{ margin: 0 auto;width: 94%;}
+.people  span{ color: #999999}
+.pay-fail{ width: 100%; margin: 0 auto; text-align: center; margin-top: 50px;}
+.pay-fail span{ color: white; padding: 0px; background-color: #F8361C; border-radius: 50%; font-size: 60px;}
+.pay-fail p{ color: #F8361C; font-size: 18px; padding-top: 14px;}
+
+.my-icon{position: absolute; bottom: 20px; width: 50px; left: 34px;}
+
+.sec_row{position:relative; clear:left; overflow:hidden;}
+.sec_op{padding: 0px 15px;font-size:17px;height:37px;}
+
+.user-name{
+	background: url("images/star_on.png") no-repeat left;
+	background-size: 25px;
+	padding: 2px 35px 0px;
+
+}

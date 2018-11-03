@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+	<head>
+		<tc_include file="Public/MPHead"/>
+		<title>铁樵健康</title>
+	</head>
+	<body>
+		<div class="mui-content">
+			<header id="header" class="mui-bar mui-bar-nav" style="margin-bottom: 4rem;">
+				<h1 class="mui-title">客户注册</h1>
+			</header>
+			<form action="{:U('portal/index/register_doctor')}">
+				<div class="mui-content-padded" style="margin-top: 4rem;">
+					<div class="mui-input-group mui-input-row">
+						<label>Input</label>
+						<input type="text" id="name" name="name" class="mui-input-clear" placeholder="请输入用户姓名" value="">
+					</div>
+					<div class="mui-input-row">
+						<label>Input</label>
+						<input type="text" class="mui-input-clear" placeholder="带清除按钮的输入框">
+					</div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" onclick="return false;">确认</button>&nbsp;&nbsp;
+						<button type="button" class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+	<script type="text/javascript">
+        function check_form() {
+            var name = $("#name").val();
+            var sex = $('#sex option:selected').val();
+            var age = $("#age").val();
+            var phone = $("#phone").val();
+            var hospital = $('#hospital option:selected').val();
+            var office = $('#office option:selected').val();
+            var tag = $('#tag option:selected').val();
+            var province = $('#province option:selected').val();
+            var city = $('#city option:selected').val();
+            if(name.length==0){
+                alert("请输入姓名");
+                return false;
+            }else if(sex.length==0){
+                alert("请选择性别");
+                return false;
+            }else if(age.length==0){
+                alert("请输入年龄");
+                return false;
+            }else if(phone.length==0){
+                alert("请输入手机号");
+                return false;
+            }else if(hospital.length==0){
+                alert("请选择医院");
+                return false;
+            }else if(office.length==0){
+                alert("请选择科室");
+                return false;
+            }else if(tag.length==0){
+                alert("请选择职位");
+                return false;
+            }else if(province.length==0){
+                alert("请选择省/直辖市");
+                return false;
+            }else if(city.length==0){
+                alert("请选择市/区");
+                return false;
+            }else {
+                return true;
+			}
+        }
+        function setCity() {
+            var pid = $('#province option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_data",
+                data : {'pid' : pid},
+                dataType : "json",
+                success : function(data) {
+                    var list = data.list;
+                    var selct = $("#city");
+                    selct.empty();
+                    for (i=0;i<list.length;i++){
+                        var city = list[i];
+                        selct.append("<option value='"+city.id+"'>"+city.name+"</option>");
+                    }
+                    var coty = list[0];
+                    $.ajax({
+                        async:false,
+                        type : "get",
+                        url : "index.php?g=portal&m=commonMethod&a=get_data",
+                        data : {
+                            'pid' : coty.id,
+                            'county' : 1
+                        },
+                        dataType : "json",
+                        success : function(dta) {
+                            var sel = $("#county");
+                            sel.empty();
+                            if(dta.list.length > 0){
+                                var list = dta.list;
+                                for (i=0;i<list.length;i++){
+                                    var county = list[i];
+                                    sel.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                                }
+                                sel.css("display","block");
+                            }else{
+                                sel.css("display","none");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function setCounty() {
+            var cid = $('#city option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_data",
+                data : {
+                    'pid' : cid,
+                    'county' : 1
+                },
+                dataType : "json",
+                success : function(data) {
+                    var selct = $("#county");
+                    selct.empty();
+                    if(data.list.length > 0){
+                        var list = data.list;
+                        for (i=0;i<list.length;i++){
+                            var county = list[i];
+                            selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                        }
+                        selct.css("display","block");
+                    }else{
+                        selct.css("display","none");
+                    }
+                }
+            });
+        }
+	</script>
+</html>

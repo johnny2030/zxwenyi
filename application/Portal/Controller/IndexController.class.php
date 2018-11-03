@@ -22,7 +22,8 @@ class IndexController extends HomebaseController {
 
     //首页
 	public function index() {
-        $open_id = session('open_id');
+        $this->display('../Tieqiao/register_patient');
+        /*$open_id = session('open_id');
         $where = array();
         $where['open_id'] = array('eq',$open_id);
         $user = $this->common_user_model->where($where)->find();
@@ -42,9 +43,9 @@ class IndexController extends HomebaseController {
             }else{
                 R('Patient/index');
             }
-        }
+        }*/
     }
-    //登记信息
+    //患者信息注册
     function register_patient() {
         $id = (int)session('login_id');
         if ( IS_POST ) {
