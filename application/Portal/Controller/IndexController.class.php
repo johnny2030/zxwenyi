@@ -5,24 +5,16 @@ use Common\Controller\HomebaseController;
 class IndexController extends HomebaseController {
 
     private $common_user_model;
-    private $common_hospital_model;
-    private $common_office_model;
-    private $common_tag_model;
-    private $china_model;
 
     public function _initialize() {
         parent::_initialize();
 
         $this->common_user_model = D( 'Common_user' );
-        $this->common_hospital_model = D( 'Common_hospital' );
-        $this->common_office_model = D( 'Common_office' );
-        $this->common_tag_model = D( 'Common_tag' );
-        $this->china_model = D( 'China' );
     }
 
     //首页
 	public function index() {
-        $this->display('../Tieqiao/register_patient');
+        $this->display('../Tieqiao/index');
         /*$open_id = session('open_id');
         $where = array();
         $where['open_id'] = array('eq',$open_id);

@@ -199,7 +199,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .tips{ font-style: normal; color: #999999; margin-right: -30px; font-size: 15px;}
 .personal{ padding-bottom: 61px;}
 .personal .mui-table-view{ margin-top: 20px;}
-.head{ background:url(../imgs/head_bg.jpg) no-repeat; top: 0; left: 0;; width: 100%; height: 190px; background-size: 100%100%; margin: 0 auto; text-align: center; }
+.head{ background:url(../images/head_bg.jpg) no-repeat; top: 0; left: 0; width: 100%; height: 190px; background-size: 100%100%; margin: 0 auto; text-align: center; }
 .head img{ width: 75px; height: 75px; border-radius:50%; border: 1px solid #fff; padding: 1px; margin-top: 45px;}
 .head h4{ color: #fff;}
 /*个人中心结束*/
@@ -207,7 +207,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 
 
 /*医生详情开始*/
-.detail .top-bg{ height: 160px; width: 100%; background-color: #0290FF; position: absolute; top: 0; left: 0;}
+.detail .top-bg{ height: 160px; width: 100%; background: url('../images/doctor-hd.jpg') no-repeat 5px; position: absolute; top: 0; left: 0; background-size: 100% 100%}
 .top-card{ background: #FFFFFF; height: 150px; width: 95%; position: relative;top: 70px; z-index: 99; margin: 0 auto;  border-radius: 4px;-moz-box-shadow:0px 2px 3px #C4C4C4; -webkit-box-shadow:0px 2px 3px #C4C4C4; box-shadow:0px 2px 3px #C4C4C4;}
 .doctor-introduce{ margin-top: 85px;}
 .photo{  width: 100%; margin: 0 auto;}
@@ -280,9 +280,140 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .sec_row{position:relative; clear:left; overflow:hidden;}
 .sec_op{padding: 0px 15px;font-size:17px;height:37px;}
 
-.user-name{
-	background: url("images/star_on.png") no-repeat left;
-	background-size: 25px;
-	padding: 2px 35px 0px;
-
+/*顶部*/
+.head-img{
+	margin-top: 0.3rem;
+	margin-left: 5rem;
+	width: 2rem;
+	height: 2rem;
+}
+/*注册（患者/医生）*/
+.u-inpt{
+	background-size: 25px !important;
+	padding: 5px 40px 0px !important;
+	border-radius: 10px !important;
+}
+.u-name{
+	background: url('../images/user.png') no-repeat 5px;
+}
+.i-card{
+	background: url('../images/main.png') no-repeat 5px;
+}
+.u-age{
+	background: url('../images/age.png') no-repeat 5px;
+}
+.m-card{
+	background: url('../images/idcard.png') no-repeat 5px;
+}
+.p-card{
+	background: url('../images/password.png') no-repeat 5px;
+}
+.t-card{
+	background: url('../images/star_on.png') no-repeat 5px;
+}
+.u-pwd{
+	background: url('../images/pwd1.jpg') no-repeat 5px;
+}
+.u-pwd-agn{
+	background: url('../images/pwd2.jpg') no-repeat 5px;
+}
+.u-phone{
+	background: url('../images/iphone.png') no-repeat 5px;
+}
+.v-code{
+	width: 65% !important;
+	background: url('../images/v-code.jpg') no-repeat 5px;
+}
+.c-job{
+	background: url('../images/department_logo.png') no-repeat 5px;
+}
+.pt-sel{
+	background: #FFFFFF url('../images/national.png') no-repeat 5px;
+	border: 1px solid rgba(0,0,0,.2) !important;
+}
+.of-sel{
+	background: #FFFFFF url('../images/table_logo.png') no-repeat 5px;
+	border: 1px solid rgba(0,0,0,.2) !important;
+}
+.tg-sel{
+	background: #FFFFFF url('../images/yellow_star.png') no-repeat 5px;
+	border: 1px solid rgba(0,0,0,.2) !important;
+}
+.v-code-btn{
+	height: 40px;
+	line-height: 40px;
+	width: 30% !important;
+}
+.footer-btn{
+	height: 40px;
+	width: 30%;
+	margin-bottom: 5rem;
+	margin-top: 1rem;
+}
+/*科室咨询*/
+.off-hd{
+	background: url('../images/off-hd.jpg') no-repeat 5px;
+	width: 100%;
+	height: 190px;
+	background-size: 100%100%;
+}
+.off-ico{
+	margin-top: 0.5rem;
+	margin-left: 1rem;
+	width: 2rem;
+	height: 2rem;
+}
+.off-text{
+	margin-left: 1rem;
+}
+.off-preview{
+	list-style:none;
+	background-color: #1C86EE;
+	width: 30%;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 10px !important;
+	float: left;
+	margin: 1rem 0px 0px 0.5rem;
+	text-align: center;
+	color: #ffffff;
+}
+/*医生详情*/
+.doc-p{
+	font-size: 18px;
+	text-align: center;
+	color: black;
+}
+.doc-work-sw{
+	margin-bottom: 1rem !important;
+}
+.doc-work-sw li{
+	height: 40px;
+	line-height: 40px;
+}
+.doc-work-lr li{
+	border:1px #bbb solid;
+	border-bottom: none;
+}
+.doc-work-ct li{
+	border-top: 1px #bbb solid;
+}
+.doc-work-lt{
+	border-top-left-radius:6px;
+}
+.doc-work-rt{
+	border-top-right-radius:6px;
+}
+.doc-work-lb{
+	border-bottom-left-radius:6px;
+}
+.doc-work-rb{
+	border-bottom-right-radius:6px;
+}
+.doc-work-bt{
+	border-bottom: 1px #bbb solid !important;
+}
+.doc-active{
+	background-color: #1E90FF;
+	color: #ffffff;
 }

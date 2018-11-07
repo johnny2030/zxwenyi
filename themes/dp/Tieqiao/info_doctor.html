@@ -2,89 +2,90 @@
 <html>
 	<head>
 		<tc_include file="Public/MPHead"/>
-		<title>首页</title>
 	</head>
 	<body>
-		<div class="mui-content">
-			<form method="post" action="{:U('portal/index/register_doctor')}">
-				<div class="mui-content">
-					<div class="mui-input-row" style="margin-top:10px;">
-						<input type="text" id="name" name="name" class="mui-input-clear" placeholder="请输入姓名" value="{$user.name}">
-					</div>
-					<div class="sec_row">
-						<select id="sex" name="sex" class="sec_op">
-							<if condition="$user.sex eq 2">
-								<option value="1">男</option>
-								<option value="1" selected>女</option>
-								<else />
-								<option value="1" selected>男</option>
-								<option value="1">女</option>
-							</if>
-						</select>
-					</div>
-					<!--年龄-->
-					<div class="mui-input-row">
-						<input type="text" id="age" name="age" class="mui-input-clear" placeholder="请输入年龄" value="{$user.age}">
-					</div>
-					<div class="mui-input-row">
-						<input type="text" id="phone" name="phone" class="mui-input-clear" placeholder="请输入手机号" value="{$user.phone}">
-					</div>
-					<div class="sec_row">
-						<select id="hospital" name="hospital" class="sec_op">
-                            <option value="" selected>请选择医院</option>
-                            <foreach name="hlist" item="h">
-                                <option value="{$h.name}">{$h.name}</option>
-                            </foreach>
-						</select>
-					</div>
-					<div class="sec_row">
-						<select id="office" name="office" class="sec_op">
-                            <option value="" selected>请选择科室</option>
-                            <foreach name="olist" item="o">
-                                <option value="{$o.name}">{$o.name}</option>
-                            </foreach>
-						</select>
-					</div>
-					<div class="sec_row">
-						<select id="tag" name="tag" class="sec_op">
-                            <option value="" selected>请选择职位</option>
-                            <foreach name="tlist" item="t">
-                                <option value="{$t.name}">{$t.name}</option>
-                            </foreach>
-						</select>
-					</div>
-					<div class="sec_row">
-						<select id="province" name="province" onchange="setCity()" class="sec_op">
-                            <option value="" selected>请选择省/直辖市</option>
-                            <foreach name="provinceList" item="prov">
-                                <option value="{$prov.id}">{$prov.name}</option>
-                            </foreach>
-						</select>
-					</div>
-					<div class="sec_row">
-						<select id="city" name="city" onchange="setCounty()" class="sec_op">
-                            <option value="" selected>请选择市/区</option>
-                            <foreach name="cityList" item="cty">
-                                <option value="{$cty.id}">{$cty.name}</option>
-                            </foreach>
-						</select>
-					</div>
-					<div class="sec_row">
-						<select id="county" name="county" class="sec_op" style="display: none;">
-							<option value="" selected>请选择县/区</option>
-							<foreach name="countyList" item="cnty">
-								<option value="{$cnty.id}">{$cnty.name}</option>
-							</foreach>
-						</select>
-					</div>
-				</div>
-				<nav class="mui-bar mui-bar-tab">
-					<div class="zixun-nav">
-						<button type="submit" class="mui-pull-right" onclick="return check_form()">确认</button>
-					</div>
-				</nav>
-			</form>
+	<div class="mui-content personal">
+		<div class="head">
+			<a href="{:U('portal/doctor/uploadImg')}"><img src="__TMPL__Tieqiao/images/doctor.jpg"/></a>
+			<h4><a href="{:U('portal/doctor/modify',array('data'=>$doctor['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">李医生</a></h4>
 		</div>
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('province'=>$doctor['province'],'city'=>$doctor['city'],'county'=>$doctor['county'],'flg'=>area,'menu'=>所属地区))}" class="mui-navigate-right">
+					出生日期
+					<i class="mui-pull-right tips">{$doctor.provinceName}&nbsp;&nbsp;{$doctor.cityName}&nbsp;&nbsp;{$doctor.countyName}</i>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['hospital'],'flg'=>hospital,'menu'=>医院))}" class="mui-navigate-right">
+					民族
+					<i class="mui-pull-right tips">{$doctor.hospital}</i>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['office'],'flg'=>office,'menu'=>科室))}" class="mui-navigate-right">
+					性别
+					<i class="mui-pull-right tips">{$doctor.office}</i>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['tag'],'flg'=>tag,'menu'=>职位))}" class="mui-navigate-right">
+					身高
+					<i class="mui-pull-right tips">{$doctor.tag}</i>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['phone'],'flg'=>phone,'menu'=>电话))}" class="mui-navigate-right">
+					体重
+					<i class="mui-pull-right tips">{$doctor.phone}</i>
+				</a>
+			</li>
+		</ul>
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['money'],'flg'=>money,'menu'=>收费标准))}" class="mui-navigate-right">
+					过敏史
+					<hr>
+					<i class="mui-pull-right tips">{$doctor.money}</i>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['introduce'],'flg'=>introduce,'menu'=>我的介绍,'check'=>check))}" class="mui-navigate-right">
+					药物禁忌
+					<hr>
+					<p class="mui-ellipsis-2">{$doctor.introduce}</p>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
+					生活嗜好
+					<hr>
+					<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
+					是否服务保健品
+					<hr>
+					<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
+					健康状况
+					<hr>
+					<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
+					运动情况
+					<hr>
+					<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+				</a>
+			</li>
+		</ul>
+	</div>
 	</body>
 	<script type="text/javascript">
         function check_form() {
@@ -127,50 +128,6 @@
             }else {
                 return true;
 			}
-        }
-        function setCity() {
-            var pid = $('#province option:selected').val();
-            $.ajax({
-                async:false,
-                type : "get",
-                url : "index.php?g=portal&m=commonMethod&a=get_data",
-                data : {'pid' : pid},
-                dataType : "json",
-                success : function(data) {
-                    var list = data.list;
-                    var selct = $("#city");
-                    selct.empty();
-                    for (i=0;i<list.length;i++){
-                        var city = list[i];
-                        selct.append("<option value='"+city.id+"'>"+city.name+"</option>");
-                    }
-                    var coty = list[0];
-                    $.ajax({
-                        async:false,
-                        type : "get",
-                        url : "index.php?g=portal&m=commonMethod&a=get_data",
-                        data : {
-                            'pid' : coty.id,
-                            'county' : 1
-                        },
-                        dataType : "json",
-                        success : function(dta) {
-                            var sel = $("#county");
-                            sel.empty();
-                            if(dta.list.length > 0){
-                                var list = dta.list;
-                                for (i=0;i<list.length;i++){
-                                    var county = list[i];
-                                    sel.append("<option value='"+county.id+"'>"+county.name+"</option>");
-                                }
-                                sel.css("display","block");
-                            }else{
-                                sel.css("display","none");
-                            }
-                        }
-                    });
-                }
-            });
         }
         function setCounty() {
             var cid = $('#city option:selected').val();

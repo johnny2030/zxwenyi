@@ -4,62 +4,33 @@
 	<tc_include file="Public/MPHead"/>
 </head>
 <body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<img src="__TMPL__Public/images/logo.jpg" class="head-img">
+	<h1 class="mui-title">科室咨询</h1>
+</header>
 <div class="mui-content">
-	<header id="header" class="mui-bar mui-bar-nav">
-		<img src="__TMPL__Public/images/logo.jpg" class="head-img">
-		<h1 class="mui-title">医生注册</h1>
-	</header>
-	<form action="{:U('portal/index/register_doctor')}">
-		<div class="mui-content-padded" style="margin-top: 4rem;">
-			<div class="mui-input-row">
-				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="">
-			</div>
-			<div class="mui-input-row">
-				<input type="text" id="i_card" name="i_card" class="u-inpt c-job mui-input-clear" placeholder="请输入单位" value="">
-			</div>
-			<div class="mui-input-row">
-				<select id="position" name="position" class="u-inpt pt-sel">
-					<option value="" selected>请选择职位</option>
-					<foreach name="hlist" item="h">
-						<option value="{$h.name}">{$h.name}</option>
-					</foreach>
-				</select>
-			</div>
-			<div class="mui-input-row">
-				<select id="office" name="office" class="u-inpt of-sel">
-					<option value="" selected>请选择科室</option>
-					<foreach name="olist" item="o">
-						<option value="{$o.name}">{$o.name}</option>
-					</foreach>
-				</select>
-			</div>
-			<div class="mui-input-row">
-				<select id="tag" name="tag" class="u-inpt tg-sel">
-					<option value="" selected>请选择具体科室</option>
-					<foreach name="tlist" item="t">
-						<option value="{$t.name}">{$t.name}</option>
-					</foreach>
-				</select>
-			</div>
-			<div class="mui-input-row">
-				<input type="password" id="pwd" name="pwd" class="u-inpt u-pwd mui-input-password" placeholder="请设置密码" value="">
-			</div>
-			<div class="mui-input-row">
-				<input type="password" id="pwds" name="pwds" class="u-inpt u-pwd-agn mui-input-password" placeholder="请确认密码" value="">
-			</div>
-			<div class="mui-input-row">
-				<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="">
-			</div>
-			<div class="mui-input-row">
-				<input type="text" id="v_code" name="v_code" class="u-inpt v-code mui-input-clear" placeholder="请输入验证码" value="">
-				<button type="button" class="mui-btn mui-btn-primary v-code-btn">获取验证码</button>
-			</div>
-			<div class="mui-button-row">
-				<button type="submit" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">确认</button>&nbsp;&nbsp;
-				<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-			</div>
+	<div class="mui-content-padded">
+		<div class="mui-input-row">
+			<img src="__TMPL__Public/images/department_logo.png" class="off-ico"><span class="off-text">科室咨询</span>
 		</div>
-	</form>
+		<div class="mui-input-row">
+			<li class="off-preview">
+				<span>科室1</span>
+			</li>
+			<li class="off-preview">
+				<span>科室1</span>
+			</li>
+			<li class="off-preview">
+				<span>科室1</span>
+			</li>
+			<li class="off-preview">
+				<span>科室1</span>
+			</li>
+			<li class="off-preview">
+				<span>科室1</span>
+			</li>
+		</div>
+	</div>
 </div>
 </body>
 <script type="text/javascript">
