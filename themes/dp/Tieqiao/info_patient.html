@@ -13,7 +13,7 @@
 		<li class="mui-table-view-cell">
 			<a href="{:U('portal/doctor/modify',array('province'=>$doctor['province'],'city'=>$doctor['city'],'county'=>$doctor['county'],'flg'=>area,'menu'=>所属地区))}" class="mui-navigate-right">
 				出生日期
-				<i class="mui-pull-right tips">{$doctor.provinceName}&nbsp;&nbsp;{$doctor.cityName}&nbsp;&nbsp;{$doctor.countyName}</i>
+				<i class="mui-pull-right tips">1990-10-21</i>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
@@ -53,7 +53,7 @@
 			<a href="{:U('portal/doctor/modify',array('data'=>$doctor['introduce'],'flg'=>introduce,'menu'=>我的介绍,'check'=>check))}" class="mui-navigate-right">
 				药物禁忌
 				<hr>
-				<p class="mui-ellipsis-2">{$doctor.introduce}</p>
+				<p class="mui-ellipsis-2">暂无禁忌</p>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
@@ -64,10 +64,10 @@
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>擅长疾病,'check'=>check))}" class="mui-navigate-right">
-				是否服务保健品
+			<a href="{:U('portal/doctor/modify',array('data'=>$doctor['speciality'],'flg'=>speciality,'menu'=>是否服用保健品,'check'=>check))}" class="mui-navigate-right">
+				是否服用保健品
 				<hr>
-				<p class="mui-ellipsis-2">{$doctor.speciality}</p>
+				<p class="mui-ellipsis-2"></p>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">

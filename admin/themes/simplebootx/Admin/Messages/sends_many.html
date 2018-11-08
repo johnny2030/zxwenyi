@@ -1,0 +1,98 @@
+<admintpl file="header"/>
+<link href="__PUBLIC__/simpleboot/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a>医生列表</a></li>
+		</ul>
+		<div class="row-fluid">
+			<div class="table-actions">
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+			</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="100">医生名</th>
+						<th width="600">所属平台</th>
+						<th width="50">操作</th>
+					</tr>
+				</thead>
+				<tr>
+					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+					<td>李医生</td>
+					<td>铁樵健康</td>
+					<td>
+						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+						<br />
+					</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+					<td>王医生</td>
+					<td>铁樵健康</td>
+					<td>
+						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+						<br />
+					</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+					<td>赵医生</td>
+					<td>专家联盟</td>
+					<td>
+						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+						<br />
+					</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+					<td>刘医生</td>
+					<td>铁樵健康</td>
+					<td>
+						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+						<br />
+					</td>
+				</tr>
+				<tfoot>
+				<tr>
+					<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+					<th width="100">医生名</th>
+					<th width="600">所属平台</th>
+					<th width="50">操作</th>
+				</tr>
+				</tfoot>
+			</table>
+			<div class="table-actions">
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "{:L('CLOSE_PAGE')}",
+						ok : function() {
+							setCookie("refersh_time", 1);
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+		});
+	</script>
+</body>
+</html>
