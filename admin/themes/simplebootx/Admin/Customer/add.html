@@ -3,26 +3,15 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('tag/index')}">具体科室信息</a></li>
-			<li class="active"><a href="{:U('tag/add')}">添加具体科室</a></li>
+			<li><a href="{:U('tag/index')}">职位信息</a></li>
+			<li class="active"><a href="{:U('tag/add')}">添加职位</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 			<div class="row-fluid">
 				<div class="span9">
 					<table class="table table-bordered">
 						<tr>
-							<th>科室名称</th>
-							<td>
-								<select id="office_id" name="office_id" style="width: 400px;">
-									<foreach name="list" item="li">
-										<option value="{$li.id}">{$li.name}</option>
-									</foreach>
-								</select>
-								<span class="form-required" style="color:red;"> *</span>
-							</td>
-						</tr>
-						<tr>
-							<th>具体科室名称</th>
+							<th>职位名称</th>
 							<td>
 								<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入职位名称"/>
 								<span class="form-required" style="color:red;"> *</span>

@@ -1,28 +1,32 @@
-<admintpl file="header"/>
-<link href="__PUBLIC__/simpleboot/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+<admintpl file="header" />
 </head>
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="javascript:void(0);">导入医生信息</a></li>
+			<li><a href="{:U('office/index')}">科室信息</a></li>
+			<li class="active"><a href="{:U('office/add')}">添加科室</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
-			<table class="table table-bordered">
-				<tr>
-					<th style="width: 100px;">医生信息</th>
-					<td>
-						<input type="file" name="doctor" accept=".xls,.xlsx" />导入医生信息
-					</td>
-				</tr>
-			</table>
-			<a href="http://www.jkwdr.cn/admin/themes/simplebootx/Admin/Doctor/doctor_info.xlsx">下载医生信息模板</a>
+			<div class="row-fluid">
+				<div class="span9">
+					<table class="table table-bordered">
+						<tr>
+							<th>科室名称</th>
+							<td>
+								<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入科室名称"/>
+								<span class="form-required" style="color:red;"> *</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 			<div class="form-actions">
-				<button class="btn btn-primary js-ajax-submit" type="submit">上传</button>
+				<button class="btn btn-primary js-ajax-submit" type="submit">添加</button>
+				<a class="btn" href="{:U('office/index')}">返回</a>
 			</div>
 		</form>
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
-	<script type="text/javascript" src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			$(".js-ajax-close-btn").on('click', function(e) {
@@ -44,13 +48,15 @@
 					});
 				});
 			});
+			/////---------------------
 			Wind.use('validate','ajaxForm','artDialog',function() {
 				var form = $('form.js-ajax-forms');
 				//ie处理placeholder提交问题
 				if ($.browser && $.browser.msie) {
 					form.find('[placeholder]').each(function() {
 						var input = $(this);
-						if (input.val() == input.attr('placeholder')) {
+						if (input.val() == input
+								.attr('placeholder')) {
 							input.val('');
 						}
 					});
@@ -63,6 +69,8 @@
 					onkeyup : false,
 					//当鼠标掉级时验证
 					onclick : false,
+					//验证hidden
+					ignore : "",
 					//验证错误
 					showErrors : function(errorMap,errorArr) {
 						//errorMap {'name':'错误信息'}
@@ -77,7 +85,7 @@
 								background : "#CCCCCC",
 								opacity : 0,
 								content : errorArr[0].message,
-								cancelVal : "{:L('OK')}",
+								cancelVal : "确定",
 								cancel : function() {
 									$(errorArr[0].element).focus();
 								}
@@ -86,11 +94,12 @@
 					},
 					//验证规则
 					rules : {
-						'doctor' : { required : 1 }
+						'name' : { required : 1 }
+
 					},
 					//验证未通过提示消息
 					messages : {
-						'doctor' : { required : "请选择上传文件" }
+                        'name' : { required : "请输入科室名称" }
 					},
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,
@@ -106,7 +115,7 @@
 							},
 							success : function(data,statusText,xhr,$form) {
 								if (data.status) {
-									setCookie("refersh_time",10);
+									setCookie("refersh_time",1);
 									//添加成功
 									Wind.use("artDialog",function() {
 										art.dialog({
@@ -119,12 +128,19 @@
 											content : data.info,
 											button : [
 											{
-												name : "确定",
+												name : "继续添加？",
 												callback : function() {
 													reloadPage(window);
 													return true;
 												},
 												focus : true
+											},
+											{
+												name : "返回列表",
+												callback : function() {
+													location.href = "{:U('office/index')}";
+													return true;
+												}
 											}
 											]
 										});
@@ -137,6 +153,7 @@
 					}
 				});
 			});
+		////-------------------------
 		});
 	</script>
 </body>

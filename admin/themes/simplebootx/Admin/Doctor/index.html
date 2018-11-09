@@ -1,82 +1,33 @@
 <admintpl file="header" />
 </head>
-<style type="text/css">
-	.window{
-		width:430px;
-		background-color:#d0def0;
-		position:absolute;
-		padding:2px;
-		margin:5px;
-		display:none;
-		height: 454px;
-	}
-	.content{
-		height:430px;
-		background-color:#FFF;
-		font-size:14px;
-		overflow:auto;
-	}
-	.title{
-		padding:2px;
-		color:#218ED4;
-		font-size:14px;
-		text-align: center;
-	}
-	.title img{
-		float:right;
-	}
-</style>
-<script type="text/javascript" language="javascript">
-    function qrShow() {
-        $.ajax({
-            type: "GET",
-            url: "{:U('doctor/getqrcode')}",
-            data: '',
-            dataType: "json",
-            success: function(data){
-                $('#qrImg').empty();
-                $('#qrImg').append("<img src="+data+">");
-                popCenterWindow();
-            }
-        });
-    }
-</script>
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('doctor/index')}">医生信息</a></li>
-			<li><a href="{:U('doctor/add')}">添加医生</a></li>
 		</ul>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入医生姓名">
 			<button class="btn btn-primary">搜索</button>
 			<a class="btn btn-danger" href="{:U('doctor/index')}">清空</a>
-			<a class="btn btn-warning" href="javascript:open_iframe_dialog('{:U('doctor/upload')}','批量导入医生信息')">批量导入</a>
-			<!--<a class="btn btn-warning" id="ClickMe" href="javascript:void(0);">查看二维码</a>-->
-			<input class="btn btn-warning" type="button" value="查看二维码" id="btn_center" onclick="qrShow()" />
 		</form>
 		<form class="js-ajax-form" method="post">
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>2))}" data-subcheck="true" data-msg="确定设置主推？">主推</button>
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>1))}" data-subcheck="true" data-msg="确定设置推荐？">推荐</button>
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>0))}" data-subcheck="true" data-msg="确定取消推荐？">取消推荐</button>
 				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<table class="table table-hover table-bordered table-list">
 				<thead>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
-						<th width="50">姓名</th>
-						<th width="30">性别</th>
-						<th width="30">年龄</th>
-						<th width="50">手机号</th>
-						<th width="50">咨询价</th>
-						<th width="80">医院</th>
-						<th width="80">科室</th>
+						<th width="50">医生姓名</th>
+						<th width="30">单位</th>
+						<th width="30">医院</th>
+						<th width="50">科室</th>
+						<th width="50">具体科室</th>
 						<th width="80">职位</th>
-						<th width="50">执业编号</th>
-						<th width="100">所属区域</th>
-						<th width="100">推荐状态</th>
+						<th width="80">擅长</th>
+						<th width="80">手机号</th>
+						<th width="80">平台</th>
+						<th width="100">关注时间</th>
 						<th width="100">操作</th>
 					</tr>
 				</thead>
@@ -84,73 +35,49 @@
 					<tr>
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
 						<td>{$vo.name}</td>
-						<td>{$vo.sex}</td>
-						<td>{$vo.age}</td>
+						<td>{$vo.unit}</td>
+						<td>{$vo.hospital_n}</td>
+						<td>{$vo.office_n}</td>
+						<td>{$vo.tag_n}</td>
+						<td>{$vo.position}</td>
+						<td>{$vo.genius}</td>
 						<td>{$vo.phone}</td>
-						<td>{$vo.money}</td>
-						<td>{$vo.hospital}</td>
-						<td>{$vo.office}</td>
-						<td>{$vo.tag}</td>
-						<td>{$vo.practice_number}</td>
-						<td>{$vo.area}</td>
 						<td>
-							<if condition="$vo.recommend eq 0">
-								未推荐
+							<if condition="$vo.status eq 0">
+								铁樵健康
 							</if>
-							<if condition="$vo.recommend eq 1">
-								推荐
-							</if>
-							<if condition="$vo.recommend eq 2">
-								主推
+							<if condition="$vo.status eq 1">
+								专家联盟
 							</if>
 						</td>
+						<td>{$vo.create_time}</td>
 						<td>
-							<a style="margin-top: 5px;" href="{:U('doctor/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">编辑</a>
 							<a style="margin-top: 5px;" href="{:U('doctor/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-							<if condition="$vo.recommend eq 0">
-								<a style="margin-top: 5px;" href="{:U('doctor/recommend',array('id'=>$vo['id'],'recommend'=>2))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定设置主推？">主推</a>
-								<a style="margin-top: 5px;" href="{:U('doctor/recommend',array('id'=>$vo['id'],'recommend'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定设置推荐？">推荐</a>
-							<else />
-								<a style="margin-top: 5px;" href="{:U('doctor/recommend',array('id'=>$vo['id'],'recommend'=>0))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定取消推荐？">取消推荐</a>
-							</if>
 						</td>
 					</tr>
 				</foreach>
 				<tfoot>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
-						<th width="50">姓名</th>
-						<th width="30">性别</th>
-						<th width="30">年龄</th>
-						<th width="50">手机号</th>
-						<th width="50">咨询价</th>
-						<th width="80">医院</th>
-						<th width="80">科室</th>
+						<th width="50">医生姓名</th>
+						<th width="30">单位</th>
+						<th width="30">医院</th>
+						<th width="50">科室</th>
+						<th width="50">具体科室</th>
 						<th width="80">职位</th>
-						<th width="50">执业编号</th>
-						<th width="100">所属区域</th>
-						<th width="100">推荐状态</th>
+						<th width="80">擅长</th>
+						<th width="80">手机号</th>
+						<th width="80">平台</th>
+						<th width="100">关注时间</th>
 						<th width="100">操作</th>
 					</tr>
 				</tfoot>
 			</table>
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>2))}" data-subcheck="true" data-msg="确定设置主推？">主推</button>
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>1))}" data-subcheck="true" data-msg="确定设置推荐？">推荐</button>
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/recommend',array('recommend'=>0))}" data-subcheck="true" data-msg="确定取消推荐？">取消推荐</button>
 				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('doctor/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<div class="pagination">{$page}</div>
 		</form>
-		<div class="window" id="center">
-			<div id="title" class="title">
-				<img src="http://pic002.cnblogs.com/images/2012/451207/2012100814082487.jpg" alt="关闭" />
-				医生信息登记
-			</div>
-			<div class="content" id="qrImg">
-				<img src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQF18TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyMDRyV2tRVGtlVDIxMDAwMHcwM0MAAgS2tE5bAwQAAAAA">
-			</div>
-		</div>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>

@@ -12,20 +12,9 @@
 			<div class="span9">
 				<table class="table table-bordered">
 					<tr>
-						<th>科室名称</th>
+						<th>职位名称</th>
 						<td>
-							<select id="office_id" name="office_id" style="width: 400px;">
-								<foreach name="list" item="li">
-									<option value="{$li.id}">{$li.name}</option>
-								</foreach>
-							</select>
-							<span class="form-required" style="color:red;"> *</span>
-						</td>
-					</tr>
-					<tr>
-						<th>具体科室名称</th>
-						<td>
-							<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入职位名称" value="{$name}"/>
+							<input type="text" style="width: 400px;" id="name" name="name" value="{$name}" placeholder="请输入职位名称"/>
 							<span class="form-required" style="color:red;"> *</span>
 						</td>
 					</tr>
