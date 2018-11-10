@@ -36,28 +36,15 @@ class HomebaseController extends AppframeController {
 		}
 		//获取open_id
         require_once 'today/class.today.php';
-        require_once 'today/Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         $today = new \Today\Today($this);
         if (session('open_id') != ""){
             $wechat->getUserInfor( session('open_id') );
-            $where = array();
-            $where['open_id'] = array('eq',session('open_id'));
-            $user = D('Common_user')->where($where)->find();
-            $r_where = array();
-            if ($user['status'] == 1){
-                $r_where['doctor_id'] = array('eq',$user['id']);
-                $r_where['status'] = array('eq',0);
-                $msg_count = D('Common_remind')->where($r_where)->count();
-                session('msg_count',$msg_count);
-            }
-            if ($user['status'] == 0){
-                $r_where['patient_id'] = array('eq',$user['open_id']);
-                $r_where['status'] = array('eq',0);
-                $msg_count = D('Common_remind')->where($r_where)->count();
-                session('msg_count',$msg_count);
-            }
             if (session('login_id') == ""){
+                $where = array();
+                $where['open_id'] = array('eq',session('open_id'));
+                $user = D('Common_user')->where($where)->find();
                 session('login_id',$user['id']);
             }
         }
@@ -74,7 +61,7 @@ class HomebaseController extends AppframeController {
             $where['open_id'] = array('eq',$open_id);
             $user = D('Common_user')->where($where)->find();
             $data = array();
-            $wxinfor = D('Wxinfor')->where(array('open_id' => $open_id))->find();
+            $wxinfor = D('Wxinfor_tq')->where(array('open_id' => $open_id))->find();
             if (empty($user)){
                 $data['open_id'] = $open_id;
                 $data['name'] = $wxinfor['nickname'];

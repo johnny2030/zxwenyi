@@ -254,7 +254,7 @@ class Wechat_zj {
 	* @param refresh 是否重新获取最新数据，默认为false，表示直接从数据库获取
 	*/
 	public function getUserInfor( $openID, $refresh = false ) {
-		$mdl_wxinfor = D( 'Wxinfor' );
+		$mdl_wxinfor = D( 'Wxinfor_zj' );
 		$wxuser = $mdl_wxinfor->where( array( 'open_id' => $openID ) )->find();
 		if ( !$refresh && $wxuser ) return $wxuser;
 
@@ -356,7 +356,7 @@ class Wechat_zj {
 	* 通过网页授权直接获取用户信息
 	*/
 	public function getUserInforForAuth20( $openID = '', $refresh = false, $url = '' ) {
-		$mdl_wxinfor = $this->systemObj->loadModel( 'wxinfor' );
+		$mdl_wxinfor = $this->systemObj->loadModel( 'wxinfor_zj' );
 		if ( $openID ) {
 			$wxuser = $mdl_wxinfor->getByWhere( array( 'OpenID' => $openID ) );
 			if ( !$refresh && $wxuser ) return $wxuser;

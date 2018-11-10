@@ -150,9 +150,9 @@ class Wechat_tq {
 	* 从数据库获取access_token，如果没有或者过期，则生成access_token，存入数据库
 	*/
 	public function getAccessToken() {
-		$mdl_wxtoken = D( 'Wxtoken' );
+		$mdl_wxtoken = D( 'Wxtoken_tq' );
 
-		$token = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='token'" );
+		$token = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken_tq where tname='token'" );
 		$token = $token[0];
 
 		if ( $token['seconds'] < 3600 && !empty( $token['token'] ) ) {
@@ -184,9 +184,9 @@ class Wechat_tq {
 	* 从数据库获取jsapi_ticket，如果没有或者过期，则生成jsapi_ticket，存入数据库
 	*/
 	public function getJSApiTicket() {
-		$mdl_wxtoken = D( 'Wxtoken' );
+		$mdl_wxtoken = D( 'Wxtoken_tq' );
 
-		$ticket = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='JSticket'" );
+		$ticket = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken_tq where tname='JSticket'" );
 		$ticket = $ticket[0];
 
 		if ( $ticket['seconds'] < 3600 && !empty( $ticket['token'] ) ) {
@@ -254,7 +254,7 @@ class Wechat_tq {
 	* @param refresh 是否重新获取最新数据，默认为false，表示直接从数据库获取
 	*/
 	public function getUserInfor( $openID, $refresh = false ) {
-		$mdl_wxinfor = D( 'Wxinfor' );
+		$mdl_wxinfor = D( 'Wxinfor_tq' );
 		$wxuser = $mdl_wxinfor->where( array( 'open_id' => $openID ) )->find();
 		if ( !$refresh && $wxuser ) return $wxuser;
 
@@ -356,7 +356,7 @@ class Wechat_tq {
 	* 通过网页授权直接获取用户信息
 	*/
 	public function getUserInforForAuth20( $openID = '', $refresh = false, $url = '' ) {
-		$mdl_wxinfor = $this->systemObj->loadModel( 'wxinfor' );
+		$mdl_wxinfor = $this->systemObj->loadModel( 'wxinfor_tq' );
 		if ( $openID ) {
 			$wxuser = $mdl_wxinfor->getByWhere( array( 'OpenID' => $openID ) );
 			if ( !$refresh && $wxuser ) return $wxuser;

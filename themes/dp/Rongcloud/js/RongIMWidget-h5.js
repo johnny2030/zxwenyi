@@ -336,36 +336,6 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             params:{
                 'g':'portal',
                 'm':'rong',
-                'a':'checkUser'
-            }
-        }).success(function (res) {
-            if(res.status == 1){
-                var subsp = document.getElementById("subsp");
-                var compileFn=$compile('<ul class="rongcloud-clearfix rongcloud-shortWord"><a href="#" ng-click="shortWord()"><li class="rongcloud-sprite"></li></a></ul><ul class="rongcloud-clearfix rongcloud-voices"><a href="#" ng-click="showMore()"><li class="rongcloud-sprite-voice"></li></a></ul>');
-                var $dom=compileFn($scope);
-                $dom.appendTo(subsp);
-
-                var lfic = document.getElementById("left_ico");
-                var compileLi=$compile('<i class="voice_show" id="voice_sw" ng-click="showTv()"></i>');
-                var $dm=compileLi($scope);
-                $dm.appendTo(lfic);
-            }else{
-                var rgic = document.getElementById("right_ico");
-                rgic.style.display = 'none';
-                var lfic = document.getElementById("left_ico");
-                var compileLi=$compile('<i class="rongcloud-sprite2 rongcloud-icon_message_type1" id="uploadfile"></i>');
-                var $dm=compileLi($scope);
-                $dm.appendTo(lfic);
-            }
-        }).error(function (error) {
-            alert("请求失败");
-        });
-        $http({
-            method:'GET',
-            url:'/index.php',
-            params:{
-                'g':'portal',
-                'm':'rong',
                 'a':'getUpToken'
             }
         }).success(function (res) {
@@ -378,10 +348,8 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 return;
             if (newVal) {
                 var emj = document.getElementById("emj");
-                var shtw = document.getElementById("shtw");
                 var vic = document.getElementById("voice");
                 emj.style.display = 'block';
-                shtw.style.display = 'none';
                 vic.style.display = 'none';
                 $scope.wrapperbottom = {
                     bottom: "8rem"
@@ -396,56 +364,14 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $scope.showEmj = function () {
             var emj = document.getElementById("emj");
-            var shtw = document.getElementById("shtw");
             var vic = document.getElementById("voice");
             emj.style.display = 'block';
-            shtw.style.display = 'none';
             vic.style.display = 'none';
-        };
-        $scope.shortWord = function () {
-            var emj = document.getElementById("emj");
-            var shtw = document.getElementById("shtw");
-            var vic = document.getElementById("voice");
-            $http({
-                method:'GET',
-                url:'/index.php',
-                params:{
-                    'g':'portal',
-                    'm':'rong',
-                    'a':'getShortWord'
-                }
-            }).success(function (res) {
-                var arr = Object.keys(res);
-                var num = arr.length - 2;
-                shtw.innerHTML = "";
-                if (num > 0){
-                    for (i = 0; i<num; i++){
-                        var shortWord = res[i].content;
-                        var compileFn=$compile('<div class="shortWord"><a href="javascript:void(0);" ng-click=\'setMsg("'+shortWord+'")\'>'+res[i].content+'</a></div>');
-                        var $dom=compileFn($scope);
-                        $dom.appendTo(shtw);
-                    }
-                } else {
-                    shtw.innerHTML += "<div>暂未设置快捷用语</div>";
-                }
-            }).error(function (error) {
-                alert("请求失败");
-            })
-            emj.style.display = 'none';
-            shtw.style.display = 'block';
-            vic.style.display = 'none';
-        };
-        $scope.setMsg = function (shortWord) {
-            var obj = document.getElementById("inputMsg");
-            obj.value=shortWord;
-            $scope.currentConversation.messageContent = shortWord;
         };
         $scope.showMore = function () {
             var emj = document.getElementById("emj");
-            var shtw = document.getElementById("shtw");
             var vic = document.getElementById("voice");
             emj.style.display = 'none';
-            shtw.style.display = 'none';
             vic.style.display = 'block';
         };
         $scope.showTv = function () {
@@ -1009,209 +935,6 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 }
             });
         }
-        wx.ready(function () {
-            wx.checkJsApi({
-                jsApiList: [
-                    'startRecord',
-                    'stopRecord',
-                    'onVoiceRecordEnd',
-                    'playVoice',
-                    'pauseVoice',
-                    'stopVoice',
-                    'onVoicePlayEnd',
-                    'uploadVoice',
-                    'downloadVoice',
-                    'translateVoice',
-                    'chooseImage',
-                    'previewImage',
-                    'uploadImage',
-                    'downloadImage'
-                ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-                success: function (res) {
-                    if (res.checkResult.getLocation == false) {
-                        alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
-                        return;
-                    }
-                }
-            });
-            var voice = {
-                localId: '',
-                serverId: ''
-            };
-            var END;
-            var START;
-            //按下开始录音
-            $('#tk_btn').on('touchstart', function(event){
-                event.preventDefault();
-                START = new Date().getTime();
-                recordTimer = setTimeout(function(){
-                    wx.startRecord({
-                        success: function(){
-                            localStorage.rainAllowRecord = 'true';
-                        },
-                        cancel: function () {
-                            alert('用户拒绝授权录音');
-                        }
-                    });
-                },300);
-            });
-            //松手结束录音
-            $('#tk_btn').on('touchend', function(event){
-                event.preventDefault();
-                END = new Date().getTime();
-                if((END - START) < 1000){
-                    END = 0;
-                    START = 0;
-                    //小于1000ms，不录音
-                    clearTimeout(recordTimer);
-                    var t=setTimeout(function(){wx.stopRecord()},800);//这里设置800毫秒，是因为如果用户录音之后马上松开按钮，会成 wx.stopRecord不起作用的情况，然后会一直录音，所以时间设置长一点
-                    //clearTimeout(t);
-                }else{
-                    wx.stopRecord({
-                        success: function (res) {
-                            voice.localId = res.localId;
-                            uploadVoice();
-                        },
-                        fail: function (res) {
-                            alert(JSON.stringify(res));
-                        }
-                    });
-                }
-            });
-            //上传录音
-            function uploadVoice(){
-                //调用微信的上传录音接口把本地录音先上传到微信的服务器
-                //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
-                wx.uploadVoice({
-                    localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
-                    isShowProgressTips: 0, // 默认为1，显示进度提示
-                    success: function (res) {
-                        voice.serverId = res.serverId;
-                        $.ajax({
-                            url: 'index.php?g=portal&m=rong&a=uploadVoice',
-                            type: 'post',
-                            data: {'media_id': voice.serverId.toString()},
-                            dataType: "json",
-                            success: function (data) {
-                                var voice = data['vic'];
-                                var duration = voice.length / 1024;
-                                if(duration < 1){
-                                    duration = 1;
-                                }
-                                var im = RongIMLib.VoiceMessage.obtain(voice,duration);
-                                var content = packDisplaySendMessage(im, WidgetModule.MessageType.VoiceMessage);
-                                RongIMLib.RongIMClient.getInstance().sendMessage($scope.currentConversation.targetType, $scope.currentConversation.targetId, im, {
-                                    onSuccess: function () {
-                                        conversationListServer.updateConversations().then(function () {
-                                        });
-                                    },
-                                    onError: function () {
-                                    }
-                                });
-                                conversationServer._addHistoryMessages(WidgetModule.Message.convert(content));
-                                $scope.$apply();
-                                $scope.refreshiScroll();
-                            },
-                            error: function (xhr, errorType, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                });
-            }
-            // 4.4 监听录音自动停止
-            wx.onVoiceRecordEnd({
-                complete: function (res) {
-                    voice.localId = res.localId;
-                    //uploadVoice();//上传录音到服务器
-                    alert('录音时间已超过一分钟');
-                }
-            });
-            var images = {
-                localId: [],
-                serverId: []
-            };
-            $("#uploadImage").click(function () {
-                if (!$scope.currentConversation.targetId || !$scope.currentConversation.targetType) {
-                    alert("请先选择一个会话目标。");
-                    return;
-                }
-                $http({
-                    method:'GET',
-                    url:'/index.php',
-                    params:{
-                        'g':'portal',
-                        'm':'rong',
-                        'a':'check_chat',
-                        'userId': $scope.currentConversation.targetId
-                    }
-                }).success(function (res) {
-                    if (res == 0){
-                        alert("咨询已失效，请重新咨询");
-                    } else {
-                        wx.chooseImage({
-                            count: 1, // 默认9
-                            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-                            success: function (res) {
-                                images.localId = res.localIds;
-                                if (images.localId.length == 0) {
-                                    alert('请先选择图片');
-                                    return;
-                                }
-                                if (images.localId.length > 1) {
-                                    alert('目前仅支持单张图片上传,请重新上传');
-                                    images.localId = [];
-                                    return;
-                                }
-                                // 上传照片
-                                wx.uploadImage({
-                                    localId: images.localId.toString(),
-                                    isShowProgressTips: 1,
-                                    success: function (res) {
-                                        images.serverId = res.serverId;
-                                        $.ajax({
-                                            url: 'index.php?g=portal&m=rong&a=uploadImg',
-                                            type: 'post',
-                                            data: {'media_id': images.serverId.toString()},
-                                            dataType: "json",
-                                            success: function (data) {
-                                                var im = RongIMLib.ImageMessage.obtain(data['img'],data['img_url']);
-                                                var content = packDisplaySendMessage(im, WidgetModule.MessageType.ImageMessage);
-                                                RongIMLib.RongIMClient.getInstance().sendMessage($scope.currentConversation.targetType, $scope.currentConversation.targetId, im, {
-                                                    onSuccess: function () {
-                                                        conversationListServer.updateConversations().then(function () {
-                                                        });
-                                                    },
-                                                    onError: function (message) {
-                                                        alert(message);
-                                                    }
-                                                });
-                                                conversationServer._addHistoryMessages(WidgetModule.Message.convert(content));
-                                                $scope.$apply();
-                                                console.log(1);
-                                                $scope.refreshiScroll();
-                                            },
-                                            error: function (xhr, errorType, error) {
-                                                console.log(error);
-                                            }
-                                        });
-                                    },
-                                    fail: function (res) {
-                                        alert(JSON.stringify(res));
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }).error(function (error) {
-                    alert("请求失败");
-                });
-            });
-        });
-        wx.error(function (res) {
-            alert(res.errMsg);
-        });
     }]);
 /// <reference path="../../typings/tsd.d.ts"/>
 var conversationDirective = angular.module("RongWebIMWidget.conversationDirective", ["RongWebIMWidget.conversationController"]);
@@ -2700,7 +2423,7 @@ angular.module('RongWebIMWidget').run(['$templateCache', function($templateCache
   'use strict';
 
   $templateCache.put('./ts/conversation/conversation.tpl.html',
-    "<div id=rong-conversation class=\"rongcloud-main rongcloud-kefuList\" ng-show=showSelf><evaluatedir type=evaluate.type display=evaluate.showevaluate confirm=evaluate.onConfirm(data) cancle=evaluate.onCancle()></evaluatedir><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\" ng-click=close()></a><div class=rongcloud-title><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>{{currentConversation.title}}</a></div><a href=\"javascript:void 0\"></a></header><div id=wrapper ng-iscroll ng-style=wrapperbottom><div id=scroller><div id=Messages><div class=\"rongcloud-MessagesInner rongcloud-message-scroll\"><div class=rongcloud-Message-wrapper><div ng-repeat=\"item in messageList\" ng-switch=item.panelType><div class=rongcloud-Messages-date ng-switch-when=104><b>{{item.sentTime|historyTime}}</b></div><div class=rongcloud-Messages-date ng-switch-when=105><b my-tap=getHistory()>查看历史消息</b></div><div class=rongcloud-Messages-date ng-switch-when=106><b my-tap=getMoreMessage()>获取更多消息</b></div><div class=rongcloud-sys-tips ng-switch-when=2><span>{{item.content.content}}</span></div><div class=\"rongcloud-Message rongcloud-status1\" ng-switch-when=1 ng-class=\"{'rongcloud-youMsg':item.messageDirection==2,'rongcloud-myMsg':item.messageDirection==1}\"><div class=rongcloud-Messages-unreadLine></div><div><div class=rongcloud-Message-header><a href=\"index.php?g=portal&m=doctor&a=details_s&id={{item.content.userInfo.userId}}\" ><img class=\"rongcloud-img rongcloud-u-isActionable rongcloud-Message-avatar rongcloud-avatar\" ng-src=\"{{item.content.userInfo.portraitUri||'../themes/dp/Rongcloud/images/webBg.png'}}\" src=../themes/dp/Rongcloud/images/barBg.png alt=\"\"></a></div></div><div class=rongcloud-Message-body ng-switch=item.messageType><textmessage ng-switch-when=TextMessage msg=item.content></textmessage><imagemessage ng-switch-when=ImageMessage msg=item.content></imagemessage><voicemessage ng-switch-when=VoiceMessage msg=item.content></voicemessage><locationmessage ng-switch-when=LocationMessage msg=item.content></locationmessage><richcontentmessage ng-switch-when=RichContentMessage msg=item.content></richcontentmessage></div></div></div></div></div></div></div></div><footer class=\"rongcloud-footer rongcloud-clearfix\"><div id=funcPanel style=\"display: flex;display: -webkit-flex\"><a id=left_ico href=# class=\"rongcloud-pull-left rongcloud-message_type_btn\" ng-show=\"_inputPanelState==0\"></a><a href=# class=\"rongcloud-pull-left rongcloud-message_type2_btn\" ng-click=switchPerson() ng-show=\"_inputPanelState==2\"><span>转人工服务</span></a><div class=rongcloud-message_wrap id=show_tx><textarea id=inputMsg ng-focus=\"showemoji=false\" onfocus=enter() ctrl-enter-keys fun=send() ctrlenter=false ondrop=\"return false\" ng-model=currentConversation.messageContent placeholder=请输入文字...></textarea><span id=tk_btn class=an-btn>按住说话</span></div><a id=right_ico href=# class=\"rongcloud-pull-right rongcloud-message_type_btn3\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-icon_message_type1\" id=\"uploadfile\"></i></a><a href=# class=\"rongcloud-pull-right rongcloud-message_type_btn rongcloud-message_type_btn2\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-message_emoji_btn\" ng-click=\"showemoji=!showemoji\"></i></a><a href=\"\" class=rongcloud-send_btn  ng-click=send()>发送</a></div><div class=rongcloud-pub-faces ng-show=showemoji id=emj><swipe-emoji content=currentConversation></swipe-emoji></div><div class=rongcloud-pub-faces ng-show=showemoji id=shtw></div><div class=rongcloud-pub-faces ng-show=showemoji id=voice><ul><!--<li class=voice_pressure><img src=../themes/dp/Rongcloud/images/img_ico.png><span>发送图片</span></li>--><li class=voice_pressure><a href=\"\" ng-click=end_chat()><img src=../themes/dp/Rongcloud/images/close_chat.png ><span>结束咨询</span></a></li></ul></div><div class=\"rongcloud-footerBtn rongcloud-clearfix\" ng-show=showemoji id=subsp><ul class=\"rongcloud-clearfix rongcloud-emojiWrap\"><a href=#  ng-click=showEmj()><li class=rongcloud-sprite2></li></a></ul></div></footer></div></div>"
+    "<div id=rong-conversation class=\"rongcloud-main rongcloud-kefuList\" ng-show=showSelf><evaluatedir type=evaluate.type display=evaluate.showevaluate confirm=evaluate.onConfirm(data) cancle=evaluate.onCancle()></evaluatedir><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\" ng-click=close()></a><div class=rongcloud-title><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>{{currentConversation.title}}</a></div><a href=\"javascript:void 0\"></a></header><div id=wrapper ng-iscroll ng-style=wrapperbottom><div id=scroller><div id=Messages><div class=\"rongcloud-MessagesInner rongcloud-message-scroll\"><div class=rongcloud-Message-wrapper><div ng-repeat=\"item in messageList\" ng-switch=item.panelType><div class=rongcloud-Messages-date ng-switch-when=104><b>{{item.sentTime|historyTime}}</b></div><div class=rongcloud-Messages-date ng-switch-when=105><b my-tap=getHistory()>查看历史消息</b></div><div class=rongcloud-Messages-date ng-switch-when=106><b my-tap=getMoreMessage()>获取更多消息</b></div><div class=rongcloud-sys-tips ng-switch-when=2><span>{{item.content.content}}</span></div><div class=\"rongcloud-Message rongcloud-status1\" ng-switch-when=1 ng-class=\"{'rongcloud-youMsg':item.messageDirection==2,'rongcloud-myMsg':item.messageDirection==1}\"><div class=rongcloud-Messages-unreadLine></div><div><div class=rongcloud-Message-header><a href=\"index.php?g=portal&m=doctor&a=details_s&id={{item.content.userInfo.userId}}\" ><img class=\"rongcloud-img rongcloud-u-isActionable rongcloud-Message-avatar rongcloud-avatar\" ng-src=\"{{item.content.userInfo.portraitUri||'../themes/dp/Rongcloud/images/webBg.png'}}\" src=../themes/dp/Rongcloud/images/barBg.png alt=\"\"></a></div></div><div class=rongcloud-Message-body ng-switch=item.messageType><textmessage ng-switch-when=TextMessage msg=item.content></textmessage><imagemessage ng-switch-when=ImageMessage msg=item.content></imagemessage><voicemessage ng-switch-when=VoiceMessage msg=item.content></voicemessage><locationmessage ng-switch-when=LocationMessage msg=item.content></locationmessage><richcontentmessage ng-switch-when=RichContentMessage msg=item.content></richcontentmessage></div></div></div></div></div></div></div></div><footer class=\"rongcloud-footer rongcloud-clearfix\"><div id=funcPanel style=\"display: flex;display: -webkit-flex\"><a id=left_ico href=# class=\"rongcloud-pull-left rongcloud-message_type_btn\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-icon_message_type1\" id=\"uploadfile\"></i></a><a href=# class=\"rongcloud-pull-left rongcloud-message_type2_btn\" ng-click=switchPerson() ng-show=\"_inputPanelState==2\"><span>转人工服务</span></a><div class=rongcloud-message_wrap id=show_tx><textarea id=inputMsg ng-focus=\"showemoji=false\" onfocus=enter() ctrl-enter-keys fun=send() ctrlenter=false ondrop=\"return false\" ng-model=currentConversation.messageContent placeholder=请输入文字...></textarea></div><a href=# class=\"rongcloud-pull-right rongcloud-message_type_btn rongcloud-message_type_btn2\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-message_emoji_btn\" ng-click=\"showemoji=!showemoji\"></i></a><a href=\"\" class=rongcloud-send_btn  ng-click=send()>发送</a></div><div class=rongcloud-pub-faces ng-show=showemoji id=emj><swipe-emoji content=currentConversation></swipe-emoji></div><div class=rongcloud-pub-faces ng-show=showemoji id=shtw></div><div class=rongcloud-pub-faces ng-show=showemoji id=voice><ul><!--<li class=voice_pressure><img src=../themes/dp/Rongcloud/images/img_ico.png><span>发送图片</span></li>--><li class=voice_pressure><a href=\"\" ng-click=end_chat()><img src=../themes/dp/Rongcloud/images/close_chat.png ><span>结束咨询</span></a></li></ul></div><div class=\"rongcloud-footerBtn rongcloud-clearfix\" ng-show=showemoji id=subsp><ul class=\"rongcloud-clearfix rongcloud-emojiWrap\"><a href=#  ng-click=showEmj()><li class=rongcloud-sprite2></li></a></ul></div></footer></div></div>"
   );
 
 

@@ -6,8 +6,8 @@
 <body>
 <div class="mui-content personal">
 	<div class="head">
-		<a href="{:U('portal/user/uploadImg')}"><img src="__TMPL__Tieqiao/images/patient.jpg"/></a>
-		<h4><a href="{:U('portal/user/modify',array('data'=>$user['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">张三</a></h4>
+		<a href="{:U('portal/user/uploadImg')}"><img src="{$user.photo}"/></a>
+		<h4><a href="{:U('portal/user/modify',array('data'=>$user['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">$user['name']</a></h4>
 	</div>
 	<ul class="mui-table-view mui-table-view-chevron">
 		<li class="mui-table-view-cell">
@@ -25,7 +25,15 @@
 		<li class="mui-table-view-cell">
 			<a href="{:U('portal/user/modify',array('data'=>$user['sex'],'flg'=>sex,'menu'=>性别))}" class="mui-navigate-right">
 				性别
-				<i class="mui-pull-right tips">{$user.sex}</i>
+				<i class="mui-pull-right tips">
+					<if condition="$user.sex eq 2">
+						<option value="1">男</option>
+						<option value="2" selected>女</option>
+						<else />
+						<option value="1" selected>男</option>
+						<option value="2">女</option>
+					</if>
+				</i>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
@@ -40,48 +48,33 @@
 				<i class="mui-pull-right tips">{$user.weight}</i>
 			</a>
 		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$doctor['phone'],'flg'=>phone,'menu'=>电话))}" class="mui-navigate-right">
+				手机号码
+				<i class="mui-pull-right tips">{$doctor.phone}</i>
+			</a>
+		</li>
 	</ul>
 	<ul class="mui-table-view mui-table-view-chevron">
 		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['money'],'flg'=>money,'menu'=>过敏史))}" class="mui-navigate-right">
+			<a href="{:U('portal/user/modify',array('data'=>$user['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
 				过敏史
 				<hr>
-				<i class="mui-pull-right tips">{$user.money}</i>
+				<i class="mui-pull-right tips">{$user.allergic}</i>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['introduce'],'flg'=>introduce,'menu'=>药物禁忌,'check'=>check))}" class="mui-navigate-right">
-				药物禁忌
-				<hr>
-				<p class="mui-ellipsis-2">暂无禁忌</p>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['speciality'],'flg'=>speciality,'menu'=>生活嗜好,'check'=>check))}" class="mui-navigate-right">
-				生活嗜好
-				<hr>
-				<p class="mui-ellipsis-2">{$user.speciality}</p>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['speciality'],'flg'=>speciality,'menu'=>是否服用保健品,'check'=>check))}" class="mui-navigate-right">
-				是否服用保健品
-				<hr>
-				<p class="mui-ellipsis-2"></p>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['speciality'],'flg'=>speciality,'menu'=>健康状况,'check'=>check))}" class="mui-navigate-right">
+			<a href="{:U('portal/user/modify',array('data'=>$user['healthy'],'flg'=>healthy,'menu'=>健康状况))}" class="mui-navigate-right">
 				健康状况
 				<hr>
-				<p class="mui-ellipsis-2">{$user.speciality}</p>
+				<p class="mui-ellipsis-2">{$user.healthy}</p>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$user['speciality'],'flg'=>speciality,'menu'=>运动情况,'check'=>check))}" class="mui-navigate-right">
+			<a href="{:U('portal/user/modify',array('data'=>$user['motion'],'flg'=>motion,'menu'=>运动情况))}" class="mui-navigate-right">
 				运动情况
 				<hr>
-				<p class="mui-ellipsis-2">{$user.speciality}</p>
+				<p class="mui-ellipsis-2">{$user.motion}</p>
 			</a>
 		</li>
 	</ul>

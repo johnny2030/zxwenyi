@@ -64,7 +64,7 @@ class UserController extends HomebaseController {
     //医生个人中心
     public function info_doctor() {
         $id = (int)session('login_id');
-        $doctor = $this->common_user_model->find($id);
+        $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('id' => $id))->find();
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/info_doctor');
     }
@@ -93,16 +93,65 @@ class UserController extends HomebaseController {
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }
-    //问题列表
+    //咨询问诊
     public function question() {
         $this->display('../Tieqiao/question');
     }
-    //咨询问题
-    public function question_apply() {
-        $this->display('../Tieqiao/question_apply');
-    }
-    //对话列表
-    public function question_chat() {
-        $this->display('../Tieqiao/question_chat');
+    //信息修改
+    public function modify() {
+        if ( IS_POST ) {
+            $id = (int)session('login_id');
+            $user = $this->common_user_model->find($id);
+            if(!empty($_POST['phone']) && $_POST['phone'] != $user['phone']){
+                $where = array();
+                $where['phone'] = array('eq',$_POST['phone']);
+                $check_user = $this->common_user_model->where($where)->find();
+                if (!empty($check_user)) $this->error('该手机号已被使用！');
+            }
+            if(!empty($_POST['province']) && !empty($_POST['city'])){
+                $county = $_POST['county'];
+                if (empty($county)){
+                    $_POST['county'] = '0';
+                }
+            }
+            $_POST['update_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
+            if ($result) {
+                R('Patient/patient_user');
+            } else {
+                $this->error('修改失败！');
+            }
+        } else {
+            $data = $_GET['data'];//数据
+            $flg = $_GET['flg'];//数据库字段名
+            $menu = $_GET['menu'];//页面字段名
+            $check = $_GET['check'];//介绍/擅长
+
+            $id = (int)session('login_id');
+            $user = $this->common_user_model->find($id);
+            if ($flg == 'healthy'){
+
+            }elseif ($flg == 'hospital'){
+                $where = array();
+                $where['del_flg'] = array('eq',0);
+                $list = $this->common_hospital_model->where($where)->select();
+                $this->assign( 'list', $list );
+            }elseif ($flg == 'office'){
+                $where = array();
+                $where['del_flg'] = array('eq',0);
+                $list = $this->common_office_model->where($where)->select();
+                $this->assign( 'list', $list );
+            }elseif ($flg == 'tag'){
+                $where = array();
+                $where['del_flg'] = array('eq',0);
+                $list = $this->common_tag_model->where($where)->select();
+                $this->assign( 'list', $list );
+            }
+            $this->assign( 'data', $data );
+            $this->assign( 'flg', $flg );
+            $this->assign( 'menu', $menu );
+            $this->assign( 'check', $check );
+            $this->display('../Tieqiao/modify');
+        }
     }
 }

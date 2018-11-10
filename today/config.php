@@ -13,8 +13,8 @@ $PAYMENTS = array(
 $SMS_ENABLE = true;  //是否启用发送短信接口
 $TIME_LIMIT = 120;  //发送短信时间间隔，单位：秒
 //开发环境
-define('RY_KEY','m7ua80gbmjmjm');
-define('RY_SECRET','06UxW29eWPO2');
+define('RY_KEY','6tnym1br64ed7');
+define('RY_SECRET','Rj4C6sOXPXp2t');
 //生产环境
 /*define('RY_KEY','x18ywvqfxbt2c');
 define('RY_SECRET','WQUVUwLuZS6k');

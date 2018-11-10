@@ -44,14 +44,6 @@ class RongController extends CheckController {
     public function index(){
         $this->display('../Rongcloud/demo/user1/index');
     }
-    public function getShortWord(){
-        $id = session('login_id');
-        $where = array();
-        $where['user_id'] = array('eq',$id);
-        $where['del_flg'] = array('eq',0);
-        $list = $this->doctor_shortword_model->where($where)->select();
-        $this->ajaxReturn($list);
-    }
     public function get_data(){
         require_once 'today/config.php';
         $id=session('login_id');
@@ -147,11 +139,6 @@ class RongController extends CheckController {
         $qiniu = new \Think\Upload\Driver\Qiniu($config);
         $upToken = $qiniu->getUpToken();
         $this->ajaxReturn(' '.$upToken);
-    }
-    public function send(){
-        $RongCloud = new \RongCloud(RY_KEY, RY_SECRET);
-        $result = $RongCloud->Message()->publishPrivate('33','44','TextMessage','123','','','','0','1','1','0');
-        $this->ajaxReturn($result);
     }
     public function uploadVoice() {
         $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
