@@ -3,32 +3,25 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('tag/index')}">具体科室信息</a></li>
-			<li class="active"><a href="{:U('tag/add')}">添加具体科室</a></li>
+			<li><a href="{:U('ZJwxmenu/submenu',array('id'=>$id))}">子菜单</a></li>
+			<li class="active"><a href="javascript:void(0)">添加子菜单</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$id}">
 			<div class="row-fluid">
 				<div class="span9">
 					<table class="table table-bordered">
 						<tr>
-							<th>科室名称</th>
+							<th width="100">菜单名</th>
 							<td>
-								<select id="office_id" name="office_id" style="width: 400px;">
-									<notempty name="list">
-										<foreach name="list" item="li">
-											<option value="{$li.id}">{$li.name}</option>
-										</foreach>
-										<else/>
-										<option value="">请先添加科室</option>
-									</notempty>
-								</select>
+								<input type="text" style="width: 200px;" id="name" name="name" value="" placeholder="请输入菜单名"/>
 								<span class="form-required" style="color:red;"> *</span>
 							</td>
 						</tr>
 						<tr>
-							<th>具体科室名称</th>
+							<th>链接地址</th>
 							<td>
-								<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入具体科室名称"/>
+								<input type="text" style="width: 500px;" id="url" name="url" value="" placeholder="请输入链接地址"/>
 								<span class="form-required" style="color:red;"> *</span>
 							</td>
 						</tr>
@@ -37,7 +30,7 @@
 			</div>
 			<div class="form-actions">
 				<button class="btn btn-primary js-ajax-submit" type="submit">添加</button>
-				<a class="btn" href="{:U('tag/index')}">返回</a>
+				<a class="btn" href="{:U('ZJwxmenu/submenu',array('id'=>$id))}">返回</a>
 			</div>
 		</form>
 	</div>
@@ -107,17 +100,16 @@
 							});
 						} catch (err) {}
 					},
-					//验证规则
-					rules : {
-						'name' : { required : 1 },
-                        'office_id' : { required : 1 }
-
-					},
-					//验证未通过提示消息
-					messages : {
-                        'name' : { required : "请输入具体科室名" },
-                        'office_id' : { required : "请选择科室信息" }
-					},
+                    //验证规则
+                    rules : {
+                        'name' : { required : 1 },
+                        'url' : { required : 1 }
+                    },
+                    //验证未通过提示消息
+                    messages : {
+                        'name' : { required : "请输入菜单名" },
+                        'url' : { required : "请输入链接地址" }
+                    },
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,
 					//是否在获取焦点时验证
@@ -155,7 +147,7 @@
 											{
 												name : "返回列表",
 												callback : function() {
-													location.href = "{:U('tag/index')}";
+													location.href = "{:U('ZJwxmenu/submenu',array('id'=>$id))}";
 													return true;
 												}
 											}

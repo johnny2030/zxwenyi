@@ -3,8 +3,8 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('wxmenu/index')}">微信菜单信息</a></li>
-			<li class="active"><a href="{:U('wxmenu/add')}">添加微信菜单</a></li>
+			<li><a href="{:U('ZJwxmenu/index')}">专家微信菜单</a></li>
+			<li class="active"><a href="{:U('ZJwxmenu/add')}">添加微信菜单</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 			<div class="row-fluid">
@@ -29,7 +29,7 @@
 			</div>
 			<div class="form-actions">
 				<button class="btn btn-primary js-ajax-submit" type="submit">添加</button>
-				<a class="btn" href="{:U('wxmenu/index')}">返回</a>
+				<a class="btn" href="{:U('ZJwxmenu/index')}">返回</a>
 			</div>
 		</form>
 	</div>
@@ -146,7 +146,7 @@
 											{
 												name : "返回列表",
 												callback : function() {
-													location.href = "{:U('wxmenu/index')}";
+													location.href = "{:U('ZJwxmenu/index')}";
 													return true;
 												}
 											}

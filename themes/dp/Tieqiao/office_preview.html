@@ -1,11 +1,10 @@
 <!doctype html>
 <html>
 <head>
-	<tc_include file="Public/MPHead"/>
+	<tc_include file="Public/TQHead"/>
 </head>
 <body>
 <header id="header" class="mui-bar mui-bar-nav">
-	<img src="__TMPL__Public/images/logo.jpg" class="head-img">
 	<h1 class="mui-title">科室咨询</h1>
 </header>
 <div class="mui-content">
@@ -14,21 +13,13 @@
 			<img src="__TMPL__Public/images/department_logo.png" class="off-ico"><span class="off-text">科室咨询</span>
 		</div>
 		<div class="mui-input-row">
-			<li class="off-preview">
-				<span>科室1</span>
-			</li>
-			<li class="off-preview">
-				<span>科室1</span>
-			</li>
-			<li class="off-preview">
-				<span>科室1</span>
-			</li>
-			<li class="off-preview">
-				<span>科室1</span>
-			</li>
-			<li class="off-preview">
-				<span>科室1</span>
-			</li>
+			<foreach name="list" item="l">
+				<li class="off-preview">
+					<a href="{:U('portal/user/doctor_list',array('office_id'=>$l['id']))}" >
+						<span>{$l.name}</span>
+					</a>
+				</li>
+			</foreach>
 		</div>
 	</div>
 </div>

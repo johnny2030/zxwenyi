@@ -4,13 +4,13 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('wxmenu/submenu',array('id'=>$id))}">子菜单</a></li>
-			<li><a href="{:U('wxmenu/sub_add',array('id'=>$id))}">添加子菜单</a></li>
+			<li class="active"><a href="{:U('TQwxmenu/submenu',array('id'=>$id))}">子菜单</a></li>
+			<li><a href="{:U('TQwxmenu/sub_add',array('id'=>$id))}">添加子菜单</a></li>
 		</ul>
 		<form class="js-ajax-form" method="post">
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/listorders')}">排序</button>
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/listorders')}">排序</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<table class="table table-hover table-bordered table-list">
 				<thead>
@@ -42,8 +42,8 @@
 						<td>{$vo.update_time}</td>
 						<td>{$vo.create_time}</td>
 						<td>
-							<a style="margin-top: 5px;" href="{:U('wxmenu/sub_edit',array('id'=>$vo['id'],'fid'=>$id))}" class="btn btn-success btn-small">编辑</a>
-							<a style="margin-top: 5px;" href="{:U('wxmenu/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+							<a style="margin-top: 5px;" href="{:U('TQwxmenu/sub_edit',array('id'=>$vo['id'],'fid'=>$id))}" class="btn btn-success btn-small">编辑</a>
+							<a style="margin-top: 5px;" href="{:U('TQwxmenu/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
 				</foreach>
@@ -61,8 +61,8 @@
 				</tfoot>
 			</table>
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/listorders')}">排序</button>
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/listorders')}">排序</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 		</form>
 	</div>

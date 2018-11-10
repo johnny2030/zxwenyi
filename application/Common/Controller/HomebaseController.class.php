@@ -35,7 +35,7 @@ class HomebaseController extends AppframeController {
 			}
 		}
 		//获取open_id
-        /*require_once 'today/class.today.php';
+        require_once 'today/class.today.php';
         require_once 'today/Wechat.php';
         $wechat = new \Wechat( $this );
         $today = new \Today\Today($this);
@@ -99,7 +99,7 @@ class HomebaseController extends AppframeController {
             }
             session('open_id',$open_id);
             session('login_id',$user['id']);
-        }*/
+        }
 		if(sp_is_user_login()){
 			$this->assign("user",sp_get_current_user());
 		}

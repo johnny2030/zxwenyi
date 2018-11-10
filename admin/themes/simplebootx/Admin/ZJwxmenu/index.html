@@ -3,20 +3,20 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('wxmenu/index')}">微信菜单信息</a></li>
-			<li><a href="{:U('wxmenu/add')}">添加微信菜单</a></li>
+			<li class="active"><a href="{:U('ZJwxmenu/index')}">专家微信菜单</a></li>
+			<li><a href="{:U('ZJwxmenu/add')}">添加微信菜单</a></li>
 		</ul>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入菜单名">
 			<button class="btn btn-primary">搜索</button>
-			<a class="btn btn-danger" href="{:U('wxmenu/index')}">清空</a>
+			<a class="btn btn-danger" href="{:U('ZJwxmenu/index')}">清空</a>
 		</form>
 		<form class="js-ajax-form" method="post">
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/listorders')}">排序</button>
-				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/toggle',array('status'=>1))}" data-subcheck="true" data-msg="确定使用？当前菜单将覆盖原有菜单！">使用</button>
-				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/toggle',array('status'=>0))}" data-subcheck="true" data-msg="确定停用？原有菜单将全部删除！">停用</button>
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/listorders')}">排序</button>
+				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/toggle',array('status'=>1))}" data-subcheck="true" data-msg="确定使用？当前菜单将覆盖原有菜单！">使用</button>
+				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/toggle',array('status'=>0))}" data-subcheck="true" data-msg="确定停用？原有菜单将全部删除！">停用</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<table class="table table-hover table-bordered table-list">
 				<thead>
@@ -48,9 +48,9 @@
 						<td>{$vo.update_time}</td>
 						<td>{$vo.create_time}</td>
 						<td>
-							<a class="btn btn-primary btn-small js-ajax-submit" style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('wxmenu/submenu',array('id'=>$vo['id']))}','{$vo.name}')">子菜单</a>
-							<a style="margin-top: 5px;" href="{:U('wxmenu/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">编辑</a>
-							<a style="margin-top: 5px;" href="{:U('wxmenu/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+							<a class="btn btn-primary btn-small js-ajax-submit" style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('ZJwxmenu/submenu',array('id'=>$vo['id']))}','{$vo.name}')">子菜单</a>
+							<a style="margin-top: 5px;" href="{:U('ZJwxmenu/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">编辑</a>
+							<a style="margin-top: 5px;" href="{:U('ZJwxmenu/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
 				</foreach>
@@ -68,10 +68,10 @@
 				</tfoot>
 			</table>
 			<div class="table-actions">
-				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/listorders')}">排序</button>
-				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/toggle',array('status'=>1))}" data-subcheck="true" data-msg="确定使用？当前菜单将覆盖原有菜单！">使用</button>
-				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/toggle')}" data-subcheck="true" data-msg="确定停用？原有菜单将全部删除！">停用</button>
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('wxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/listorders')}">排序</button>
+				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/toggle',array('status'=>1))}" data-subcheck="true" data-msg="确定使用？当前菜单将覆盖原有菜单！">使用</button>
+				<button class="btn btn-warning btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/toggle')}" data-subcheck="true" data-msg="确定停用？原有菜单将全部删除！">停用</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('ZJwxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<div class="pagination">{$page}</div>
 		</form>

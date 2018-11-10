@@ -68,6 +68,10 @@ class TagController extends AdminbaseController {
 		} else {
 			$id = intval( I( 'get.id' ) );
 			$tag = $this->common_tag_model->find($id);
+            $where = array();
+            $where['del_flg'] = array('eq',0);
+            $list = $this->common_office_model->where($where)->order("create_time desc")->select();
+            $this->assign( 'list', $list );
 			$this->assign($tag);
 			$this->display();
 		}

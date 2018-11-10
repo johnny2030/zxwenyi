@@ -325,7 +325,8 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 	background: url('../images/v-code.jpg') no-repeat 5px;
 }
 .c-job{
-	background: url('../images/department_logo.png') no-repeat 5px;
+	background: #FFFFFF url('../images/department_logo.png') no-repeat 5px;
+	border: 1px solid rgba(0,0,0,.2) !important;
 }
 .pt-sel{
 	background: #FFFFFF url('../images/national.png') no-repeat 5px;

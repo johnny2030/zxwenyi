@@ -3,86 +3,111 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('office/index')}">消息管理</a></li>
+			<li class="active"><a href="{:U('messages/index')}">消息管理</a></li>
 		</ul>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入咨询人">
-			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入咨询内容">
+			<input type="text" name="doctor_name" style="width: 200px;" value="{$doctor_name}" placeholder="请输入处理人">
+			<select id="status" name="status" style="width: 200px;">
+				<notempty name="status">
+					<if condition="$status eq 0">
+						<option value="">请选择咨询状态</option>
+						<option value="0" selected>未处理</option>
+						<option value="1">处理中</option>
+						<option value="2">处理完毕</option>
+					</if>
+					<if condition="$status eq 1">
+						<option value="">请选择咨询状态</option>
+						<option value="0">未处理</option>
+						<option value="1" selected>处理中</option>
+						<option value="2">处理完毕</option>
+					</if>
+					<if condition="$status eq 2">
+						<option value="">请选择咨询状态</option>
+						<option value="0">未处理</option>
+						<option value="1">处理中</option>
+						<option value="2" selected>处理完毕</option>
+					</if>
+					<else/>
+					<option value="" selected>请选择咨询状态</option>
+					<option value="0">未处理</option>
+					<option value="1">处理中</option>
+					<option value="2">处理完毕</option>
+				</notempty>
+			</select>
 			<button class="btn btn-primary">搜索</button>
-			<a class="btn btn-danger" href="{:U('office/index')}">清空</a>
+			<a class="btn btn-danger" href="{:U('messages/index')}">清空</a>
 		</form>
 		<form class="js-ajax-form" method="post">
 			<div class="table-actions">
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<table class="table table-hover table-bordered table-list">
 				<thead>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
-						<th width="100">ID</th>
+						<th width="50">咨询人</th>
 						<th width="100">咨询内容</th>
-						<th width="100">咨询人</th>
 						<th width="100">咨询时间</th>
-						<th width="100">咨询状态</th>
+						<th width="50">咨询状态</th>
+						<th width="50">处理人</th>
+						<th width="100">处理开始时间</th>
+						<th width="100">处理结束时间</th>
 						<th width="100">操作</th>
 					</tr>
 				</thead>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>3</td>
-					<td>时不时头痛</td>
-					<td>刘女士先生</td>
-					<td>2018-11-8 12:12</td>
-					<td>已完成</td>
-					<td>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success disabled btn-small ">转发</a>
-						<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many')}','群发')" class="btn btn-success disabled btn-small">群发</a>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success disabled btn-small">处理</a>
-						<a style="margin-top: 5px;" href="{:U('office/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-					</td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>2</td>
-					<td>偶尔会出现心悸</td>
-					<td>王先生</td>
-					<td>2018-11-8 12:05</td>
-					<td>转发处理中</td>
-					<td>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">转发</a>
-						<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many')}','群发')" class="btn btn-success btn-small">群发</a>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">处理</a>
-						<a style="margin-top: 5px;" href="{:U('office/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-					</td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>1</td>
-					<td>感冒发烧持续不退</td>
-					<td>李先生</td>
-					<td>2018-11-8 11:59</td>
-					<td>未处理</td>
-					<td>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-						<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many')}','群发')" class="btn btn-success btn-small">群发</a>
-						<a style="margin-top: 5px;" href="{:U('office/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">处理</a>
-						<a style="margin-top: 5px;" href="{:U('office/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-					</td>
-				</tr>
+				<foreach name="list" item="vo">
+					<tr>
+						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+						<td>{$vo.name_u}</td>
+						<td>{$vo.content}</td>
+						<td>{$vo.create_time}</td>
+						<td>
+							<if condition="$vo.status eq 0">
+								未处理
+							</if>
+							<if condition="$vo.status eq 1">
+								处理中
+							</if>
+							<if condition="$vo.status eq 1">
+								处理完毕
+							</if>
+						</td>
+						<td>{$vo.name_d}</td>
+						<td>{$vo.start_time}</td>
+						<td>{$vo.end_time}</td>
+						<td>
+							<if condition="$vo.status eq 0">
+								<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+								<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many')}','群发')" class="btn btn-success btn-small">群发</a>
+								<a style="margin-top: 5px;" href="{:U('messages/handle',array('id'=>$vo['id']))}" class="btn btn-success btn-small">处理</a>
+								<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+								<else/>
+								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small ">转发</a>
+								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small">群发</a>
+								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small">处理</a>
+								<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+							</if>
+
+						</td>
+					</tr>
+				</foreach>
 				<tfoot>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
-						<th width="100">ID</th>
-						<th width="100">咨询内容</th>
 						<th width="100">咨询人</th>
+						<th width="100">咨询内容</th>
 						<th width="100">咨询时间</th>
 						<th width="100">咨询状态</th>
+						<th width="100">处理人</th>
+						<th width="100">处理开始时间</th>
+						<th width="100">处理结束时间</th>
 						<th width="100">操作</th>
 					</tr>
 				</tfoot>
 			</table>
 			<div class="table-actions">
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
 			<div class="pagination">{$page}</div>
 		</form>

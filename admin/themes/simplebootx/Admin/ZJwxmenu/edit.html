@@ -3,8 +3,8 @@
 <body>
 <div class="wrap js-check-wrap">
 	<ul class="nav nav-tabs">
-		<li><a href="{:U('tag/index')}">职位信息</a></li>
-		<li class="active"><a href="javascript:void(0);">编辑职位</a></li>
+		<li><a href="{:U('ZJwxmenu/index')}">专家微信菜单</a></li>
+		<li class="active"><a href="javascript:void(0);">编辑微信菜单</a></li>
 	</ul>
 	<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 		<input type="hidden" name="id" value="{$id}">
@@ -12,24 +12,16 @@
 			<div class="span9">
 				<table class="table table-bordered">
 					<tr>
-						<th>科室名称</th>
+						<th width="100">菜单名</th>
 						<td>
-							<select id="office_id" name="office_id" style="width: 400px;">
-								<foreach name="list" item="li">
-									<if condition="$li.id eq $office_id">
-										<option value="{$li.id}" selected>{$li.name}</option>
-										<else />
-										<option value="{$li.id}">{$li.name}</option>
-									</if>
-								</foreach>
-							</select>
+							<input type="text" style="width: 200px;" id="name" name="name" value="{$name}" placeholder="请输入菜单名"/>
 							<span class="form-required" style="color:red;"> *</span>
 						</td>
 					</tr>
 					<tr>
-						<th>具体科室名称</th>
+						<th>链接地址</th>
 						<td>
-							<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入职位名称" value="{$name}"/>
+							<input type="text" style="width: 500px;" id="url" name="url" value="{$url}" placeholder="请输入链接地址"/>
 							<span class="form-required" style="color:red;"> *</span>
 						</td>
 					</tr>
@@ -38,7 +30,7 @@
 		</div>
 		<div class="form-actions">
 			<button class="btn btn-primary js-ajax-submit" type="submit">提交</button>
-			<a class="btn" href="{:U('tag/index')}">返回</a>
+			<a class="btn" href="{:U('ZJwxmenu/index')}">返回</a>
 		</div>
 	</form>
 </div>
@@ -110,11 +102,13 @@
                 },
                 //验证规则
                 rules : {
-                    'name' : { required : 1 }
+                    'name' : { required : 1 },
+                    'url' : { required : 1 }
                 },
                 //验证未通过提示消息
                 messages : {
-                    'name' : { required : "请输入职位名称" }
+                    'name' : { required : "请输入菜单名" },
+                    'url' : { required : "请输入链接地址" }
                 },
                 //给未通过验证的元素加效果,闪烁等
                 highlight : false,
@@ -126,7 +120,6 @@
                         url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
                         dataType : 'json',
                         beforeSubmit : function(arr,$form,options) {
-
                         },
                         success : function(data,statusText,xhr,$form) {
                             if (data.status) {
@@ -153,7 +146,7 @@
                                             {
                                                 name : "返回列表",
                                                 callback : function() {
-                                                    location.href = "{:U('tag/index')}";
+                                                    location.href = "{:U('ZJwxmenu/index')}";
                                                     return true;
                                                 }
                                             }

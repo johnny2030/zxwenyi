@@ -11,7 +11,7 @@ $wechatObj = new Wechat();
     $wechatObj->responseMsg();
 }*/
 require_once 'today/class.today.php';
-class Wechat {
+class Wechat_zj {
 	/**
 	* 系统对象
 	*/

@@ -1,0 +1,97 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('mcard/index')}">会员卡信息</a></li>
+			<li><a href="{:U('mcard/add')}">添加会员卡</a></li>
+		</ul>
+		<form class="well form-search" method="post" id="cid-form" >
+			<input type="text" name="card_number" style="width: 200px;" value="{$card_number}" placeholder="请输入会员卡号">
+			<button class="btn btn-primary">搜索</button>
+			<a class="btn btn-danger" href="{:U('mcard/index')}">清空</a>
+		</form>
+		<form class="js-ajax-form" method="post">
+			<div class="table-actions">
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('mcard/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+			</div>
+			<table class="table table-hover table-bordered table-list">
+				<thead>
+					<tr>
+						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="100">会员卡号</th>
+						<th width="100">会员卡密</th>
+						<th width="100">会员卡期限</th>
+						<th width="100">会员卡状态</th>
+						<th width="100">会员卡使用者</th>
+						<th width="100">使用时间</th>
+						<th width="100">创建时间</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<foreach name="list" item="vo">
+					<tr>
+						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+						<td>{$vo.card_number}</td>
+						<td>{$vo.card_pwd}</td>
+						<td>{$vo.card_time}</td>
+						<td>
+							<if condition="$vo.status eq 0">
+								未使用
+							</if>
+							<if condition="$vo.status eq 1">
+								已使用
+							</if>
+							<if condition="$vo.status eq 2">
+								已过期
+							</if>
+						</td>
+						<td>{$vo.name}</td>
+						<td>{$vo.use_time}</td>
+						<td>{$vo.create_time}</td>
+						<td>
+							<a style="margin-top: 5px;" href="{:U('mcard/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">编辑</a>
+							<a style="margin-top: 5px;" href="{:U('mcard/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+						</td>
+					</tr>
+				</foreach>
+				<tfoot>
+					<tr>
+						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="100">会员卡号</th>
+						<th width="100">会员卡密</th>
+						<th width="100">会员卡期限</th>
+						<th width="100">会员卡状态</th>
+						<th width="100">会员卡使用者</th>
+						<th width="100">使用时间</th>
+						<th width="100">创建时间</th>
+						<th width="100">操作</th>
+					</tr>
+				</tfoot>
+			</table>
+			<div class="table-actions">
+				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('mcard/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
+			</div>
+			<div class="pagination">{$page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		setCookie('refersh_time', 0);
+		function refersh_window() {
+			var refersh_time = getCookie('refersh_time');
+			if (refersh_time == 1) {
+				window.location.reload();
+			}
+		}
+		setInterval(function() {
+			refersh_window()
+		}, 2000);
+		$(function() {
+			$("#selected-cid").change(function() {
+				$("#cid-form").submit();
+			});
+		});
+	</script>
+</body>
+</html>

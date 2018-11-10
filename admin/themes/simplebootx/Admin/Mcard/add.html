@@ -3,32 +3,32 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('tag/index')}">具体科室信息</a></li>
-			<li class="active"><a href="{:U('tag/add')}">添加具体科室</a></li>
+			<li><a href="{:U('mcard/index')}">会员卡信息</a></li>
+			<li class="active"><a href="{:U('mcard/add')}">添加会员卡</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 			<div class="row-fluid">
 				<div class="span9">
 					<table class="table table-bordered">
 						<tr>
-							<th>科室名称</th>
+							<th>会员卡号</th>
 							<td>
-								<select id="office_id" name="office_id" style="width: 400px;">
-									<notempty name="list">
-										<foreach name="list" item="li">
-											<option value="{$li.id}">{$li.name}</option>
-										</foreach>
-										<else/>
-										<option value="">请先添加科室</option>
-									</notempty>
-								</select>
+								<input type="text" style="width: 400px;" id="card_number" name="card_number" placeholder="请输入卡号"/>
+								<span class="form-required" style="color:red;"> *</span>
+								<button class="btn btn-primary" type="button" onclick="get_rand()">随机生成</button>
+							</td>
+						</tr>
+						<tr>
+							<th>会员卡密</th>
+							<td>
+								<input type="text" style="width: 400px;" id="card_pwd" name="card_pwd" placeholder="请输入会员卡密"/>
 								<span class="form-required" style="color:red;"> *</span>
 							</td>
 						</tr>
 						<tr>
-							<th>具体科室名称</th>
+							<th>会员卡期限</th>
 							<td>
-								<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入具体科室名称"/>
+								<input type="text" style="width: 400px;" id="card_time" name="card_time" placeholder="请输入会员卡期限"/>
 								<span class="form-required" style="color:red;"> *</span>
 							</td>
 						</tr>
@@ -37,7 +37,7 @@
 			</div>
 			<div class="form-actions">
 				<button class="btn btn-primary js-ajax-submit" type="submit">添加</button>
-				<a class="btn" href="{:U('tag/index')}">返回</a>
+				<a class="btn" href="{:U('mcard/index')}">返回</a>
 			</div>
 		</form>
 	</div>
@@ -109,14 +109,16 @@
 					},
 					//验证规则
 					rules : {
-						'name' : { required : 1 },
-                        'office_id' : { required : 1 }
+						'card_number' : { required : 1 },
+                        'card_pwd' : { required : 1 },
+                        'card_time' : { required : 1 }
 
 					},
 					//验证未通过提示消息
 					messages : {
-                        'name' : { required : "请输入具体科室名" },
-                        'office_id' : { required : "请选择科室信息" }
+                        'card_number' : { required : "请输入会员卡号" },
+                        'card_pwd' : { required : "请输入会员卡密" },
+                        'card_time' : { required : "请输入会员卡期限" }
 					},
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,
@@ -155,7 +157,7 @@
 											{
 												name : "返回列表",
 												callback : function() {
-													location.href = "{:U('tag/index')}";
+													location.href = "{:U('mcard/index')}";
 													return true;
 												}
 											}
@@ -172,6 +174,27 @@
 			});
 		////-------------------------
 		});
+		function get_rand() {
+            var card_number="";
+            for(var i=0;i<12;i++) card_number+=Math.floor(Math.random()*10);
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "{:U('mcard/check_number')}",
+                data : {'card_number' : card_number},
+                dataType : "json",
+                success : function(data) {
+                    if (data == 0){
+                        $("#card_number").val(card_number);
+                        var card_pwd="";
+                        for(var i=0;i<8;i++) card_pwd+=Math.floor(Math.random()*10);
+                        $("#card_pwd").val(card_pwd);
+					} else {
+                        get_rand();
+					}
+                }
+            });
+        }
 	</script>
 </body>
 </html>

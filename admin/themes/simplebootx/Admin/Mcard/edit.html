@@ -3,8 +3,8 @@
 <body>
 <div class="wrap js-check-wrap">
 	<ul class="nav nav-tabs">
-		<li><a href="{:U('tag/index')}">职位信息</a></li>
-		<li class="active"><a href="javascript:void(0);">编辑职位</a></li>
+		<li><a href="{:U('mcard/index')}">科室信息</a></li>
+		<li class="active"><a href="javascript:void(0);">编辑科室</a></li>
 	</ul>
 	<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 		<input type="hidden" name="id" value="{$id}">
@@ -12,24 +12,46 @@
 			<div class="span9">
 				<table class="table table-bordered">
 					<tr>
-						<th>科室名称</th>
+						<th>会员卡号</th>
 						<td>
-							<select id="office_id" name="office_id" style="width: 400px;">
-								<foreach name="list" item="li">
-									<if condition="$li.id eq $office_id">
-										<option value="{$li.id}" selected>{$li.name}</option>
-										<else />
-										<option value="{$li.id}">{$li.name}</option>
-									</if>
-								</foreach>
-							</select>
+							<input type="text" style="width: 400px;" id="card_number" name="card_number" placeholder="请输入卡号" value="{$card_number}" readonly="readonly"/>
 							<span class="form-required" style="color:red;"> *</span>
 						</td>
 					</tr>
 					<tr>
-						<th>具体科室名称</th>
+						<th>会员卡密</th>
 						<td>
-							<input type="text" style="width: 400px;" id="name" name="name" placeholder="请输入职位名称" value="{$name}"/>
+							<input type="text" style="width: 400px;" id="card_pwd" name="card_pwd" placeholder="请输入会员卡密" value="{$card_pwd}"/>
+							<span class="form-required" style="color:red;"> *</span>
+						</td>
+					</tr>
+					<tr>
+						<th>会员卡期限</th>
+						<td>
+							<input type="text" style="width: 400px;" id="card_time" name="card_time" placeholder="请输入会员卡期限" value="{$card_time}"/>
+							<span class="form-required" style="color:red;"> *</span>
+						</td>
+					</tr>
+					<tr>
+						<th>会员卡状态</th>
+						<td>
+							<select id="status" name="status" class="st">
+								<if condition="$status eq 0">
+									<option value="0" selected>未使用</option>
+									<option value="1">已使用</option>
+									<option value="2">已过期</option>
+								</if>
+								<if condition="$status eq 1">
+									<option value="0">未使用</option>
+									<option value="1" selected>已使用</option>
+									<option value="2">已过期</option>
+								</if>
+								<if condition="$status eq 2">
+									<option value="0">未使用</option>
+									<option value="1">已使用</option>
+									<option value="2" selected>已过期</option>
+								</if>
+							</select>
 							<span class="form-required" style="color:red;"> *</span>
 						</td>
 					</tr>
@@ -38,7 +60,7 @@
 		</div>
 		<div class="form-actions">
 			<button class="btn btn-primary js-ajax-submit" type="submit">提交</button>
-			<a class="btn" href="{:U('tag/index')}">返回</a>
+			<a class="btn" href="{:U('mcard/index')}">返回</a>
 		</div>
 	</form>
 </div>
@@ -110,11 +132,15 @@
                 },
                 //验证规则
                 rules : {
-                    'name' : { required : 1 }
+                    'card_number' : { required : 1 },
+                    'card_pwd' : { required : 1 },
+                    'card_time' : { required : 1 }
                 },
                 //验证未通过提示消息
                 messages : {
-                    'name' : { required : "请输入职位名称" }
+                    'card_number' : { required : "请输入会员卡号" },
+                    'card_pwd' : { required : "请输入会员卡密" },
+                    'card_time' : { required : "请输入会员卡期限" }
                 },
                 //给未通过验证的元素加效果,闪烁等
                 highlight : false,
@@ -153,7 +179,7 @@
                                             {
                                                 name : "返回列表",
                                                 callback : function() {
-                                                    location.href = "{:U('tag/index')}";
+                                                    location.href = "{:U('mcard/index')}";
                                                     return true;
                                                 }
                                             }
