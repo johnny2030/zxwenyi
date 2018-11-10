@@ -4,7 +4,7 @@
 * Wechat
 */
 define("TOKEN", "VWgZhx7U");
-$wechatObj = new Wechat();
+$wechatObj = new Wechat_tq();
 if (isset($_GET['echostr'])) {
     $wechatObj->valid();
 }else{
