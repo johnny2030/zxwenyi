@@ -1,25 +1,21 @@
 <?php
 namespace Portal\Controller;
+use Common\Controller\HomebaseController;
+
 require_once 'today/config.php';
 require_once 'today/RongCloud/rongcloud.php';
 require_once 'simplewind/Core/Library/Think/Upload/Driver/Qiniu.class.php';
-class RongController extends CheckController {
+class RongController extends HomebaseController {
 
     private $common_user_model;
     private $rong_token_model;
     private $common_chattime_model;
-    private $doctor_shortword_model;
-    private $common_hospital_model;
-    private $common_office_model;
 
     public function _initialize() {
         parent::_initialize();
         $this->common_user_model = D( 'Common_user' );
         $this->rong_token_model = D( 'Rong_token' );
         $this->common_chattime_model = D( 'Common_chattime' );
-        $this->doctor_shortword_model = D( 'Doctor_shortword' );
-        $this->common_hospital_model = D( 'Common_hospital' );
-        $this->common_office_model = D( 'Common_office' );
     }
     /**
      * 获取token

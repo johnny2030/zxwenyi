@@ -332,7 +332,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -389,7 +389,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             var user_id = $scope.currentConversation.targetId;
             $http({
                 method:'GET',
-                url:'/index.php',
+                url:'/zxwenyi/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -797,7 +797,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }
             $http({
                 method:'GET',
-                url:'/index.php',
+                url:'/zxwenyi/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -895,7 +895,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/index.php',
+                            url:'/zxwenyi/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
