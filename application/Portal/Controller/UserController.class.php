@@ -64,7 +64,7 @@ class UserController extends HomebaseController {
     //医生个人中心
     public function info_doctor() {
         $id = (int)session('login_id');
-        $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('id' => $id))->find();
+        $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $id))->find();
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/info_doctor');
     }
