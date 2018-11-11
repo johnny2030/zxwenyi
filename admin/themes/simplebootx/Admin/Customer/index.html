@@ -36,7 +36,14 @@
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
 						<td>{$vo.name}</td>
 						<td>{$vo.age}</td>
-						<td>{$vo.sex}</td>
+						<td>
+							<if condition="$vo.sex eq 1">
+								男
+							</if>
+							<if condition="$vo.sex eq 2">
+								女
+							</if>
+						</td>
 						<td>{$vo.nation}</td>
 						<td>{$vo.m_card}</td>
 						<td>{$vo.t_card}</td>

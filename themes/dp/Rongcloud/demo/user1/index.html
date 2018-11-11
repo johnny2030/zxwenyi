@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html ng-app="demo">
-<?php
-	require_once "today/wxjssdk.php";
-	$jssdk = new \wxjssdk();
-	$signPackage = $jssdk->GetSignPackage();
-?>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -53,35 +48,12 @@
     window.onload=function(){
         setTimeout(function(){
             $("#chat").click();
-        },500);
+        },1000);
     };
     function enter() {
         setTimeout(function(){
             document.body.scrollTop = document.body.scrollHeight;
         },500);
     };
-    wx.config({
-        appId: '<?php echo $signPackage["appId"];?>',
-        timestamp: '<?php echo $signPackage["timestamp"];?>',
-        nonceStr: '<?php echo $signPackage["nonceStr"];?>',
-        signature: '<?php echo $signPackage["signature"];?>',
-        jsApiList: [
-            // 所有要调用的 API 都要加到这个列表中
-            'startRecord',
-            'stopRecord',
-            'onVoiceRecordEnd',
-            'playVoice',
-            'pauseVoice',
-            'stopVoice',
-            'onVoicePlayEnd',
-            'uploadVoice',
-            'downloadVoice',
-            'translateVoice',
-            'chooseImage',
-            'previewImage',
-            'uploadImage',
-            'downloadImage'
-        ]
-    });
 </script>
 </html>

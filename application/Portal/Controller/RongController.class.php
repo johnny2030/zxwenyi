@@ -111,8 +111,8 @@ class RongController extends HomebaseController {
         $where['d_id'] = array('eq',session('login_id'));
         $this->common_chattime_model->where($where)->save($data);
 
-        require_once 'today/Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         $doctor_user = $this->common_user_model->find(session('login_id'));
         $patient_user = $this->common_user_model->find($_GET['userId']);
         $wechat->customSendImg($doctor_user['open_id'],'http://www.jkwdr.cn/','咨询关闭提醒',$patient_user['name'].'发起的咨询已被您关闭，欢迎使用健康微达人');
@@ -140,8 +140,8 @@ class RongController extends HomebaseController {
         $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
         /*$qiniuStorage = new \Think\Upload\Driver\Qiniu\QiniuStorage();
         $qiniu = new \Think\Upload\Driver\Qiniu();*/
-        require_once 'today/Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         $result = $wechat->downloadWeixinFile($media_id,'');
         $prefix=explode("/", $result['header']['content_type']);
         $filename=$this->salt('5').$this->msectime().'.'.$prefix[1];
@@ -157,8 +157,8 @@ class RongController extends HomebaseController {
         $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
         /*$qiniuStorage = new \Think\Upload\Driver\Qiniu\QiniuStorage();
         $qiniu = new \Think\Upload\Driver\Qiniu();*/
-        require_once 'today/Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         $result = $wechat->downloadWeixinFile($media_id,'');
         $filename=$this->salt('5').$this->msectime().'.jpg';
         \Think\Log::write('图片文件名:'.$filename,'WARN');
@@ -173,8 +173,8 @@ class RongController extends HomebaseController {
     }
     public function template_send($user,$sendUser,$url) {
         //向患者发送模板消息
-        require_once 'today/Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         if ($user['status'] == 0){
             $data=array(
                 'first'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#00CD00"),

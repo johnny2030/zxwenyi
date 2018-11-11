@@ -5,14 +5,14 @@ class wxjssdk {
 	/**
 	* AppId
 	*/
-	private $WX_APPID = 'wx69217b5af9a538fb';
+	private $WX_APPID = 'wxdd058ab032b569b1';
 
     /**
      * 开发者验证
      */
     public function getSignPackage() {
-        require_once 'Wechat.php';
-        $wechat = new \Wechat( $this );
+        require_once 'Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
         $jsapiTicket = $wechat->getJSApiTicket();
         $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $timestamp = time();

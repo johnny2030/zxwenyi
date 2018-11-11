@@ -19,7 +19,7 @@
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 						<th width="50">医生姓名</th>
-						<th width="30">单位</th>
+						<th width="30">头像</th>
 						<th width="30">医院</th>
 						<th width="50">科室</th>
 						<th width="50">具体科室</th>
@@ -35,7 +35,7 @@
 					<tr>
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
 						<td>{$vo.name}</td>
-						<td>{$vo.unit}</td>
+						<td><img src="{$vo.photo}" style="width: 50px;height: 50px;"/></td>
 						<td>{$vo.hospital_n}</td>
 						<td>{$vo.office_n}</td>
 						<td>{$vo.tag_n}</td>

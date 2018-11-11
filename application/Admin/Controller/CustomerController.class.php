@@ -22,6 +22,7 @@ class CustomerController extends AdminbaseController {
 		$name=I('name');
 		$this->assign( 'name', $name );
 		if ( $name ) $where['name'] = array('like',"%$name%");
+        $where['type'] = array('eq',0);
         $where['del_flg'] = array('eq',0);
 		$count = $this->common_user_model->where($where)->count();
 		$page = $this->page($count, 20);

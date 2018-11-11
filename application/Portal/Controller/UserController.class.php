@@ -103,7 +103,7 @@ class UserController extends HomebaseController {
     }
     //咨询问诊
     public function question() {
-        $this->display('../Tieqiao/question');
+        R('Rong/index');
     }
     //信息修改
     public function modify() {
