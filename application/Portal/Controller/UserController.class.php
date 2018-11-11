@@ -50,6 +50,7 @@ class UserController extends HomebaseController {
     public function register_doctor() {
         if ( IS_POST ) {
             $id = (int)session('login_id');
+            $_POST['type'] = 1;
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
                 R('User/info_doctor');
@@ -84,17 +85,19 @@ class UserController extends HomebaseController {
     //医生列表
     public function doctor_list() {
         $office_id = $_GET['office_id'];
+        $ofc = $this->common_office_model->find($office_id);
         $where = array();
-        $where['del_flg'] = array('eq',0);
-        $where['office'] = array('eq',$office_id);
-        $list = $this->common_user_model->where($where)->select();
+        $where['u.del_flg'] = array('eq',0);
+        $where['u.office'] = array('eq',$office_id);
+        $list = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->where($where)->select();
+        $this->assign( 'office_n', $ofc['name'] );
         $this->assign( 'list', $list );
         $this->display('../Tieqiao/doctor_list');
     }
     //医生详情
     public function doctor_detail() {
         $user_id = $_GET['user_id'];
-        $doctor = $this->common_user_model->find($user_id);
+        $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $user_id))->find();
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }

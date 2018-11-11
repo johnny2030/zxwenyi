@@ -55,24 +55,24 @@
 	</ul>
 	<ul class="mui-table-view mui-table-view-chevron">
 		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
-				过敏史
-				<hr>
-				<i class="mui-pull-right tips">{$patient.allergic}</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
 			<a href="{:U('portal/user/modify',array('data'=>$patient['healthy'],'flg'=>healthy,'menu'=>健康状况))}" class="mui-navigate-right">
 				健康状况
-				<hr>
-				<p class="mui-ellipsis-2">{$patient.healthy}</p>
+				<p class="mui-pull-right tips">{$patient.healthy}</p>
 			</a>
 		</li>
 		<li class="mui-table-view-cell">
 			<a href="{:U('portal/user/modify',array('data'=>$patient['motion'],'flg'=>motion,'menu'=>运动情况))}" class="mui-navigate-right">
 				运动情况
+				<p class="mui-pull-right tips">{$patient.motion}</p>
+			</a>
+		</li>
+	</ul>
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
+				过敏史
 				<hr>
-				<p class="mui-ellipsis-2">{$patient.motion}</p>
+				<i class="mui-pull-right tips">{$patient.allergic}</i>
 			</a>
 		</li>
 	</ul>

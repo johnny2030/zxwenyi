@@ -5,7 +5,7 @@
 </head>
 <body>
 <header id="header" class="mui-bar mui-bar-nav">
-	<h1 class="mui-title">大内科</h1>
+	<h1 class="mui-title">{$office_n}</h1>
 </header>
 <div id="tabbar-with-chat" class="mui-content main">
 	<div class="mui-card-content">
@@ -13,12 +13,12 @@
 			<ul class="mui-table-view">
 				<foreach name="list" item="l">
 					<li class="mui-table-view-cell mui-media">
-						<a href="">
+						<a href="{:U('portal/user/doctor_detail',array('user_id'=>$l['id']))}">
 							<img class="mui-media-object mui-pull-left" src="{$l.photo}">
 							<div class="mui-media-body">
 								<span class="mui-pull-right red-color strong"></span>{$l.name}
 								<span class="blue-color">{$l.position}</span>
-								<h5 class='mui-ellipsis'>{$l.hospital}</h5>
+								<h5 class='mui-ellipsis'>{$l.hospital_n}</h5>
 								<p class="mui-ellipsis-2 mui-h6"><span class="red-color">专业方向:</span>{$l.major}</p>
 							</div>
 						</a>

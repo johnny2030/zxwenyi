@@ -122,13 +122,27 @@
 						<div class="mui-content">
 							<div class="mui-input-row">
 								<select name="position">
-									<foreach name="list" item="h">
-										<if condition="$h.id eq $data">
-											<option value="{$h.id}" selected>{$h.name}</option>
-											<else />
-											<option value="{$h.id}">{$h.name}</option>
+									<notempty name="data">
+										<if condition="$data eq '主任医师'">
+											<option value="主任医师" selected>主任医师</option>
+											<option value="副主任医师">副主任医师</option>
+											<option value="主治医师">主治医师</option>
 										</if>
-									</foreach>
+										<if condition="$data eq '副主任医师'">
+											<option value="主任医师">主任医师</option>
+											<option value="副主任医师" selected>副主任医师</option>
+											<option value="主治医师">主治医师</option>
+										</if>
+										<if condition="$data eq '主治医师'">
+											<option value="主任医师">主任医师</option>
+											<option value="副主任医师">副主任医师</option>
+											<option value="主治医师" selected>主治医师</option>
+										</if>
+										<else />
+										<option value="主任医师" selected>主任医师</option>
+										<option value="副主任医师">副主任医师</option>
+										<option value="主治医师">主治医师</option>
+									</notempty>
 								</select>
 							</div>
 						</div>
