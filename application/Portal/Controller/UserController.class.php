@@ -22,8 +22,8 @@ class UserController extends HomebaseController {
 	}
     //患者登记
     public function register_patient() {
+        $id = (int)session('login_id');
         if ( IS_POST ) {
-            $id = (int)session('login_id');
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
                 R('User/info_patient');
@@ -31,7 +31,12 @@ class UserController extends HomebaseController {
                 $this->error('登记失败！');
             }
         }else{
-            $this->display('../Tieqiao/register_patient');
+            $user = $this->common_user_model->find($id);
+            if (empty($user['i_card'])){
+                $this->display('../Tieqiao/register_patient');
+            }else{
+                R('User/info_patient');
+            }
         }
     }
     //患者个人中心
@@ -117,7 +122,11 @@ class UserController extends HomebaseController {
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
-                R('Patient/patient_user');
+                if ($user['type'] == 0){
+                    R('User/info_patient');
+                }else{
+                    R('User/info_doctor');
+                }
             } else {
                 $this->error('修改失败！');
             }
@@ -126,9 +135,6 @@ class UserController extends HomebaseController {
             $flg = $_GET['flg'];//数据库字段名
             $menu = $_GET['menu'];//页面字段名
             $check = $_GET['check'];//介绍/擅长
-
-            $id = (int)session('login_id');
-            $user = $this->common_user_model->find($id);
             if ($flg == 'healthy'){
 
             }elseif ($flg == 'hospital'){

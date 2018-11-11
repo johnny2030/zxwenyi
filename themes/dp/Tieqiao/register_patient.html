@@ -8,7 +8,7 @@
 			<header id="header" class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">客户注册</h1>
 			</header>
-			<form action="{:U('portal/user/register_patient')}">
+			<form method="post" action="{:U('portal/user/register_patient')}">
 				<div class="mui-content-padded" style="margin-top: 4rem;">
 					<div class="mui-input-row">
 						<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="">
@@ -45,19 +45,19 @@
 	</body>
 	<script type="text/javascript">
         function check_form() {
-            if(check_name()){
+            if(!check_name()){
                 return false;
-            }else if(check_i_card()){
+            }else if(!check_i_card()){
                 return false;
-            }else if(check_age()){
+            }else if(!check_age()){
                 return false;
-            }else if(check_m_card()){
+            }else if(!check_m_card()){
                 return false;
-            }else if(check_p_card()){
+            }else if(!check_p_card()){
                 return false;
-            }else if(check_t_card()){
+            }else if(!check_t_card()){
                 return false;
-            }else if(vailPhone()){
+            }else if(!vailPhone()){
                 return false;
             }else {
                 return true;
