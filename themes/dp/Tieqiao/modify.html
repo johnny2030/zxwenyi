@@ -41,6 +41,34 @@
 										</select>
 									</if>
 									<else />
+									<select name="healthy" onchange="set_ill()">
+										<option value="无疾病" selected>无疾病</option>
+										<option value="有疾病">有疾病</option>
+									</select>
+								</notempty>
+							</div>
+						</div>
+					<elseif condition="$flg eq healthy"/>
+						<div class="mui-content">
+							<div class="mui-input-row">
+								<notempty name="data">
+									<if condition="$data eq '无病'">
+										<select name="healthy" onchange="set_ill()">
+											<option value="无疾病" selected>无疾病</option>
+											<option value="有疾病">有疾病</option>
+										</select>
+										<else />
+										<select name="healthy" onchange="set_ill()">
+											<option value="无疾病">无疾病</option>
+											<option value="有疾病"selected>有疾病</option>
+										</select>
+										<select name="ill">
+											<option value="肩周炎"selected>肩周炎</option>
+											<option value="白内障">白内障</option>
+											<option value="其他疾病">其他疾病</option>
+										</select>
+									</if>
+									<else />
 										<select name="healthy" onchange="set_ill()">
 											<option value="无疾病" selected>无疾病</option>
 											<option value="有疾病">有疾病</option>

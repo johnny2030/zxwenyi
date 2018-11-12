@@ -1,0 +1,69 @@
+<admintpl file="header"/>
+<link href="__PUBLIC__/simpleboot/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a>状况子菜单</a></li>
+			<li><a class="btn-danger" href="{:U('health/submenu_add',array('id'=>$aid))}">添加状况</a></li>
+		</ul>
+		<div class="row-fluid">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="50">ID</th>
+						<th width="100">状况名称</th>
+						<th width="100">创建时间</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<foreach name="list" item="v">
+				<tr>
+					<td>{$v.id}</td>
+					<td>{$v.name}</td>
+					<td>{$v.create_time}</td>
+					<td>
+						<a href="{:U('health/submenu_edit',array('id'=>$v['id']))}">编辑</a>
+						<a href="{:U('health/submenu_delete',array('id'=>$v['id']))}" class="js-ajax-delete" data-msg="确认删除？">删除</a>
+						<br />
+					</td>
+				</tr>
+				</foreach>
+				<tfoot>
+					<tr>
+						<th width="50">ID</th>
+						<th width="100">状况名称</th>
+						<th width="100">创建时间</th>
+						<th width="100">操作</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "{:L('CLOSE_PAGE')}",
+						ok : function() {
+							setCookie("refersh_time", 1);
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+		});
+	</script>
+</body>
+</html>
