@@ -4,11 +4,12 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a>状况子菜单</a></li>
-			<li class="active"><a class="btn-danger" href="{:U('health/submenu_add',array('id'=>$aid))}">添加状况</a></li>
+			<li><a href="{:U('health/submenu',array('up_id'=>$up_id))}">状况子菜单</a></li>
+			<li class="active"><a href="{:U('health/submenu_add',array('up_id'=>$up_id))}">添加状况</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
 			<div class="row-fluid">
+				<input type="hidden" name="up_id" id="up_id" value="{$up_id}" />
 				<div class="span9">
 					<table class="table table-bordered">
 						<tr>
@@ -23,11 +24,12 @@
 			</div>
 			<div class="form-actions">
 				<button class="btn btn-primary js-ajax-submit" type="submit">添加</button>
-				<a class="btn" href="{:U('health/submenu')}">返回</a>
+				<a class="btn" href="{:U('health/submenu',array('up_id'=>$up_id))}">返回</a>
 			</div>
 		</form>
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
         $(function() {
             $(".js-ajax-close-btn").on('click', function(e) {
@@ -139,7 +141,7 @@
                                                 {
                                                     name : "返回列表",
                                                     callback : function() {
-                                                        location.href = "{:U('health/submenu')}";
+                                                        location.href = "{:U('health/submenu',array('up_id'=>$up_id))}";
                                                         return true;
                                                     }
                                                 }

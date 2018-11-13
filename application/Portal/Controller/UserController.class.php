@@ -11,6 +11,7 @@ class UserController extends HomebaseController {
     private $common_tag_model;
     private $common_office_model;
     private $common_hospital_model;
+    private $common_health_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -19,6 +20,7 @@ class UserController extends HomebaseController {
         $this->common_tag_model = D( 'Common_tag' );
         $this->common_office_model = D( 'Common_office' );
         $this->common_hospital_model = D( 'Common_hospital' );
+        $this->common_health_model = D( 'Common_health' );
 	}
     //患者登记
     public function register_patient() {
@@ -42,8 +44,10 @@ class UserController extends HomebaseController {
     //患者个人中心
     public function info_patient() {
         $id = (int)session('login_id');
-        $patient = $this->common_user_model->find($id);
-        $this->assign( 'patient', $patient );
+        $where = array();
+        $where['u.id'] = array('eq',$id);
+        $patient = $this->common_user_model->alias('u')->field('u.*,h.name as health_n')->join('__COMMON_HEALTH__ h ON u.healthy=h.id','left')->where($where)->select();
+        $this->assign( 'patient', $patient[0] );
         $this->display('../Tieqiao/info_patient');
     }
     //医生登记
@@ -138,9 +142,7 @@ class UserController extends HomebaseController {
             $flg = $_GET['flg'];//数据库字段名
             $menu = $_GET['menu'];//页面字段名
             $check = $_GET['check'];//介绍/擅长
-            if ($flg == 'healthy'){
-
-            }elseif ($flg == 'hospital'){
+            if ($flg == 'hospital'){
                 $where = array();
                 $where['del_flg'] = array('eq',0);
                 $list = $this->common_hospital_model->where($where)->select();
@@ -154,6 +156,12 @@ class UserController extends HomebaseController {
                 $where = array();
                 $where['del_flg'] = array('eq',0);
                 $list = $this->common_tag_model->where($where)->select();
+                $this->assign( 'list', $list );
+            }elseif ($flg == 'healthy'){
+                $where = array();
+                $where['up_id'] = array('eq',0);
+                $where['del_flg'] = array('eq',0);
+                $list = $this->common_health_model->where($where)->select();
                 $this->assign( 'list', $list );
             }
             $this->assign( 'data', $data );

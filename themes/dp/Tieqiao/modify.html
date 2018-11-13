@@ -6,75 +6,57 @@
 	<body>
 		<div class="mui-content">
 			<form method="post" action="{:U('portal/user/modify')}">
-				<if condition="$flg eq sex">
-					<div class="mui-content">
-						<div class="sec_row">
-							<select id="sex" name="sex" class="sec_op">
-								<if condition="$data eq 2">
-									<option value="1">男</option>
-									<option value="2" selected>女</option>
-									<else />
-									<option value="1" selected>男</option>
-									<option value="2">女</option>
-								</if>
-							</select>
+					<if condition="$flg eq sex">
+						<div class="mui-content">
+							<div class="sec_row">
+								<select id="sex" name="sex" class="sec_op">
+									<if condition="$data eq 2">
+										<option value="1">男</option>
+										<option value="2" selected>女</option>
+										<else />
+										<option value="1" selected>男</option>
+										<option value="2">女</option>
+									</if>
+								</select>
+							</div>
 						</div>
-					</div>
 					<elseif condition="$flg eq healthy"/>
 						<div class="mui-content">
-							<div class="mui-input-row">
-								<notempty name="data">
-									<if condition="$data eq '无病'">
-										<select name="healthy" onchange="set_ill()">
-											<option value="无疾病" selected>无疾病</option>
-											<option value="有疾病">有疾病</option>
-										</select>
-										<else />
-										<select name="healthy" onchange="set_ill()">
-											<option value="无疾病">无疾病</option>
-											<option value="有疾病"selected>有疾病</option>
-										</select>
-										<select name="ill">
-											<option value="肩周炎"selected>肩周炎</option>
-											<option value="白内障">白内障</option>
-											<option value="其他疾病">其他疾病</option>
-										</select>
-									</if>
-									<else />
-									<select name="healthy" onchange="set_ill()">
-										<option value="无疾病" selected>无疾病</option>
-										<option value="有疾病">有疾病</option>
+							<notempty name="data">
+								<div class="mui-input-row">
+									<select name="healthy" id="healthy" onchange="setHealthy()">
+										<foreach name="list" item="h">
+											<option value="{$h.id}">{$h.name}</option>
+										</foreach>
 									</select>
-								</notempty>
-							</div>
-						</div>
-					<elseif condition="$flg eq healthy"/>
-						<div class="mui-content">
-							<div class="mui-input-row">
-								<notempty name="data">
-									<if condition="$data eq '无病'">
-										<select name="healthy" onchange="set_ill()">
-											<option value="无疾病" selected>无疾病</option>
-											<option value="有疾病">有疾病</option>
-										</select>
-										<else />
-										<select name="healthy" onchange="set_ill()">
-											<option value="无疾病">无疾病</option>
-											<option value="有疾病"selected>有疾病</option>
-										</select>
-										<select name="ill">
-											<option value="肩周炎"selected>肩周炎</option>
-											<option value="白内障">白内障</option>
-											<option value="其他疾病">其他疾病</option>
-										</select>
-									</if>
-									<else />
-										<select name="healthy" onchange="set_ill()">
-											<option value="无疾病" selected>无疾病</option>
-											<option value="有疾病">有疾病</option>
-										</select>
-								</notempty>
-							</div>
+								</div>
+								<div class="mui-input-row" id="sec" style="display: none;">
+									<select name="sec">
+										<foreach name="slist" item="s">
+
+										</foreach>
+									</select>
+								</div>
+								<else />
+								<div class="mui-input-row">
+									<select name="healthy" id="healthy" onchange="setHealthy()">
+										<foreach name="list" item="h">
+											<option value="{$h.id}">{$h.name}</option>
+										</foreach>
+									</select>
+								</div>
+								<div class="mui-input-row" id="sec" style="display: none;">
+									<select name="sec">
+										<foreach name="slist" item="s">
+											<if condition="$s.name eq $data">
+												<option value="{$s.id}" selected>{$s.name}</option>
+												<else />
+												<option value="{$s.id}">{$s.name}</option>
+											</if>
+										</foreach>
+									</select>
+								</div>
+							</notempty>
 						</div>
 					<elseif condition="$flg eq motion"/>
 						<div class="mui-content">
@@ -202,7 +184,7 @@
             }
         });
         function check_form(flg,menu) {
-            if (flg == "area" || flg == "sex" || flg == "hospital" || flg == "office" || flg == "tag"){
+            if (flg == "sex" || flg == "healthy" || flg == "motion" || flg == "hospital" || flg == "office" || flg == "tag" || flg == "position"){
                 var sex = $('#sex option:selected').val();
                 var hospital = $('#hospital option:selected').val();
                 var office = $('#office option:selected').val();
@@ -225,51 +207,7 @@
                 }
             }
         }
-        function setCity() {
-            var pid = $('#province option:selected').val();
-            $.ajax({
-                async:false,
-                type : "get",
-                url : "index.php?g=portal&m=commonMethod&a=get_data",
-                data : {'pid' : pid},
-                dataType : "json",
-                success : function(data) {
-                    var list = data.list;
-                    var selct = $("#city");
-                    selct.empty();
-                    for (i=0;i<list.length;i++){
-                        var city = list[i];
-                        selct.append("<option value='"+city.id+"'>"+city.name+"</option>");
-					}
-					var coty = list[0];
-                    $.ajax({
-                        async:false,
-                        type : "get",
-                        url : "index.php?g=portal&m=commonMethod&a=get_data",
-                        data : {
-                            'pid' : coty.id,
-                            'county' : 1
-						},
-                        dataType : "json",
-                        success : function(dta) {
-                            var sel = $("#county");
-                            sel.empty();
-                            if(dta.list.length > 0){
-                                var list = dta.list;
-                                for (i=0;i<list.length;i++){
-                                    var county = list[i];
-                                    sel.append("<option value='"+county.id+"'>"+county.name+"</option>");
-                                }
-                                sel.css("display","block");
-                            }else{
-                                sel.css("display","none");
-							}
-                        }
-                    });
-                }
-            });
-        }
-        function setCounty() {
+        function setHealthy() {
             var cid = $('#city option:selected').val();
             $.ajax({
                 async:false,

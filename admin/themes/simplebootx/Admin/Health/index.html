@@ -32,6 +32,7 @@
 						<td>{$vo.name}</td>
 						<td>{$vo.create_time}</td>
 						<td>
+							<a class="btn btn-primary btn-small js-ajax-submit" style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('health/submenu',array('up_id'=>$vo['id']))}')">子菜单</a>
 							<a style="margin-top: 5px;" href="{:U('health/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small">编辑</a>
 							<a style="margin-top: 5px;" href="{:U('health/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>

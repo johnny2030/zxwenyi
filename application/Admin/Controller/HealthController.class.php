@@ -21,6 +21,7 @@ class HealthController extends AdminbaseController {
         $name=I('name');
         $this->assign( 'name', $name );
         if ( $name ) $where['name'] = array('like',"%$name%");
+        $where['up_id'] = array('eq',0);
         $where['del_flg'] = array('eq',0);
         $count = $this->common_health_model->where($where)->count();
         $page = $this->page($count, 20);
@@ -112,8 +113,9 @@ class HealthController extends AdminbaseController {
     }
     //健康状况子菜单
     function submenu() {
-        $id = intval( I( 'get.id' ) );
-        $where['up_id'] = array('eq',$id);
+        $up_id = $_GET['up_id'];
+        $this->assign( 'up_id', $up_id );
+        $where['up_id'] = array('eq',$up_id);
         $where['del_flg'] = array('eq',0);
         $count = $this->common_health_model->where($where)->count();
         $page = $this->page($count, 20);
@@ -136,6 +138,8 @@ class HealthController extends AdminbaseController {
                 $this->error('添加职位信息失败！');
             }
         } else {
+            $up_id = $_GET['up_id'];
+            $this->assign( 'up_id', $up_id );
             $this->display();
         }
     }
