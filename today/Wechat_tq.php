@@ -41,6 +41,10 @@ class Wechat_tq {
 	*/
 	private $WX_NONCESTR = '2nDgiWM7gCxhL8v0';
     /**
+     * 群发/转发（管理）
+     */
+    private $WX_FORWARD = 'sPHapieDmhYisvvp3IXazroUpUsD7Gk5d_xXuZjQU0I';
+    /**
      * 咨询通知（患者）
      */
     private $WX_CONSULTATION = 'hKQQI2SvY6f85F9hq2grvmZKySNOiSZUQ6hwPJZ8U9I';
@@ -561,6 +565,20 @@ class Wechat_tq {
         $template = array(
             'touser' => $open_id,
             'template_id' => $template_id,
+            'url' => $url,
+            'topcolor' => $topcolor,
+            'data' => $data
+        );
+        $json_template = json_encode($template);
+        $urls = $this->WX_SEND_TEMPLATE_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $urls, urldecode($json_template) );
+    }
+    //转发/群发模板消息推送
+    public function templateForward($open_id,$url,$data,$topcolor='#7B68EE'){
+        $accessToken = $this->getAccessToken();
+        $template = array(
+            'touser' => $open_id,
+            'template_id' => $this->WX_FORWARD,
             'url' => $url,
             'topcolor' => $topcolor,
             'data' => $data

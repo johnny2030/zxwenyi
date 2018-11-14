@@ -6,68 +6,68 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a>医生列表</a></li>
 		</ul>
-		<div class="row-fluid">
-			<div class="table-actions">
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定转发？">转发</button>
-			</div>
-			<table class="table table-bordered">
-				<thead>
+		<form class="js-ajax-form" action="{:U('messages/handle')}" method="post">
+			<div class="row-fluid">
+				<div class="table-actions">
+					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+				</div>
+				<input id="msg_id" name="msg_id" type="hidden" value="{$msg_id}">
+				<table class="table table-bordered">
+					<thead>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 						<th width="100">医生名</th>
-						<th width="600">所属平台</th>
+						<th width="100">头像</th>
+						<th width="100">医院</th>
+						<th width="100">科室</th>
+						<th width="100">具体科室</th>
+						<th width="100">职位</th>
+						<th width="100">所属平台</th>
 						<th width="50">操作</th>
 					</tr>
-				</thead>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>李医生</td>
-					<td>铁樵健康</td>
-					<td>
-						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-						<br />
-					</td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>王医生</td>
-					<td>铁樵健康</td>
-					<td>
-						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-						<br />
-					</td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>赵医生</td>
-					<td>专家联盟</td>
-					<td>
-						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-						<br />
-					</td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
-					<td>刘医生</td>
-					<td>铁樵健康</td>
-					<td>
-						<a href="{:U('activity/line_plan_delete',array('id'=>$v['id']))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-						<br />
-					</td>
-				</tr>
-				<tfoot>
-				<tr>
-					<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
-					<th width="100">医生名</th>
-					<th width="600">所属平台</th>
-					<th width="50">操作</th>
-				</tr>
-				</tfoot>
-			</table>
-			<div class="table-actions">
-				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('office/delete')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+					</thead>
+					<foreach name="list" item="vo">
+						<tr>
+							<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+							<td>{$vo.name}</td>
+							<td><img src="{$vo.photo}" style="width: 50px;height: 50px;"/></td>
+							<td>{$vo.hospital_n}</td>
+							<td>{$vo.office_n}</td>
+							<td>{$vo.tag_n}</td>
+							<td>{$vo.position}</td>
+							<td>
+								<if condition="$vo.status eq 0">
+									铁樵健康
+								</if>
+								<if condition="$vo.status eq 1">
+									专家联盟
+								</if>
+							</td>
+							<td>
+								<a href="{:U('messages/handle',array('id'=>$v['id'],'msg_id'=>$msg_id))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
+							</td>
+						</tr>
+					</foreach>
+					<tfoot>
+					<tr>
+						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="100">医生名</th>
+						<th width="100">头像</th>
+						<th width="100">医院</th>
+						<th width="100">科室</th>
+						<th width="100">具体科室</th>
+						<th width="100">职位</th>
+						<th width="100">所属平台</th>
+						<th width="50">操作</th>
+					</tr>
+					</tfoot>
+				</table>
+				<div class="table-actions">
+					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+				</div>
+				<div class="pagination">{$page}</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>

@@ -3,13 +3,13 @@
 /**
 * Wechat
 */
-define("TOKEN", "cxCd8c0sh");
-$wechatObj = new Wechat();
-/*if (isset($_GET['echostr'])) {
+define("TOKEN", "dkt28wiS");
+$wechatObj = new Wechat_zj();
+if (isset($_GET['echostr'])) {
     $wechatObj->valid();
 }else{
     $wechatObj->responseMsg();
-}*/
+}
 require_once 'today/class.today.php';
 class Wechat_zj {
 	/**
@@ -19,19 +19,19 @@ class Wechat_zj {
 	/**
 	* AppId
 	*/
-	private $WX_APPID = 'wx69217b5af9a538fb';
+	private $WX_APPID = 'wx14996363909295c2';
 	/**
 	* AppSecret
 	*/
-	private $WX_APPSECRET = '98e91168e2ac5e907068e62ea340ec23';
+	private $WX_APPSECRET = 'dceb345e6027c7db1e6ff83ebc08282f';
 	/**
 	* Token
 	*/
-	private $WX_TOKEN = 'cxCd8c0sh';
+	private $WX_TOKEN = 'dkt28wiS';
 	/**
 	* AESKey
 	*/
-	private $WX_AESKEY = 'GCR1nuYnf6ZFtcq6J7PIzaamz1zA7rysTw5uS3CnQRY';
+	private $WX_AESKEY = 'le2z3RTUSA68dS3EgWEWAlnv6W5w3mY9Ae9IKekvJwl';
 	/**
 	* TimeStamp
 	*/
@@ -40,6 +40,10 @@ class Wechat_zj {
 	* NonceStr
 	*/
 	private $WX_NONCESTR = '2nDgiWM7gCxhL8v0';
+    /**
+     * 群发/转发（管理）
+     */
+    private $WX_FORWARD = '5yu8Rm9ckgFsgQpeu9QxAV4r8nNAveqNI6jGpVDPOUo';
     /**
      * 咨询通知（患者）
      */
@@ -150,7 +154,7 @@ class Wechat_zj {
 	* 从数据库获取access_token，如果没有或者过期，则生成access_token，存入数据库
 	*/
 	public function getAccessToken() {
-		$mdl_wxtoken = D( 'Wxtoken' );
+		$mdl_wxtoken = D( 'Wxtoken_zj' );
 
 		$token = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='token'" );
 		$token = $token[0];
@@ -184,7 +188,7 @@ class Wechat_zj {
 	* 从数据库获取jsapi_ticket，如果没有或者过期，则生成jsapi_ticket，存入数据库
 	*/
 	public function getJSApiTicket() {
-		$mdl_wxtoken = D( 'Wxtoken' );
+		$mdl_wxtoken = D( 'Wxtoken_zj' );
 
 		$ticket = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='JSticket'" );
 		$ticket = $ticket[0];
@@ -569,105 +573,41 @@ class Wechat_zj {
         $urls = $this->WX_SEND_TEMPLATE_URL.'?access_token='.$accessToken;
         return \Today\Today::httpRequest( $urls, urldecode($json_template) );
     }
+    //转发/群发模板消息推送
+    public function templateForward($open_id,$url,$data,$topcolor='#7B68EE'){
+        $accessToken = $this->getAccessToken();
+        $template = array(
+            'touser' => $open_id,
+            'template_id' => $this->WX_FORWARD,
+            'url' => $url,
+            'topcolor' => $topcolor,
+            'data' => $data
+        );
+        $json_template = json_encode($template);
+        $urls = $this->WX_SEND_TEMPLATE_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $urls, urldecode($json_template) );
+    }
     //关注事件推送
     public function responseMsg(){
         $postArr = file_get_contents("php://input");    //php7.0只能用这种方式获取数据，之前的$GLOBALS['HTTP_RAW_POST_DATA']7.0版本不可用
         $postObj = simplexml_load_string($postArr);
-        $create_time = date('Y-m-d H:i:s',time());
-        $con = mysql_connect("47.96.115.51:3308","root","123admin");
-        mysql_select_db("medical", $con);
-        mysql_query("set names 'utf8'");
         if(strtolower($postObj->MsgType) == 'event'){
             $toUser		= $postObj->FromUserName;
             $fromUser	= $postObj->ToUserName;
-            $scene_id	= $postObj->EventKey;
-            $arr = explode('_', $scene_id);
-            $id = end($arr);
             //用户未关注时
             if(strtolower($postObj->Event) == 'subscribe'){
-                $checkuser = mysql_query("SELECT * FROM cmf_common_user WHERE open_id = '$toUser'");
-                $onUser = mysql_fetch_array($checkuser);
-                //微信搜索关注
-                if ($id == null){
-                    $Url = 'http://www.jkwdr.cn/';
-                    //用户不存在，先添加
-                    if ($onUser == null){
-                        $decription = '健康微达人,欢迎您的造访';
-                        mysql_query("INSERT INTO cmf_common_user (open_id, create_time) VALUES ('$toUser', '$create_time')");
-                    }else{
-                        //用户已存在
-                        $decription = '健康微达人,欢迎您回来';
-                    }
-                }else{
-                    //扫描二维码关注
-                    if ($id == 0){
-                        if ($onUser == null){
-                            //医生入驻（用户不存在，先添加）
-                            $Url = 'http://www.jkwdr.cn/index.php?g=portal&m=doctor&a=index';
-                            $decription = '健康微达人,欢迎您的入驻,请先完善您的信息';
-                            mysql_query("INSERT INTO cmf_common_user (open_id, status, create_time) VALUES ('$toUser', '1', '$create_time')");
-                        }else{
-                            //医生入驻（用户已存在）
-                            $Url = 'http://www.jkwdr.cn/';
-                            $decription = '健康微达人,欢迎您回来';
-                        }
-                    }else{
-                        //患者扫描医生二维码（用户不存在，先添加）
-                        if ($onUser == null){
-                            $user = mysql_query("SELECT * FROM cmf_common_user WHERE id = '$id'");
-                            $doctor = mysql_fetch_array($user);
-                            mysql_query("INSERT INTO cmf_common_user (open_id, create_time) VALUES ('$toUser', '$create_time')");
-                            mysql_query("INSERT INTO cmf_common_dp (doctor_id, patient_id, create_time) VALUES ('$id', '$toUser', '$create_time')");
-                            mysql_query("INSERT INTO cmf_common_remind (doctor_id, patient_id, message, create_time) VALUES ('$id', '$toUser', '关注通知', '$create_time')");
-                            $decription = '欢迎来到健康微达人，已为您绑定医生：'.$doctor['name'].'  点击咨询';
-                        }else{
-                            //患者扫描医生二维码（用户已存在）
-                            $user = mysql_query("SELECT * FROM cmf_common_user WHERE id = '$id'");
-                            $doctor = mysql_fetch_array($user);
-                            $dp_list = mysql_query("SELECT * FROM cmf_common_dp WHERE doctor_id = '$id' and patient_id = '$toUser'");
-                            if ($dp_list == null) {
-                                mysql_query("INSERT INTO cmf_common_dp (doctor_id, patient_id, create_time) VALUES ('$id', '$toUser', '$create_time')");
-                                mysql_query("INSERT INTO cmf_common_remind (doctor_id, patient_id, message, create_time) VALUES ('$id', '$toUser', '关注通知', '$create_time')");
-                                $decription = '欢迎来到健康微达人，已为您绑定医生：'.$doctor['name'].'  点击咨询';
-                            }else{
-                                $decription = '欢迎来到健康微达人，您已经绑定了医生：'.$doctor['name'].'  点击咨询';
-                            }
-                        }
-                        $Url = 'http://www.jkwdr.cn/index.php?g=portal&m=patient&a=payment&id='.$id;
-                    }
-                }
-                $title = $decription;
+                $title = '欢迎关注专家联盟';
+                $decription = '点击这里,让我们一路同行！';
+                $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
+                $url = 'http://tieqiao.zzzpsj.com/';
                 $time      = time();
-                $news_arr = array(
-                    'news1' => array('title' => '还没有您自己的私人医生?在“健康微达人”里找到', 'decription' => '还没有您自己的私人医生?在“健康微达人”里找到', 'PicUrl' => 'http://www.jkwdr.cn/push/image/1.jpg', 'Url' => 'http://www.jkwdr.cn'),
-                    'news2' => array('title' => '关于健康微达人-温暖世界的公众号', 'decription' => '关于健康微达人-温暖世界的公众号', 'PicUrl' => 'http://www.jkwdr.cn/push/image/2.jpg', 'Url' => 'http://www.jkwdr.cn/push/html/about.html'),
-                    'news3' => array('title' => '使用指南', 'decription' => '使用指南', 'PicUrl' => 'http://www.jkwdr.cn/push/image/3.jpg', 'Url' => 'http://www.jkwdr.cn/push/html/guide.html'),
-                    'news4' => array('title' => $title, 'decription' => $decription, 'PicUrl' => 'http://www.jkwdr.cn/push/image/6.jpg', 'Url' => $Url));
                 $template  = "<xml>
                               <ToUserName><![CDATA[%s]]></ToUserName>
                               <FromUserName><![CDATA[%s]]></FromUserName>
                               <CreateTime>%s</CreateTime>
                               <MsgType><![CDATA[news]]></MsgType>
-                              <ArticleCount>4</ArticleCount>
+                              <ArticleCount>1</ArticleCount>
                               <Articles>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
                               <item>
                               <Title><![CDATA[%s]]></Title>
                               <Description><![CDATA[%s]]></Description>
@@ -676,76 +616,23 @@ class Wechat_zj {
                               </item>
                               </Articles>
                               </xml>";
-                $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url'], $news_arr['news3']['title'],$news_arr['news3']['decription'],$news_arr['news3']['PicUrl'],$news_arr['news3']['Url'], $news_arr['news4']['title'], $news_arr['news4']['decription'], $news_arr['news4']['PicUrl'], $news_arr['news4']['Url']);
+                $info = sprintf($template, $toUser, $fromUser, $time, $title, $decription, $picurl, $url);
                 echo $info;
             }
             //用户已关注时
             if(strtolower($postObj->Event) == 'scan'){
-                $toUser		= $postObj->FromUserName;
-                $fromUser	= $postObj->ToUserName;
-                $scene_id	= $postObj->EventKey;
-                $arr = explode('_', $scene_id);
-                $id = end($arr);
-                $con = mysql_connect("47.96.115.51:3308","root","123admin");
-                mysql_select_db("medical", $con);
-                mysql_query("set names 'utf8'");
-                $checkuser = mysql_query("SELECT * FROM cmf_common_user WHERE open_id = '$toUser'");
-                $onUser = mysql_fetch_array($checkuser);
-                if ($id == 0){
-                    if ($onUser['status'] == 0){
-                        mysql_query("UPDATE cmf_common_user SET status = '1' WHERE open_id = '$toUser'");
-                        $Url = 'http://www.jkwdr.cn/index.php?g=portal&m=index&a=register_doctor';
-                        $decription = '健康微达人,欢迎您的入驻,请点击完善您的信息';
-                    }else{
-                        $Url = 'http://www.jkwdr.cn/';
-                        $decription = '健康微达人,欢迎您的入驻,您已经成为医生';
-                    }
-                }else{
-                    $user = mysql_query("SELECT * FROM cmf_common_user WHERE id = '$id'");
-                    $doctor = mysql_fetch_array($user);
-                    $dp_list = mysql_query("SELECT * FROM cmf_common_dp WHERE doctor_id = '$id' and patient_id = '$toUser'");
-                    $dp = mysql_fetch_array($dp_list);
-                    if ($dp == null) {
-                        mysql_query("INSERT INTO cmf_common_dp (doctor_id, patient_id, create_time) VALUES ('$id', '$toUser', '$create_time')");
-                        mysql_query("INSERT INTO cmf_common_remind (doctor_id, patient_id, message, create_time) VALUES ('$id', '$toUser', '关注通知', '$create_time')");
-                        $decription = '已为您绑定医生：'.$doctor['name'].'  点击咨询';
-                    }else{
-                        $decription = '您已经绑定了医生：'.$doctor['name'].'  点击咨询';
-                    }
-                    $Url = 'http://www.jkwdr.cn/index.php?g=portal&m=patient&a=payment&id='.$id;
-                }
-                $title = $decription;
+                $title = '您已关注专家联盟';
+                $decription = '点击这里,让我们一路同行！';
+                $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
+                $url = 'http://tieqiao.zzzpsj.com/';
                 $time      = time();
-                $news_arr = array(
-                    'news1' => array('title' => '还没有您自己的私人医生?在“健康微达人”里找到', 'decription' => '还没有您自己的私人医生?在“健康微达人”里找到', 'PicUrl' => 'http://www.jkwdr.cn/push/image/1.jpg', 'Url' => 'http://www.jkwdr.cn'),
-                    'news2' => array('title' => '关于健康微达人-温暖世界的公众号', 'decription' => '关于健康微达人-温暖世界的公众号', 'PicUrl' => 'http://www.jkwdr.cn/push/image/2.jpg', 'Url' => 'http://www.jkwdr.cn/push/html/about.html'),
-                    'news3' => array('title' => '使用指南', 'decription' => '使用指南', 'PicUrl' => 'http://www.jkwdr.cn/push/image/3.jpg', 'Url' => 'http://www.jkwdr.cn/push/html/guide.html'),
-                    'news4' => array('title' => $title, 'decription' => $decription, 'PicUrl' => 'http://www.jkwdr.cn/push/image/6.jpg', 'Url' => $Url));
                 $template  = "<xml>
                               <ToUserName><![CDATA[%s]]></ToUserName>
                               <FromUserName><![CDATA[%s]]></FromUserName>
                               <CreateTime>%s</CreateTime>
                               <MsgType><![CDATA[news]]></MsgType>
-                              <ArticleCount>4</ArticleCount>
+                              <ArticleCount>1</ArticleCount>
                               <Articles>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
                               <item>
                               <Title><![CDATA[%s]]></Title>
                               <Description><![CDATA[%s]]></Description>
@@ -754,7 +641,7 @@ class Wechat_zj {
                               </item>
                               </Articles>
                               </xml>";
-                $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url'], $news_arr['news3']['title'],$news_arr['news3']['decription'],$news_arr['news3']['PicUrl'],$news_arr['news3']['Url'], $news_arr['news4']['title'], $news_arr['news4']['decription'], $news_arr['news4']['PicUrl'], $news_arr['news4']['Url']);
+                $info = sprintf($template, $toUser, $fromUser, $time, $title, $decription, $picurl, $url);
                 echo $info;
             }
         }

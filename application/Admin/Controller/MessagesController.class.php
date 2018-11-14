@@ -1,6 +1,6 @@
 <?php
 /**
- * 消息管理
+ * 咨询管理
  */
 namespace Admin\Controller;
 
@@ -17,7 +17,7 @@ class MessagesController extends AdminbaseController {
         $this->common_user_model = D( 'Common_user' );
         $this->common_messages_model = D( 'Common_messages' );
 	}
-	//消息信息列表
+	//咨询信息列表
 	function index() {
         $where = array();
         //申请人姓名
@@ -40,19 +40,54 @@ class MessagesController extends AdminbaseController {
         $this->assign( 'list', $list );
 		$this->display();
 	}
-	//群发
-	function sends_many(){
-        $this->display();
+    //添加咨询信息
+    function add() {
+        if ( IS_POST ) {
+            $_POST['create_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_messages_model->add($_POST);
+            if ($result) {
+                //记录日志
+                LogController::log_record($result,1);
+                $this->success('添加咨询信息成功！');
+            } else {
+                $this->error('添加咨询信息失败！');
+            }
+        } else {
+            $where = array();
+            $where['type'] = array('eq',0);
+            $where['del_flg'] = array('eq',0);
+            $user_list = $this->common_user_model->where($where)->select();
+            $this->assign( 'user_list', $user_list );
+            $this->display();
+        }
     }
-    //转发
-    function forward(){
-        $this->display();
+    //编辑咨询信息
+    function edit() {
+        if ( IS_POST ) {
+            $id = (int)$_POST['id'];
+            $result = $this->common_messages_model->where(array('id' => $id))->save($_POST);
+            if ($result) {
+                //记录日志
+                LogController::log_record($id,2);
+                $this->success('编辑咨询信息成功！');
+            } else {
+                $this->error('编辑咨询信息失败！');
+            }
+        } else {
+            $id = intval( I( 'get.id' ) );
+            $messages = $this->common_messages_model->find($id);
+
+            $where = array();
+            $where['type'] = array('eq',0);
+            $where['del_flg'] = array('eq',0);
+            $user_list = $this->common_user_model->where($where)->select();
+
+            $this->assign( 'user_list', $user_list );
+            $this->assign($messages);
+            $this->display();
+        }
     }
-    //处理
-    function handle(){
-        $this->display();
-    }
-    //删除消息
+    //删除咨询信息
     function delete() {
         if ( isset( $_POST['ids'] ) ) {//批量逻辑删除
             $ids = implode( ',', $_POST['ids'] );
@@ -97,5 +132,103 @@ class MessagesController extends AdminbaseController {
             }
         }
     }
-
+	//群发
+	function sends_many(){
+        $id = intval( I( 'get.id' ) );
+        $this->assign( 'msg_id', $id );
+        $where = array();
+        $where['u.type'] = array('eq',1);
+        $where['u.del_flg'] = array('eq',0);
+        $count = $this->common_user_model->alias('u')->where($where)->count();
+        $page = $this->page($count, 20);
+        $list = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id','left')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where($where)->order('u.create_time desc')->select();
+        $this->assign("page", $page->show('Admin'));
+        $this->assign( 'list', $list );
+        $this->display();
+    }
+    //转发
+    function forward(){
+        $id = intval( I( 'get.id' ) );
+        $data = array();
+        $data['type'] = 1;
+        $result = $this->common_messages_model->where(array('id' => $id))->save($data);
+        if ($result) {
+            $where = array();
+            $where['type'] = array('eq',1);
+            $where['del_flg'] = array('eq',0);
+            $list = $this->common_user_model->where($where)->select();
+            $msg_info = $this->common_messages_model->find($id);
+            $user = $this->common_user_model->find($msg_info['user_id']);
+            foreach ($list as $sendUser) {
+                if ($sendUser['status'] == 0){
+                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $this->template_send_tq($msg_info,$user,$sendUser,$url);
+                }else{
+                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $this->template_send_zj($msg_info,$sendUser,$url);
+                }
+            }
+            $this->success('转发成功！');
+        } else {
+            $this->error('转发失败！');
+        }
+        $this->display();
+    }
+    //群发处理
+    function handle(){
+        if ( IS_POST ) {
+            $ids = $_POST['ids'];
+            $msg_id = $_POST['msg_id'];
+            $msg_info = $this->common_messages_model->find($msg_id);
+            $user = $this->common_user_model->find($msg_info['user_id']);
+            foreach ($ids as $id) {
+                $sendUser = $this->common_user_model->find($id);
+                if ($sendUser['status'] == 0){
+                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $this->template_send_tq($msg_info,$user,$sendUser,$url);
+                }else{
+                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $this->template_send_zj($msg_info,$sendUser,$url);
+                }
+            }
+        }else{
+            $id = $_GET['id'];
+            $msg_id = $_GET['msg_id'];
+            $msg_info = $this->common_messages_model->find($msg_id);
+            $sendUser = $this->common_user_model->find($id);
+            if ($sendUser['status'] == 0){
+                $user = $this->common_user_model->find($msg_info['user_id']);
+                $url = 'http://tieqiao.zzzpsj.com/index.php';
+                $this->template_send_tq($msg_info,$user,$sendUser,$url);
+            }else{
+                $url = 'http://tieqiao.zzzpsj.com/index.php';
+                $this->template_send_zj($msg_info,$sendUser,$url);
+            }
+        }
+        $this->error('发送成功！');
+        $this->display();
+    }
+    public function template_send_tq($msg_info,$user,$sendUser,$url) {
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
+        $data=array(
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#00CD00"),
+            'keyword1'=>array('value'=>urlencode($user['name']),'color'=>'#4876FF'),
+            'keyword2'=>array('value'=>urlencode($msg_info['title']),'color'=>'#4876FF'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+        );
+        $wechat->templateForward($sendUser['open_id'],$url,$data);
+    }
+    public function template_send_zj($msg_info,$sendUser,$url) {
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
+        $time = date('Y-m-d H:i:s',time());
+        $data=array(
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#00CD00"),
+            'keyword1'=>array('value'=>urlencode($msg_info['title']),'color'=>'#4876FF'),
+            'keyword2'=>array('value'=>urlencode($time),'color'=>'#4876FF'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+        );
+        $wechat->templateForward($sendUser['open_id'],$url,$data);
+    }
 }
