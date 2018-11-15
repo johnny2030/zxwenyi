@@ -93,6 +93,7 @@ class UserController extends HomebaseController {
         $where = array();
         $where['u.del_flg'] = array('eq',0);
         $where['u.office'] = array('eq',$office_id);
+        $where['u.type'] = array('eq',1);
         $list = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->where($where)->select();
         $this->assign( 'office_n', $ofc['name'] );
         $this->assign( 'list', $list );

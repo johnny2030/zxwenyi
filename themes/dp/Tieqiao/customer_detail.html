@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+	<body>
+	<div class="mui-content detail">
+		<div class="top-bg"></div>
+		<div class="top-card">
+			<div class="photo">
+				<img src="{$doctor.photo}">
+			</div>
+			<div class="text">
+				{$doctor.name}
+				<h6 class='mui-ellipsis'>{$doctor.hospital}</h6>
+				<h5 class='mui-ellipsis'>{$doctor.office_n}－{$doctor.tag_n}</h5>
+			</div>
+		</div>
+	</div>
+	<div class="mui-content doctor-introduce">
+		<div class="mui-card">
+			<div class="mui-card-header">
+				<span>医生介绍</span>
+			</div>
+			<div class="mui-card-content briefing">
+				<p>{$doctor.introduce}</p>
+			</div>
+		</div>
+	</div>
+
+	</body>
+</html>

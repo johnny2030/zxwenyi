@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<h1 class="mui-title">咨询列表</h1>
+</header>
+<div class="mui-content">
+	<ul class="mui-table-view mui-table-view-chevron">
+		<foreach name="msg_list" item="msg">
+			<li class="mui-table-view-cell mui-media">
+				<a class="mui-navigate-right" href="{:U('portal/messages/detail',array('id'=>$msg['id']))}">
+					<img class="mui-media-object mui-pull-left" src="{$msg.photo_u}">
+					<div class="mui-media-body">
+						{$msg.name_u}
+						<p class='mui-ellipsis'>{$msg.title}</p>
+					</div>
+				</a>
+			</li>
+		</foreach>
+	</ul>
+</div>
+</body>
+</html>
