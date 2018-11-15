@@ -35,7 +35,7 @@
 							<php>$smeta=json_decode($vo['photo'],true);</php>
 							<notempty name="smeta.thumb">
 								<a href="javascript:parent.image_preview_dialog('{:sp_get_image_preview_url($smeta['thumb'])}');">
-									<img src="{:sp_get_image_preview_url($smeta['thumb'])}" style="width:60px;height:60px;" title="点击查看大图"/>
+									<img src="{:sp_get_image_preview_url($smeta['thumb'])}" style="width:50px;height:50px;" title="点击查看大图"/>
 								</a>
 							</notempty>
 						</td>
@@ -51,10 +51,10 @@
 						<td>{$vo.create_time}</td>
 						<td>
 							<if condition="$vo.flg eq 0">
-								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定启用？">启用</a>
+								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'flg'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定启用？">启用</a>
 							</if>
 							<if condition="$vo.flg eq 1">
-								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定停用？">停用</a>
+								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'flg'=>0))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定停用？">停用</a>
 							</if>
 							<a style="margin-top: 5px;" href="{:U('manager/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-small">编辑</a>
 							<a style="margin-top: 5px;" href="{:U('manager/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
