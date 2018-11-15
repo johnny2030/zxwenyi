@@ -12,10 +12,13 @@
 		<foreach name="msg_list" item="msg">
 			<li class="mui-table-view-cell mui-media">
 				<a class="mui-navigate-right" href="{:U('portal/messages/detail',array('id'=>$msg['id']))}">
-					<img class="mui-media-object mui-pull-left" src="{$msg.photo_u}">
+					<img class="mui-media-object mui-pull-left" src="{$msg.photo}" style="width: 50px;height: 50px;">
 					<div class="mui-media-body">
-						{$msg.name_u}
+						{$msg.name}
 						<p class='mui-ellipsis'>{$msg.title}</p>
+					</div>
+					<div class="mui-pull-right" style="margin-top:-28px;font-size: 14px;color: #CD3333;margin-right:-20px;">
+						查看详情
 					</div>
 				</a>
 			</li>

@@ -1,32 +1,56 @@
 <!doctype html>
-<html>
+<html ng-app="demo">
 <head>
 	<tc_include file="Public/TQHead"/>
+	<tc_include file="Public/RCHead"/>
 </head>
-	<body>
-	<div class="mui-content detail">
-		<div class="top-bg"></div>
-		<div class="top-card">
-			<div class="photo">
-				<img src="{$doctor.photo}">
-			</div>
-			<div class="text">
-				{$doctor.name}
-				<h6 class='mui-ellipsis'>{$doctor.hospital}</h6>
-				<h5 class='mui-ellipsis'>{$doctor.office_n}－{$doctor.tag_n}</h5>
+	<body ng-controller="main">
+		<div class="detail">
+			<div class="top-bg"></div>
+			<div class="top-card">
+				<div class="photo">
+					<img src="{$msg.photo}">
+				</div>
+				<div class="text">
+					{$msg.name}
+					<h5 class='mui-ellipsis'>
+						<notempty name="msg.sex">
+							<if condition="$msg.sex eq 2">
+								女
+								<else />
+								男
+							</if>
+							<else />
+							保密
+						</notempty>
+						－
+						<notempty name="msg.age">
+							{$msg.age}
+							<else />
+							保密
+						</notempty>
+					</h5>
+					<h6 class='mui-ellipsis'>{$msg.title}</h6>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="mui-content doctor-introduce">
-		<div class="mui-card">
-			<div class="mui-card-header">
-				<span>医生介绍</span>
-			</div>
-			<div class="mui-card-content briefing">
-				<p>{$doctor.introduce}</p>
+		<div class="doctor-introduce">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>咨询内容</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<p>{$msg.content}</p>
+				</div>
 			</div>
 		</div>
-	</div>
-
+		<nav class="mui-bar mui-bar-tab">
+			<div class="zixun-nav">
+				<button type="button" class="mui-pull-right" ng-click="setconversation()">立即回复</button>
+			</div>
+		</nav>
+		<div>
+			<rong-widget></rong-widget>
+		</div>
 	</body>
 </html>
