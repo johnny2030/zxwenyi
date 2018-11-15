@@ -82,8 +82,8 @@ class ManagerController extends AdminbaseController {
         $manager = $this->common_user_model->where($where)->find();
         if(empty($manager)){
             $data = array();
-            $data['flg'] = array('eq',1);
-            $_POST['update_time'] = date('Y-m-d H:i:s',time());
+            $data['flg'] = 1;
+            $data['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($data);
             if ($result) {
                 $this->success('设置成功！');
