@@ -45,13 +45,9 @@ class Wechat_zj {
      */
     private $WX_FORWARD = '5yu8Rm9ckgFsgQpeu9QxAV4r8nNAveqNI6jGpVDPOUo';
     /**
-     * 咨询通知（患者）
+     * 问题咨询处理通知
      */
-    private $WX_CONSULTATION = 'hKQQI2SvY6f85F9hq2grvmZKySNOiSZUQ6hwPJZ8U9I';
-    /**
-     * 咨询通知（医生）
-     */
-    private $WX_CONSULTATION_DOCTOR = '24kf4TK1VZWz_JQ0SPR_esjE_OaqE1XtlE1eWcdaW7U';
+    private $WX_CONSULTATION = 'jQxWx1yqq4QbTkXrAxUBbEP2RlvED2Yu0KEbt1rGxHA';
 	/**
 	* 获取access_token的URL
 	*/
@@ -546,7 +542,7 @@ class Wechat_zj {
                     "title":"'.$title.'",
                     "description":"'.$description.'",
                     "url":"'.$url.'",
-                    "picurl":"http://www.jkwdr.cn/push/image/5.jpg"
+                    "picurl":"http://tieqiao.zzzpsj.com/themes/dp/Public/images/off-hd.jpg"
                 }
                 ]
             }
@@ -555,16 +551,11 @@ class Wechat_zj {
         return \Today\Today::httpRequest( $url,$txt );
     }
     //发送模板消息
-    public function templateSend($open_id,$status,$url,$data,$topcolor='#7B68EE'){
+    public function templateSend($open_id,$url,$data,$topcolor='#7B68EE'){
         $accessToken = $this->getAccessToken();
-        if ($status == 0){
-            $template_id = $this->WX_CONSULTATION;
-        }else{
-            $template_id = $this->WX_CONSULTATION_DOCTOR;
-        }
         $template = array(
             'touser' => $open_id,
-            'template_id' => $template_id,
+            'template_id' => $this->WX_CONSULTATION,
             'url' => $url,
             'topcolor' => $topcolor,
             'data' => $data
@@ -597,7 +588,7 @@ class Wechat_zj {
             //用户未关注时
             if(strtolower($postObj->Event) == 'subscribe'){
                 $title = '欢迎关注专家联盟';
-                $decription = '点击这里,让我们一路同行！';
+                $decription = '用我们贴心的服务，换您满意的微笑！';
                 $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
                 $url = 'http://tieqiao.zzzpsj.com/';
                 $time      = time();
@@ -622,7 +613,7 @@ class Wechat_zj {
             //用户已关注时
             if(strtolower($postObj->Event) == 'scan'){
                 $title = '您已关注专家联盟';
-                $decription = '点击这里,让我们一路同行！';
+                $decription = '用我们贴心的服务，换您满意的微笑！';
                 $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
                 $url = 'http://tieqiao.zzzpsj.com/';
                 $time      = time();

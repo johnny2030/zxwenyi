@@ -1423,4 +1423,9 @@ li {
 .rongcloud-sprite-voice{
     background:url(../images/star_on.png) no-repeat;
 }
-
+.chat{
+    color: #ffffff;
+}
+.rongcloud-title-f{
+    margin-left: 30px;
+}
