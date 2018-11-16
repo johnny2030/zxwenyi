@@ -43,7 +43,6 @@ class RongController extends HomebaseController {
         $this->display('../Rongcloud/demo/user1/index');
     }
     public function get_data(){
-        require_once 'today/config.php';
         $id=session('login_id');
         $lgUser = $this->common_user_model->find($id);
         $sendid= session('send_id');

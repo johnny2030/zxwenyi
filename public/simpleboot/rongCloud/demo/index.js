@@ -8,8 +8,8 @@ demo.controller("main", ["$scope", "WebIMWidget", "$http", function($scope, WebI
         url:"{:U('chat/get_data')}",
         params:{}
     }).success(function (res) {
-        $scope.targetId = res.sendUser.id;
-        $scope.name = res.sendUser.name;
+        $scope.targetId = res.manager_user.id;
+        $scope.name = res.manager_user.name;
         stat(res);
     }).error(function (error) {
         alert("请求失败");

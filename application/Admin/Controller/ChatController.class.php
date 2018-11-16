@@ -29,8 +29,7 @@ class ChatController extends AdminbaseController {
     /**
      * 获取token
      */
-    public function get_token(){
-        $id=session('login_id');
+    public function get_token($id){
         $where = array();
         $where['id'] = array('eq',$id);
         $rong_token = $this->rong_token_model->where($where)->find();
@@ -65,16 +64,16 @@ class ChatController extends AdminbaseController {
      * 获取初始数据
      */
     public function get_data(){
-        $id=session('login_id');
-        $lgUser = $this->common_user_model->find($id);
-        $sendid= session('send_id');
-        $sendUser = $this->common_user_model->find($sendid);
-        $token = $this->get_token();
+        $where = array();
+        $where['flg'] = array('eq',1);
+        $where['type'] = array('eq',2);
+        $where['del_flg'] = array('eq',0);
+        $user = $this->common_user_model->where($where)->find();
+        $token = $this->get_token($user['id']);
         $data = array();
         $data['appkey'] = RY_KEY;
         $data['token'] = $token;
-        $data['lgUser'] = $lgUser;
-        $data['sendUser'] = $sendUser;
+        $data['manager_user'] = $user;
         $this->ajaxReturn($data);
     }
     /**
