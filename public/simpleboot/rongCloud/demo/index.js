@@ -5,7 +5,7 @@ demo.controller("main", ["$scope", "WebIMWidget", "$http", function($scope, WebI
     $scope.targetType = 1; //1：私聊 更多会话类型查看http://www.rongcloud.cn/docs/api/js/global.html#ConversationType
     $http({
         method:'GET',
-        url:"{:U('chat/get_data')}",
+        url:"http://tieqiao.zzzpsj.com/index.php?g=Admin&m=Chat&a=get_data",
         params:{}
     }).success(function (res) {
         $scope.targetId = res.manager_user.id;

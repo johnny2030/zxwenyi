@@ -9,7 +9,7 @@ window.RongDemo = {
         WebIMWidget.setUserInfoProvider(function(targetId,obj){
             $http({
                 method:'GET',
-                url:"{:U('chat/get_user')}",
+                url:"http://tieqiao.zzzpsj.com/index.php?g=Admin&m=Chat&a=get_user",
                 params:{
                     'userId':targetId
                 }
