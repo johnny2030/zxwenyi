@@ -21,6 +21,12 @@ class ChatController extends AdminbaseController {
         $this->rong_token_model = D( 'Rong_token' );
 	}
     /**
+     * 聊天咨询
+     */
+    function index() {
+        $this->display();
+    }
+    /**
      * 获取token
      */
     public function get_token(){
@@ -72,10 +78,12 @@ class ChatController extends AdminbaseController {
         $this->ajaxReturn($data);
     }
     /**
-     * 聊天咨询
+     * 获取用户信息
      */
-	function index() {
-		$this->display();
-	}
+    public function get_user() {
+        $id = $_GET['userId'];
+        $patient = $this->common_user_model->find($id);
+        $this->ajaxReturn($patient);
+    }
 
 }
