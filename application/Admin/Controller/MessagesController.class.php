@@ -226,8 +226,8 @@ class MessagesController extends AdminbaseController {
         $wechat->templateForward($sendUser['open_id'],$url,$data);
     }
     public function template_send_zj($msg_info,$sendUser,$url) {
-        require_once 'today/Wechat_tq.php';
-        $wechat = new \Wechat_tq( $this );
+        require_once 'today/Wechat_zj.php';
+        $wechat = new \Wechat_zj( $this );
         $time = date('Y-m-d H:i:s',time());
         $data=array(
             'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#00CD00"),

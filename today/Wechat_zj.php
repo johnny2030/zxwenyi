@@ -152,7 +152,7 @@ class Wechat_zj {
 	public function getAccessToken() {
 		$mdl_wxtoken = D( 'Wxtoken_zj' );
 
-		$token = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='token'" );
+		$token = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken_zj where tname='token'" );
 		$token = $token[0];
 
 		if ( $token['seconds'] < 3600 && !empty( $token['token'] ) ) {
