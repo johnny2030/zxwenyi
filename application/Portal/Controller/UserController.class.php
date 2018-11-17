@@ -43,16 +43,19 @@ class UserController extends HomebaseController {
     }
     //患者个人中心
     public function info_patient() {
-        if ( IS_POST ) {
+	    $flg = session('flg');
+        if ( IS_POST && empty($flg)) {
             $id = (int)session('login_id');
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result){
-                $this->ajaxReturn(1);
+                session('flg','redt');
+                R('User/info_patient');
             }else{
                 $this->ajaxReturn(0);
             }
         }else{
+            session('flg',null);
             $id = (int)session('login_id');
             $where = array();
             $where['u.id'] = array('eq',$id);
@@ -84,12 +87,19 @@ class UserController extends HomebaseController {
     }
     //医生个人中心
     public function info_doctor() {
-        if ( IS_POST ) {
+        $flg = session('flg');
+        if ( IS_POST && empty($flg)) {
             $id = (int)session('login_id');
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
-            $this->common_user_model->where(array('id' => $id))->save($_POST);
-            $this->ajaxReturn(1);
+            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
+            if ($result){
+                session('flg','redt');
+                R('User/info_doctor');
+            }else{
+                $this->ajaxReturn(0);
+            }
         }else{
+            session('flg',null);
             $id = (int)session('login_id');
             $doctor = $this->common_user_model->where(array('id' => $id))->find();
             $where = array();

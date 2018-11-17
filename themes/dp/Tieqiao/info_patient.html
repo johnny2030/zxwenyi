@@ -160,7 +160,6 @@
         mui.confirm('确认保存信息？', '铁樵健康提醒您', btnArray, function(e) {
             if (e.index == 0) {
                 $("form[name='info']").submit();
-                setTimeout(function () { window.location.href = "index.php?g=portal&m=user&a=info_patient"; }, 200);
                 mui.toast('保存成功！');
             } else {
                 return;
