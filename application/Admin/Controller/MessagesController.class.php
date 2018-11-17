@@ -211,7 +211,7 @@ class MessagesController extends AdminbaseController {
                 $this->template_send_zj($msg_info,$sendUser,$url);
             }
         }
-        $this->error('发送成功！');
+        $this->success('发送成功！');
         $this->display();
     }
     public function template_send_tq($msg_info,$user,$sendUser,$url) {

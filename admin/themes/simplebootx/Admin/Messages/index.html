@@ -92,20 +92,10 @@
 						<td>{$vo.start_time}</td>
 						<td>{$vo.end_time}</td>
 						<td>
-							<if condition="$vo.status eq 0">
-								<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-warning btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-								<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many',array('id'=>$vo['id']))}','群发')" class="btn btn-warning btn-small">群发</a>
-								<a style="margin-top: 5px;" href="{:U('messages/handle',array('id'=>$vo['id']))}" class="btn btn-warning btn-small">处理</a>
-								<a style="margin-top: 5px;" href="{:U('messages/edit',array('id'=>$vo['id']))}" class="btn btn-success btn-small ">编辑</a>
-								<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-								<else/>
-								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small ">转发</a>
-								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small">群发</a>
-								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-success disabled btn-small">处理</a>
-								<a style="margin-top: 5px;" href="javascript:void(0);" class="btn btn-warning disabled btn-small ">编辑</a>
-								<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
-							</if>
-
+							<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定转发给所有平台的医生吗？">转发</a>
+							<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many',array('id'=>$vo['id']))}','群发')" class="btn btn-success btn-small">群发</a>
+							<a style="margin-top: 5px;" href="{:U('messages/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-small ">编辑</a>
+							<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
 				</foreach>

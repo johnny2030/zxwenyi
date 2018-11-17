@@ -9,7 +9,7 @@
 		<form class="js-ajax-form" action="{:U('messages/handle')}" method="post">
 			<div class="row-fluid">
 				<div class="table-actions">
-					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定发送？">发送</button>
 				</div>
 				<input id="msg_id" name="msg_id" type="hidden" value="{$msg_id}">
 				<table class="table table-bordered">
@@ -23,7 +23,7 @@
 						<th width="100">具体科室</th>
 						<th width="100">职位</th>
 						<th width="100">所属平台</th>
-						<th width="50">操作</th>
+						<!--<th width="50">操作</th>-->
 					</tr>
 					</thead>
 					<foreach name="list" item="vo">
@@ -43,9 +43,9 @@
 									专家联盟
 								</if>
 							</td>
-							<td>
-								<a href="{:U('messages/handle',array('id'=>$v['id'],'msg_id'=>$msg_id))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定转发？">转发</a>
-							</td>
+							<!--<td>
+								<a href="{:U('messages/handle',array('id'=>$v['id'],'msg_id'=>$msg_id))}" class="btn btn-primary btn-small js-ajax-delete" data-msg="确定发送？">发送</a>
+							</td>-->
 						</tr>
 					</foreach>
 					<tfoot>
@@ -58,12 +58,12 @@
 						<th width="100">具体科室</th>
 						<th width="100">职位</th>
 						<th width="100">所属平台</th>
-						<th width="50">操作</th>
+						<!--<th width="50">操作</th>-->
 					</tr>
 					</tfoot>
 				</table>
 				<div class="table-actions">
-					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定转发？">转发</button>
+					<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('messages/handle')}" data-subcheck="true" data-msg="确定发送？">发送</button>
 				</div>
 				<div class="pagination">{$page}</div>
 			</div>
