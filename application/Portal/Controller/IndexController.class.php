@@ -1,8 +1,8 @@
 <?php
 namespace Portal\Controller;
-use Common\Controller\HomebasezZJController;
+use Common\Controller\HomebaseController;
 
-class IndexController extends HomebasezZJController {
+class IndexController extends HomebaseController {
 
     private $common_user_model;
 
@@ -14,7 +14,7 @@ class IndexController extends HomebasezZJController {
 
     //首页
 	public function index() {
-        $this->display('../Expert/index');
+        $this->display('../Tieqiao/index');
         /*$open_id = session('open_id');
         $where = array();
         $where['open_id'] = array('eq',$open_id);

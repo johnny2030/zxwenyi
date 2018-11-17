@@ -2,82 +2,230 @@
 <html>
 <head>
 	<tc_include file="Public/TQHead"/>
+	<link rel="stylesheet" type="text/css" href="__TMPL__Public/mui/css/mui.picker.min.css" />
+	<script src="__TMPL__Public/mui/js//mui.picker.min.js"></script>
 </head>
 <body>
-<div class="mui-content personal">
+<div class="mui-content">
 	<div class="head">
 		<a href="{:U('portal/user/uploadImg')}"><img src="{$patient.photo}"/></a>
-		<h4><a href="{:U('portal/user/modify',array('data'=>$patient['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">{$patient.name}</a></h4>
+		<h4>{$patient.name}</h4>
 	</div>
-	<ul class="mui-table-view mui-table-view-chevron">
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['birthday'],'flg'=>birthday,'menu'=>出生日期))}" class="mui-navigate-right">
-				出生日期
-				<i class="mui-pull-right tips">{$patient.birthday}</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['nation'],'flg'=>nation,'menu'=>民族))}" class="mui-navigate-right">
-				民族
-				<i class="mui-pull-right tips">{$patient.nation}</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['sex'],'flg'=>sex,'menu'=>性别))}" class="mui-navigate-right">
-				性别
-				<i class="mui-pull-right tips">
+	<form method="post" name="info" action="{:U('portal/user/info_patient')}">
+		<div class="mui-content-padded">
+			<div class="mui-input-row">
+				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="{$patient.name}">
+			</div>
+			<div class="mui-input-row">
+				<input type="text" id="birthday" name="birthday" data-options='{"type":"date","beginYear":1900,"endYear":2050}' class="u-inpt u-birthday" placeholder="年-月-日" value="{$patient.birthday}" readonly="readonly">
+			</div>
+			<div class="mui-input-row">
+				<input type="text" id="nation" name="nation" class="u-inpt u-nation mui-input-clear" placeholder="请输入民族" value="{$patient.nation}">
+				<select id="sex" name="sex" class="u-inpt u-sex sel_info">
 					<if condition="$patient.sex eq 2">
-						女
+						<option value="1">男</option>
+						<option value="2" selected>女</option>
 						<else />
-						男
+						<option value="1" selected>男</option>
+						<option value="2">女</option>
 					</if>
-				</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['height'],'flg'=>height,'menu'=>身高))}" class="mui-navigate-right">
-				身高
-				<i class="mui-pull-right tips">{$patient.height}</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['weight'],'flg'=>weight,'menu'=>体重))}" class="mui-navigate-right">
-				体重
-				<i class="mui-pull-right tips">{$patient.weight}</i>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['phone'],'flg'=>phone,'menu'=>电话))}" class="mui-navigate-right">
-				手机号码
-				<i class="mui-pull-right tips">{$patient.phone}</i>
-			</a>
-		</li>
-	</ul>
-	<ul class="mui-table-view mui-table-view-chevron">
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['healthy'],'flg'=>healthy,'menu'=>健康状况))}" class="mui-navigate-right">
-				健康状况
-				<p class="mui-pull-right tips">{$patient.health_n}</p>
-			</a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['motion'],'flg'=>motion,'menu'=>运动情况))}" class="mui-navigate-right">
-				运动情况
-				<p class="mui-pull-right tips">{$patient.motion}</p>
-			</a>
-		</li>
-	</ul>
-	<ul class="mui-table-view mui-table-view-chevron">
-		<li class="mui-table-view-cell">
-			<a href="{:U('portal/user/modify',array('data'=>$patient['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
-				过敏史
-				<hr>
-				<i class="mui-pull-right tips">{$patient.allergic}</i>
-			</a>
-		</li>
-	</ul>
+				</select>
+			</div>
+			<div class="mui-input-row">
+				<input type="text" id="height" name="height" class="u-inpt u-height mui-input-clear" placeholder="身高（cm）" value="{$patient.height}">
+				<input type="text" id="weight" name="weight" class="u-inpt u-weight mui-input-clear" placeholder="体重（kg）" value="{$patient.weight}">
+			</div>
+			<div class="mui-input-row user_list">
+				<label class="label_info">过敏史</label>
+				<span class="span_info">|</span>
+				<input type="text" id="allergic" name="allergic" class="mui-input-clear input_info" placeholder="请输入过敏史" value="{$patient.allergic}">
+			</div>
+			<div class="mui-input-row user_list">
+				<label class="label_info">健康状况</label>
+				<span class="span_info">|</span>
+				<a href="#familyData" onclick="get_healthy_f()" style="color:black;">
+					<input type="text" id="hly" name="hly" class="mui-input-clear input_info pro_ipt" placeholder="请选择健康状况" readonly="readonly" value="{$patient.health_n}">
+					<input type="hidden" id="healthy" name="healthy" value="{$patient.healthy}">
+				</a>
+			</div>
+			<div class="mui-input-row user_list">
+				<label class="label_info">运动情况</label>
+				<span class="span_info">|</span>
+				<select name="motion" class="input_info">
+					<notempty name="patient.motion">
+						<if condition="$patient.motion eq '经常'">
+							<option value="经常" selected>经常</option>
+							<option value="有时">有时</option>
+							<option value="几乎不">几乎不</option>
+						</if>
+						<if condition="$patient.motion eq '有时'">
+							<option value="经常">经常</option>
+							<option value="有时" selected>有时</option>
+							<option value="几乎不">几乎不</option>
+						</if>
+						<if condition="$patient.motion eq '几乎不'">
+							<option value="经常">经常</option>
+							<option value="有时">有时</option>
+							<option value="几乎不" selected>几乎不</option>
+						</if>
+						<else />
+						<option value="" selected>请选择运动情况</option>
+						<option value="经常">经常</option>
+						<option value="有时">有时</option>
+						<option value="几乎不">几乎不</option>
+					</notempty>
+				</select>
+			</div>
+			<div class="mui-popover pro_info" id="familyData">
+				<ul class="mui-table-view" id="areaData" style="max-height: 190px;">
+					<div class="mui-card" style="max-height: 170px;">
+						<div class="mui-card-content">
+							<select id="helty1" name="helty1" class="sel_info pro_sel" onclick="getHealthy()"></select>
+							<select id="helty2" name="helty2" class="sel_info pro_sel" style="display: none;"></select>
+							<button type="button" class="mui-btn mui-btn-primary pro_btn" onclick="return setHealthy();">确认</button>
+						</div>
+					</div>
+				</ul>
+			</div>
+			<div class="mui-button-row">
+				<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:50%;border-radius:10px;">保存</button>
+				<!--<button id='confirmBtn' type="button" class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>-->
+			</div>
+		</div>
+	</form>
 </div>
 </body>
-<script type="text/javascript">
+<script>
+    (function($) {
+        $.init();
+        var btns = $('.u-birthday');
+        btns.each(function(i, btn) {
+            btn.addEventListener('tap', function() {
+                var _self = this;
+                if(_self.picker) {
+                    _self.picker.show(function (rs) {
+                        document.getElementById("birthday").value = rs.text;
+                        _self.picker.dispose();
+                        _self.picker = null;
+                    });
+                } else {
+                    var optionsJson = this.getAttribute('data-options') || '{}';
+                    var options = JSON.parse(optionsJson);
+                    /*
+                     * 首次显示时实例化组件
+                     * 示例为了简洁，将 options 放在了按钮的 dom 上
+                     * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                     */
+                    _self.picker = new $.DtPicker(options);
+                    _self.picker.show(function(rs) {
+                        /*
+                         * rs.value 拼合后的 value
+                         * rs.text 拼合后的 text
+                         * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                         * rs.m 月，用法同年
+                         * rs.d 日，用法同年
+                         * rs.h 时，用法同年
+                         * rs.i 分（minutes 的第二个字母），用法同年
+                         */
+                        document.getElementById("birthday").value = rs.text;
+                        /*
+                         * 返回 false 可以阻止选择框的关闭
+                         * return false;
+                         */
+                        /*
+                         * 释放组件资源，释放后将将不能再操作组件
+                         * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                         * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                         * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                         */
+                        _self.picker.dispose();
+                        _self.picker = null;
+                    });
+                }
+
+            }, false);
+        });
+    })(mui);
+    mui.init({
+        swipeBack: true //启用右滑关闭功能
+    });
+    document.getElementById("confirmBtn").addEventListener('tap', function() {
+        var btnArray = ['是', '否'];
+        mui.confirm('确认保存信息？', '铁樵健康提醒您', btnArray, function(e) {
+            if (e.index == 0) {
+                $("form[name='info']").submit();
+                window.location.href = "http://localhost/zxwenyi/index.php?g=portal&m=user&a=info_patient";
+                mui.toast('保存成功！');
+            } else {
+                return;
+            }
+        })
+    });
+    function get_healthy_f() {
+        $.ajax({
+            async:false,
+            type : "get",
+            url : "index.php?g=portal&m=commonMethod&a=get_healthy_f_info",
+            data : {},
+            dataType : "json",
+            success : function(data) {
+                var selct = $("#helty1");
+                selct.empty();
+                selct.append("<option value=''>请选择健康状况</option>");
+                if(data.list.length > 0){
+                    var list = data.list;
+                    for (i=0;i<list.length;i++){
+                        var county = list[i];
+                        selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                    }
+                    var up_id = $('#helty1 option:selected').val();
+                    if (up_id==null||up_id==""){
+                        $("#helty2").empty();
+                        $("#helty2").css("display","none");
+					}
+                }
+            }
+        });
+    }
+    function getHealthy() {
+        var up_id = $('#helty1 option:selected').val();
+        $.ajax({
+            async:false,
+            type : "get",
+            url : "index.php?g=portal&m=commonMethod&a=get_healthy_info",
+            data : {
+                'up_id' : up_id
+            },
+            dataType : "json",
+            success : function(data) {
+                var selct = $("#helty2");
+                selct.empty();
+                if(data.list.length > 0){
+                    var list = data.list;
+                    for (i=0;i<list.length;i++){
+                        var county = list[i];
+                        selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                    }
+                    selct.css("display","block");
+                }else{
+                    selct.css("display","none");
+                }
+            }
+        });
+    }
+    function setHealthy() {
+        var helty2 = $('#helty2 option:selected').val();
+        if (helty2 != null){
+            var helty_t = $('#helty2 option:selected').text();
+            $("#hly").val(helty_t);
+            $("#healthy").val(helty2);
+		} else {
+            var helty1 = $('#helty1 option:selected').val();
+            var helty_t = $('#helty1 option:selected').text();
+            $("#hly").val(helty_t);
+            $("#healthy").val(helty1);
+		}
+		mui('#familyData').popover('hide');
+    }
 </script>
 </html>

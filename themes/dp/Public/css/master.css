@@ -199,8 +199,8 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .tips{ font-style: normal; color: #999999; margin-right: -30px; font-size: 15px;}
 .personal{ padding-bottom: 61px;}
 .personal .mui-table-view{ margin-top: 20px;}
-.head{ background:url(../images/head_bg.jpg) no-repeat; top: 0; left: 0; width: 100%; height: 190px; background-size: 100%100%; margin: 0 auto; text-align: center; }
-.head img{ width: 75px; height: 75px; border-radius:50%; border: 1px solid #fff; padding: 1px; margin-top: 45px;}
+.head{ background:url(../images/head_bg.jpg) no-repeat; top: 0; left: 0; width: 100%; height: 120px; background-size: 100%100%; margin: 0 auto; text-align: center; }
+.head img{ width: 75px; height: 75px; border-radius:50%; border: 1px solid #fff; padding: 1px;}
 .head h4{ color: #fff;}
 /*个人中心结束*/
 
@@ -290,7 +290,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 /*注册（患者/医生）*/
 .u-inpt{
 	background-size: 25px !important;
-	padding: 5px 40px 0px !important;
+	padding: 0px 10px 0px 40px !important;
 	border-radius: 10px !important;
 }
 .u-name{
@@ -348,7 +348,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .footer-btn{
 	height: 40px;
 	width: 30%;
-	margin-bottom: 5rem;
+	margin-bottom: 3rem;
 	margin-top: 1rem;
 }
 /*科室咨询*/
@@ -417,4 +417,73 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .doc-active{
 	background-color: #1E90FF;
 	color: #ffffff;
+}
+.user_list{
+	margin-top: 10px;
+	background-color: #ffffff !important;
+	border-radius: 10px;
+	border:1px solid #D4D4D4;
+}
+.label_info{
+	width: 25% !important;
+}
+.span_info{
+	height:36px;
+	line-height: 36px;
+	color:#d4d4d4;
+	font-size:22px;
+	width: 3%;
+}
+.input_info{
+	width: 70% !important;
+}
+.sel_info{
+	background-color: #ffffff !important;
+	border: 1px solid #b4b4b4 !important;
+}
+.u-birthday{
+	background: url('../images/Date_birth.png') no-repeat 5px;
+}
+.u-nation{
+	background: url('../images/national.png') no-repeat 5px;
+	width: 47% !important;
+}
+.u-sex{
+	background: url('../images/gender.png') no-repeat 5px;
+	width: 47% !important;
+	margin-left: 3%;
+}
+.u-height{
+	background: url('../images/height.png') no-repeat 5px;
+	width: 47% !important;
+}
+.u-weight{
+	background: url('../images/weight.png') no-repeat 5px;
+	width: 47% !important;
+	margin-left: 3%;
+}
+.pro_info{
+	margin-top:10px;
+	margin-left: 10%;
+	width: 80%;
+}
+.pro_ipt{
+	border:0 !important;
+	padding-left:0 !important;
+	float: right !important;
+	margin-bottom:0 !important;
+}
+.pro_sel{
+	width:90%;
+	margin-left:5%;
+	margin-top:10px;
+	margin-bottom:0px !important;
+	border-radius:10px;
+}
+.pro_btn{
+	width:50%;
+	margin-left:25%;
+	margin-top:15px;
+	margin-bottom: 10px;
+	border-radius:10px;
 }

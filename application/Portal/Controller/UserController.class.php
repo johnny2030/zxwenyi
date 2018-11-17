@@ -3,9 +3,9 @@
  * 用户端
  */
 namespace Portal\Controller;
-use Common\Controller\HomebasezZJController;
+use Common\Controller\HomebaseController;
 
-class UserController extends HomebasezZJController {
+class UserController extends HomebaseController {
 
     private $common_user_model;
     private $common_tag_model;
@@ -35,7 +35,7 @@ class UserController extends HomebasezZJController {
         }else{
             $user = $this->common_user_model->find($id);
             if (empty($user['i_card'])){
-                $this->display('../Expert/register_patient');
+                $this->display('../Tieqiao/register_patient');
             }else{
                 R('User/info_patient');
             }
@@ -43,12 +43,19 @@ class UserController extends HomebasezZJController {
     }
     //患者个人中心
     public function info_patient() {
-        $id = (int)session('login_id');
-        $where = array();
-        $where['u.id'] = array('eq',$id);
-        $patient = $this->common_user_model->alias('u')->field('u.*,h.name as health_n')->join('__COMMON_HEALTH__ h ON u.healthy=h.id','left')->where($where)->select();
-        $this->assign( 'patient', $patient[0] );
-        $this->display('../Expert/info_patient');
+        if ( IS_POST ) {
+            $id = (int)session('login_id');
+            $_POST['update_time'] = date('Y-m-d H:i:s',time());
+            $this->common_user_model->where(array('id' => $id))->save($_POST);
+            $this->ajaxReturn(1);
+        }else{
+            $id = (int)session('login_id');
+            $where = array();
+            $where['u.id'] = array('eq',$id);
+            $patient = $this->common_user_model->alias('u')->field('u.*,h.name as health_n')->join('__COMMON_HEALTH__ h ON u.healthy=h.id','left')->where($where)->select();
+            $this->assign( 'patient', $patient[0] );
+            $this->display('../Tieqiao/info_patient');
+        }
     }
     //医生登记
     public function register_doctor() {
@@ -68,7 +75,7 @@ class UserController extends HomebasezZJController {
             $olist = $this->common_office_model->where($where)->select();
             $this->assign( 'hlist', $hlist );
             $this->assign( 'olist', $olist );
-            $this->display('../Expert/register_doctor');
+            $this->display('../Tieqiao/register_doctor');
         }
     }
     //医生个人中心
@@ -76,7 +83,7 @@ class UserController extends HomebasezZJController {
         $id = (int)session('login_id');
         $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $id))->find();
         $this->assign( 'doctor', $doctor );
-        $this->display('../Expert/info_doctor');
+        $this->display('../Tieqiao/info_doctor');
     }
     //科室展示
     public function office_preview() {
@@ -84,7 +91,7 @@ class UserController extends HomebasezZJController {
         $where['del_flg'] = array('eq',0);
         $list = $this->common_office_model->where($where)->select();
         $this->assign( 'list', $list );
-        $this->display('../Expert/office_preview');
+        $this->display('../Tieqiao/office_preview');
     }
     //医生列表
     public function doctor_list() {
@@ -97,14 +104,14 @@ class UserController extends HomebasezZJController {
         $list = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->where($where)->select();
         $this->assign( 'office_n', $ofc['name'] );
         $this->assign( 'list', $list );
-        $this->display('../Expert/doctor_list');
+        $this->display('../Tieqiao/doctor_list');
     }
     //医生详情
     public function doctor_detail() {
         $user_id = $_GET['user_id'];
         $doctor = $this->common_user_model->alias('u')->field('u.*,h.name as hospital_n,o.name as office_n,t.name as tag_n')->join('__COMMON_HOSPITAL__ h ON u.hospital=h.id')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $user_id))->find();
         $this->assign( 'doctor', $doctor );
-        $this->display('../Expert/doctor_detail');
+        $this->display('../Tieqiao/doctor_detail');
     }
     //咨询问诊
     public function question() {
@@ -169,7 +176,7 @@ class UserController extends HomebasezZJController {
             $this->assign( 'flg', $flg );
             $this->assign( 'menu', $menu );
             $this->assign( 'check', $check );
-            $this->display('../Expert/modify');
+            $this->display('../Tieqiao/modify');
         }
     }
 }

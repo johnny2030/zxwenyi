@@ -7,6 +7,7 @@ class CommonMethodController extends HomebaseController {
     private $common_user_model;
     private $common_tag_model;
     private $common_card_model;
+    private $common_health_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -14,6 +15,7 @@ class CommonMethodController extends HomebaseController {
         $this->common_user_model = D( 'Common_user' );
         $this->common_tag_model = D( 'Common_tag' );
         $this->common_card_model = D( 'Common_card' );
+        $this->common_health_model = D( 'Common_health' );
     }
     /**
      * 生成毫秒级时间戳
@@ -75,5 +77,27 @@ class CommonMethodController extends HomebaseController {
         }else{
             $this->ajaxReturn($card['card_time']);
         }
+    }
+    //获取健康状况（首菜单）
+    function get_healthy_f_info(){
+        $where = array();
+        $where['up_id'] = array('eq',0);
+        $where['del_flg'] = array('eq',0);
+        $list = $this->common_health_model->where($where)->select();
+        $data['list'] = $list;
+        $this->ajaxReturn($data);
+    }
+    //获取健康状况（次级菜单）
+    function get_healthy_info(){
+        $up_id = $_GET['up_id'];
+        $list = array();
+        if ($up_id>0){
+            $where = array();
+            $where['up_id'] = array('eq',$up_id);
+            $where['del_flg'] = array('eq',0);
+            $list = $this->common_health_model->where($where)->select();
+        }
+        $data['list'] = $list;
+        $this->ajaxReturn($data);
     }
 }

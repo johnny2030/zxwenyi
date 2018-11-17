@@ -3,7 +3,7 @@ namespace Common\Controller;
 
 use Common\Controller\AppframeController;
 
-class HomebasezZJController extends AppframeController {
+class HomebaseZJController extends AppframeController {
 	
 	public function __construct() {
 		$this->set_action_success_error_tpl();
