@@ -164,7 +164,7 @@ class ZJwxmenuController extends AdminbaseController {
     //微信菜单使用
     function toggle() {
         require_once 'today/class.today.php';
-        require_once 'today/Wechat.php';
+        require_once 'today/Wechat_zj.php';
         $wechat = new \Wechat_zj( $this );
         if ( isset( $_POST['ids'] )){
             /*$where = array();*/

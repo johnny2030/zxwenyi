@@ -10,12 +10,14 @@ class RongController extends HomebaseController {
     private $common_user_model;
     private $rong_token_model;
     private $common_chattime_model;
+    private $common_messages_model;
 
     public function _initialize() {
         parent::_initialize();
         $this->common_user_model = D( 'Common_user' );
         $this->rong_token_model = D( 'Rong_token' );
         $this->common_chattime_model = D( 'Common_chattime' );
+        $this->common_messages_model = D( 'Common_messages' );
     }
     /**
      * 获取token
@@ -41,7 +43,6 @@ class RongController extends HomebaseController {
         $this->display('../Rongcloud/demo/user1/index');
     }
     public function get_data(){
-        require_once 'today/config.php';
         $id=session('login_id');
         $lgUser = $this->common_user_model->find($id);
         $sendid= session('send_id');
@@ -53,6 +54,14 @@ class RongController extends HomebaseController {
         $data['lgUser'] = $lgUser;
         $data['sendUser'] = $sendUser;
         $this->ajaxReturn($data);
+    }
+    public function getdata_kefu(){
+        $where = array();
+        $where['flg'] = array('eq',1);
+        $where['type'] = array('eq',2);
+        $where['del_flg'] = array('eq',0);
+        $user = $this->common_user_model->where($where)->find();
+        $this->ajaxReturn($user);
     }
     public function get_user() {
         $id = $_GET['userId'];
@@ -67,7 +76,7 @@ class RongController extends HomebaseController {
         //接收人
         $sendId = $_GET['userId'];
         $sendUser = $this->common_user_model->find($sendId);
-        if ($user['status'] == 0){
+        if ($user['type'] == 0){
             $where['d_id'] = array('eq',$_GET['userId']);
             $where['p_id'] = array('eq',session('login_id'));
         }else{
@@ -76,7 +85,7 @@ class RongController extends HomebaseController {
         }
         $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
         $t = $chat['chat_time'];
-        $chat_time = strtotime("$t+1day");//有效时间24小时
+        $chat_time = strtotime("$t+2hour");//有效时间24小时
         $time = strtotime(date('Y-m-d H:i:s',time()));
         if ($time > $chat_time){
             $this->ajaxReturn(0);
@@ -85,7 +94,7 @@ class RongController extends HomebaseController {
                 $data = array();
                 $data['chat_end_time'] = date('Y-m-d H:i:s',time());
                 $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
-                $this->template_send($user,$sendUser,'http://www.jkwdr.cn/index.php?g=portal&m=rong&a=index');
+                $this->template_send($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index');
             }else{
                 $chat_end_time = strtotime($chat['chat_end_time']);
                 $timediff = $time-$chat_end_time;
@@ -93,7 +102,7 @@ class RongController extends HomebaseController {
                 $remain = $remain%3600;
                 $mins = intval($remain/60);
                 if ($mins>5){
-                    $this->template_send($user,$sendUser,'http://www.jkwdr.cn/index.php?g=portal&m=rong&a=index');
+                    $this->template_send($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index');
                 }
                 $data = array();
                 $data['chat_end_time'] = date('Y-m-d H:i:s',time());
@@ -105,18 +114,33 @@ class RongController extends HomebaseController {
     public function end_chat() {
         $t = date('Y-m-d H:i:s',time());
         $data = array();
-        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-1day"));
+        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-2hour"));
         $where = array();
         $where['p_id'] = array('eq',$_GET['userId']);
         $where['d_id'] = array('eq',session('login_id'));
         $this->common_chattime_model->where($where)->save($data);
+        $where_msg = array();
+        $where_msg['user_id'] = array('eq',$_GET['userId']);
+        $where_msg['doctor_id'] = array('eq',session('login_id'));
+        $where_msg['status'] = array('eq',1);
+        $where_msg['del_flg'] = array('eq',0);
+        $msgInfo = array();
+        $msgInfo['status'] = 2;
+        $msgInfo['end_time'] = date('Y-m-d H:i:s',time());
+        $this->common_messages_model->where($where_msg)->save($msgInfo);
 
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
-        $doctor_user = $this->common_user_model->find(session('login_id'));
         $patient_user = $this->common_user_model->find($_GET['userId']);
-        $wechat->customSendImg($doctor_user['open_id'],'http://www.jkwdr.cn/','咨询关闭提醒',$patient_user['name'].'发起的咨询已被您关闭，欢迎使用健康微达人');
-        $wechat->customSendImg($patient_user['open_id'],'http://www.jkwdr.cn/','咨询关闭提醒','您的咨询已被'.$doctor_user['name'].'关闭，欢迎使用健康微达人');
+        $doctor_user = $this->common_user_model->find(session('login_id'));
+        $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/','咨询关闭提醒','您的咨询已被'.$doctor_user['name'].'关闭');
+        if ($doctor_user['status'] == 0){
+            $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/','咨询关闭提醒',$patient_user['name'].'发起的咨询已被您关闭');
+        }else{
+            require_once 'today/Wechat_zj.php';
+            $wechat_zj = new \Wechat_zj( $this );
+            $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/','咨询关闭提醒',$patient_user['name'].'发起的咨询已被您关闭');
+        }
         $this->ajaxReturn(1);
     }
     public function checkUser() {
@@ -134,7 +158,7 @@ class RongController extends HomebaseController {
         );
         $qiniu = new \Think\Upload\Driver\Qiniu($config);
         $upToken = $qiniu->getUpToken();
-        $this->ajaxReturn(' '.$upToken);
+        $this->ajaxReturn($upToken);
     }
     public function uploadVoice() {
         $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
@@ -172,45 +196,79 @@ class RongController extends HomebaseController {
         $this->ajaxReturn($data);
     }
     public function template_send($user,$sendUser,$url) {
-        //向患者发送模板消息
+        //发送模板消息
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
-        if ($user['status'] == 0){
+        if ($user['type'] == 0){
             $data=array(
-                'first'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#00CD00"),
-                'keyword1'=>array('value'=>urlencode($user['name']),'color'=>'#4876FF'),
-                'keyword2'=>array('value'=>urlencode($sendUser['hospital']),'color'=>'#4876FF'),
-                'keyword3'=>array('value'=>urlencode($sendUser['office']),'color'=>'#4876FF'),
-                'keyword4'=>array('value'=>urlencode($sendUser['name']),'color'=>'#4876FF'),
-                'keyword5'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
+                'serviceInfo'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#00CD00"),
+                'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
                 'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
             );
-            $wechat->templateSend($user['open_id'],$user['status'],$url,$data);
-            if ($user['sex'] == 1){
-                $sex = '男';
-            }elseif ($user['sex'] == 2){
-                $sex = '女';
+            $wechat->templateSend($user['open_id'],$url,$data);
+            if ($user['status'] == 0){
+                $data=array(
+                    'serviceInfo'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
+                    'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                    'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
+                    'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+                );
+                $wechat->templateSend($sendUser['open_id'],$url,$data);
             }else{
-                $sex = '保密';
+                require_once 'today/Wechat_zj.php';
+                $wechat_zj = new \Wechat_zj( $this );
+                $where = array();
+                $where['user_id'] = array('eq',$user['id']);
+                $where['doctor_id'] = array('eq',$sendUser['id']);
+                $where['status'] = array('eq',1);
+                $where['del_flg'] = array('eq',0);
+                $msg_info = $this->common_messages_model->where($where)->select();
+                $data=array(
+                    'first'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
+                    'keyword1'=>array('value'=>urlencode($msg_info[0]['title']),'color'=>'#4876FF'),
+                    'keyword2'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+                );
+                $wechat_zj->templateSend($sendUser['open_id'],$url,$data);
             }
-            $data=array(
-                'first'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
-                'keyword1'=>array('value'=>urlencode($user['name']),'color'=>'#4876FF'),
-                'keyword2'=>array('value'=>urlencode($sex),'color'=>'#4876FF'),
-                'remark'=>array('value'=>urlencode('点击这里回复患者'),'color'=>'#FF0000'),
-            );
-            $wechat->templateSend($sendUser['open_id'],$sendUser['status'],$url,$data);
+
         }else{
             $data=array(
-                'first'=>array('value'=>urlencode("您好，您的问题医生已经回复，请及时查看。"),'color'=>"#00CD00"),
-                'keyword1'=>array('value'=>urlencode($sendUser['name']),'color'=>'#4876FF'),
-                'keyword2'=>array('value'=>urlencode($user['hospital']),'color'=>'#4876FF'),
-                'keyword3'=>array('value'=>urlencode($user['office']),'color'=>'#4876FF'),
-                'keyword4'=>array('value'=>urlencode($user['name']),'color'=>'#4876FF'),
-                'keyword5'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
+                'serviceInfo'=>array('value'=>urlencode("您好，您的问题医生已经回复，请及时查看。"),'color'=>"#00CD00"),
+                'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
                 'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF0000'),
             );
-            $wechat->templateSend($sendUser['open_id'],$sendUser['status'],$url,$data);
+            $wechat->templateSend($sendUser['open_id'],$url,$data);
+        }
+    }
+    public function set_time(){
+        $msg_id = $_GET['msgId'];
+        $msg_info = $this->common_messages_model->find($msg_id);
+        if ($msg_info['status'] == 0){
+            //记录聊天时间
+            $data = array();
+            $data['chat_time'] = date('Y-m-d H:i:s',time());
+            $data['d_id'] = session('login_id');
+            $data['p_id'] = session('send_id');
+            $result = $this->common_chattime_model->add($data);
+            //修改咨询状态
+            $data_msg = array();
+            $data_msg['doctor_id'] = session('login_id');
+            $data_msg['status'] = 1;
+            $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+            $result_msg = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+            if ($result&&$result_msg){
+                $this->ajaxReturn('0');
+            }else{
+                $this->ajaxReturn('1');
+            }
+        }else{
+            $this->ajaxReturn('2');
         }
     }
     /**

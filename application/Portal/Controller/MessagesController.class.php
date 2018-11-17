@@ -30,17 +30,17 @@ class MessagesController extends HomebaseController {
         $where['m.type'] = array('eq',2);
         $where['m.status'] = array('eq',0);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name_u,u.photo as photo_u')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/messages');
     }
     //转发
     public function forward() {
         $where = array();
-        $where['m.type'] = array('eq',2);
+        $where['m.type'] = array('eq',1);
         $where['m.status'] = array('eq',0);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name_u,u.photo as photo_u')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/forward');
     }
@@ -49,8 +49,9 @@ class MessagesController extends HomebaseController {
 	    $id = $_GET['id'];
         $where = array();
         $where['m.id'] = array('eq',$id);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name_u,u.photo as photo_u')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
-        $this->assign( 'msg', $msg_list[0] );
+        $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
+        session('send_id',$msg_Info['user_id']);
+        $this->assign( 'msg', $msg_Info );
         $this->display('../Tieqiao/customer_detail');
     }
 }

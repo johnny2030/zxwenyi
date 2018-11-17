@@ -161,10 +161,10 @@ class MessagesController extends AdminbaseController {
             $user = $this->common_user_model->find($msg_info['user_id']);
             foreach ($list as $sendUser) {
                 if ($sendUser['status'] == 0){
-                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
                     $this->template_send_tq($msg_info,$user,$sendUser,$url);
                 }else{
-                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
                     $this->template_send_zj($msg_info,$sendUser,$url);
                 }
             }
@@ -184,10 +184,10 @@ class MessagesController extends AdminbaseController {
             foreach ($ids as $id) {
                 $sendUser = $this->common_user_model->find($id);
                 if ($sendUser['status'] == 0){
-                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=index';
                     $this->template_send_tq($msg_info,$user,$sendUser,$url);
                 }else{
-                    $url = 'http://tieqiao.zzzpsj.com/index.php';
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=index';
                     $this->template_send_zj($msg_info,$sendUser,$url);
                 }
             }
@@ -198,10 +198,10 @@ class MessagesController extends AdminbaseController {
             $sendUser = $this->common_user_model->find($id);
             if ($sendUser['status'] == 0){
                 $user = $this->common_user_model->find($msg_info['user_id']);
-                $url = 'http://tieqiao.zzzpsj.com/index.php';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=index';
                 $this->template_send_tq($msg_info,$user,$sendUser,$url);
             }else{
-                $url = 'http://tieqiao.zzzpsj.com/index.php';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=index';
                 $this->template_send_zj($msg_info,$sendUser,$url);
             }
         }

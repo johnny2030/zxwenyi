@@ -1417,7 +1417,7 @@ var RongWebIMWidget;
                     '</p>' +
                     '</div>' +
                     '<div class="rongcloud-photo">' +
-                    '<img class="rongcloud-img" ng-src="{{item.portraitUri}}" err-src="http://www.jkwdr.cn/themes/dp/Doctor/imgs/doctor_icon.png" alt="">' +
+                    '<img class="rongcloud-img" ng-src="{{item.portraitUri}}" alt="">' +
                     '<i ng-show="!!$parent.data.getOnlineStatus&&item.targetType==1" class="rongcloud-Presence rongcloud-Presence--stacked rongcloud-Presence--mainBox"></i>' +
                     '</div>' +
                     '<div class="rongcloud-info">' +

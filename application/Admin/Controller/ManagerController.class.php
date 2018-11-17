@@ -76,22 +76,24 @@ class ManagerController extends AdminbaseController {
     //设置为管理员
     function set_manager() {
         $id = intval( I( 'get.id' ) );
-        $where = array();
-        $where['flg'] = array('eq',1);
-        $where['del_flg'] = array('eq',0);
-        $manager = $this->common_user_model->where($where)->find();
-        if(empty($manager)){
-            $data = array();
-            $data['flg'] = array('eq',1);
-            $_POST['update_time'] = date('Y-m-d H:i:s',time());
-            $result = $this->common_user_model->where(array('id' => $id))->save($data);
-            if ($result) {
-                $this->success('设置成功！');
-            } else {
-                $this->error('设置失败！');
+        $flg = $_GET['flg'];
+        if ($flg == 1){
+            $where = array();
+            $where['flg'] = array('eq',1);
+            $where['del_flg'] = array('eq',0);
+            $manager = $this->common_user_model->where($where)->find();
+            if(!empty($manager)){
+                $this->error('已有管理员启用，请先停用！');
             }
-        }else{
-            $this->error('管理员已存在！');
+        }
+        $data = array();
+        $data['flg'] = $flg;
+        $data['update_time'] = date('Y-m-d H:i:s',time());
+        $result = $this->common_user_model->where(array('id' => $id))->save($data);
+        if ($result) {
+            $this->success('设置成功！');
+        } else {
+            $this->error('设置失败！');
         }
     }
     //删除管理员
