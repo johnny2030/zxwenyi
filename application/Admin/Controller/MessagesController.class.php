@@ -179,6 +179,9 @@ class MessagesController extends AdminbaseController {
         if ( IS_POST ) {
             $ids = $_POST['ids'];
             $msg_id = $_POST['msg_id'];
+            $data = array();
+            $data['type'] = 2;
+            $this->common_messages_model->where(array('id' => $msg_id))->save($data);
             $msg_info = $this->common_messages_model->find($msg_id);
             $user = $this->common_user_model->find($msg_info['user_id']);
             foreach ($ids as $id) {
@@ -194,6 +197,9 @@ class MessagesController extends AdminbaseController {
         }else{
             $id = $_GET['id'];
             $msg_id = $_GET['msg_id'];
+            $data = array();
+            $data['type'] = 2;
+            $this->common_messages_model->where(array('id' => $msg_id))->save($data);
             $msg_info = $this->common_messages_model->find($msg_id);
             $sendUser = $this->common_user_model->find($id);
             if ($sendUser['status'] == 0){

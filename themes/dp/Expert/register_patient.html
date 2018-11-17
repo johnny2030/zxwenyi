@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+	<head>
+		<tc_include file="Public/TQHead"/>
+	</head>
+	<body>
+		<div class="mui-content">
+			<header id="header" class="mui-bar mui-bar-nav">
+				<h1 class="mui-title">客户注册</h1>
+			</header>
+			<form method="post" action="{:U('portal/user/register_patient')}">
+				<div class="mui-content-padded" style="margin-top: 4rem;">
+					<div class="mui-input-row">
+						<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="">
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="i_card" name="i_card" class="u-inpt i-card mui-input-clear" placeholder="请输入身份证" value="" onchange="check_i_card()">
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="age" name="age" class="u-inpt u-age mui-input-clear" placeholder="请输入年龄" value="">
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="m_card" name="m_card" class="u-inpt m-card mui-input-clear" placeholder="请输入会员卡号" value="" onchange="check_card()">
+					</div>
+					<div class="mui-input-row">
+						<input type="password" id="p_card" name="p_card" class="u-inpt p-card mui-input-password" placeholder="请输入会员卡密码" value="" onchange="check_card()">
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="t_card" name="t_card" class="u-inpt t-card mui-input-clear" placeholder="会员卡期限" value="" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="" onchange="vailPhone()">
+					</div>
+					<!--<div class="mui-input-row">
+						<input type="text" id="v_code" name="v_code" class="u-inpt v-code mui-input-clear" placeholder="请输入验证码" value="">
+						<button type="button" class="mui-btn mui-btn-primary v-code-btn">获取验证码</button>
+					</div>-->
+					<div class="mui-button-row">
+						<button type="submit" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">确认</button>&nbsp;&nbsp;
+						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+	<script type="text/javascript">
+        function check_form() {
+            if(!check_name()){
+                return false;
+            }else if(!check_i_card()){
+                return false;
+            }else if(!check_age()){
+                return false;
+            }else if(!check_m_card()){
+                return false;
+            }else if(!check_p_card()){
+                return false;
+            }else if(!check_t_card()){
+                return false;
+            }else if(!vailPhone()){
+                return false;
+            }else {
+                return true;
+			}
+        }
+        function check_name(){
+            var name = $("#name").val();
+            if (name.length==0){
+                alert("用户姓名不能为空！");
+                $("#name").css("border-color","red");
+                return false;
+			} else{
+                $("#name").css("border-color","");
+                return true;
+			}
+        }
+        function check_i_card(){
+            var i_card = $('#i_card').val();
+            var flag = false;
+            var myreg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if(i_card.length == 0){
+                alert("身份证号码不能为空！");
+            }else if(!myreg.test(i_card)){
+                alert("请输入有效的身份证号码！");
+            }else{
+                flag = true;
+                $("#i_card").css("border-color","");
+            }
+            if(!flag){
+                $("#i_card").css("border-color","red");
+            }
+            return flag;
+        }
+        function check_age(){
+            var age = $("#age").val();
+            if (age.length==0){
+                alert("年龄不能为空！");
+                $("#age").css("border-color","red");
+                return false;
+            } else{
+                $("#age").css("border-color","");
+                return true;
+            }
+        }
+        function check_m_card(){
+            var m_card = $("#m_card").val();
+            if (m_card.length==0){
+                alert("会员卡号不能为空！");
+                $("#m_card").css("border-color","red");
+                return false;
+            } else{
+                $("#m_card").css("border-color","");
+                return true;
+            }
+        }
+        function check_p_card(){
+            var p_card = $("#p_card").val();
+            if (p_card.length==0){
+                alert("会员卡密码不能为空！");
+                $("#p_card").css("border-color","red");
+                return false;
+            } else{
+                $("#p_card").css("border-color","");
+                return true;
+            }
+        }
+        function check_t_card(){
+            var t_card = $("#t_card").val();
+            if (t_card.length==0){
+                alert("会员卡信息有误！");
+                $("#t_card").css("border-color","red");
+                return false;
+            } else{
+                $("#t_card").css("border-color","");
+                return true;
+            }
+        }
+        function vailPhone(){
+            var phone = $("#phone").val();
+            var flag = false;
+            var myreg = /^1[34578]\d{9}$/;
+            if(phone.length == 0){
+                alert("手机号码不能为空！");
+            }else if(phone.length !=11){
+                alert("请输入有效的手机号码！");
+            }else if(!myreg.test(phone)){
+                alert("请输入有效的手机号码！");
+            }else if(check_phone()){
+                alert("该手机号已经注册！");
+            }else{
+                flag = true;
+                $("#phone").css("border-color","");
+            }
+            if(!flag){
+                $("#phone").css("border-color","red");
+            }
+            return flag;
+        }
+        function check_phone() {
+            var phone = $("#phone").val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=check_phone",
+                data : {
+                    'phone' : phone
+                },
+                dataType : "json",
+                success : function(data) {
+                    if (data == 0){
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            });
+        }
+        function check_card() {
+            var m_card = $('#m_card').val();
+            var p_card = $("#p_card").val();
+            if (m_card.length>0 && p_card.length>0){
+                $.ajax({
+                    async:false,
+                    type : "get",
+                    url : "index.php?g=portal&m=commonMethod&a=get_cardInfo",
+                    data : {
+                        'm_card' : m_card,
+                        'p_card' : p_card
+                    },
+                    dataType : "json",
+                    success : function(data) {
+                        if (data == 0){
+                            alert("会员卡信息有误，请核实后重新输入");
+						} else {
+                            $("#t_card").val(data);
+						}
+                    }
+                });
+			}
+        }
+	</script>
+</html>

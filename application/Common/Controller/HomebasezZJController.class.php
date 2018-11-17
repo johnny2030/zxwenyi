@@ -3,7 +3,7 @@ namespace Common\Controller;
 
 use Common\Controller\AppframeController;
 
-class HomebaseController extends AppframeController {
+class HomebasezZJController extends AppframeController {
 	
 	public function __construct() {
 		$this->set_action_success_error_tpl();
@@ -36,10 +36,9 @@ class HomebaseController extends AppframeController {
 		}
 		//获取open_id
         require_once 'today/class.today.php';
-        require_once 'today/Wechat_tq.php';
-        $wechat = new \Wechat_tq( $this );
+        require_once 'today/Wechat_zj.php';
+        $wechat = new \Wechat_zj( $this );
         $today = new \Today\Today($this);
-        session('open_id','oiizC03r1Do-CFBKAqGqV1VyCyMU');
         if (session('open_id') != ""){
             $wechat->getUserInfor( session('open_id') );
             if (session('login_id') == ""){
@@ -62,7 +61,7 @@ class HomebaseController extends AppframeController {
             $where['open_id'] = array('eq',$open_id);
             $user = D('Common_user')->where($where)->find();
             $data = array();
-            $wxinfor = D('Wxinfor_tq')->where(array('open_id' => $open_id))->find();
+            $wxinfor = D('Wxinfor_zj')->where(array('open_id' => $open_id))->find();
             if (empty($user)){
                 $data['open_id'] = $open_id;
                 $data['name'] = $wxinfor['nickname'];

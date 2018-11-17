@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+<body>
+<!--<div class="mui-content personal">
+	<div class="head">
+		<a href="{:U('portal/user/uploadImg')}"><img src="{$patient.photo}"/></a>
+		<h4><a href="{:U('portal/user/modify',array('data'=>$patient['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">{$patient.name}</a></h4>
+	</div>
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['birthday'],'flg'=>birthday,'menu'=>出生日期))}" class="mui-navigate-right">
+				出生日期
+				<i class="mui-pull-right tips">{$patient.birthday}</i>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['nation'],'flg'=>nation,'menu'=>民族))}" class="mui-navigate-right">
+				民族
+				<i class="mui-pull-right tips">{$patient.nation}</i>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['sex'],'flg'=>sex,'menu'=>性别))}" class="mui-navigate-right">
+				性别
+				<i class="mui-pull-right tips">
+					<if condition="$patient.sex eq 2">
+						女
+						<else />
+						男
+					</if>
+				</i>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['height'],'flg'=>height,'menu'=>身高))}" class="mui-navigate-right">
+				身高
+				<i class="mui-pull-right tips">{$patient.height}</i>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['weight'],'flg'=>weight,'menu'=>体重))}" class="mui-navigate-right">
+				体重
+				<i class="mui-pull-right tips">{$patient.weight}</i>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['phone'],'flg'=>phone,'menu'=>电话))}" class="mui-navigate-right">
+				手机号码
+				<i class="mui-pull-right tips">{$patient.phone}</i>
+			</a>
+		</li>
+	</ul>
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['healthy'],'flg'=>healthy,'menu'=>健康状况))}" class="mui-navigate-right">
+				健康状况
+				<p class="mui-pull-right tips">{$patient.health_n}</p>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['motion'],'flg'=>motion,'menu'=>运动情况))}" class="mui-navigate-right">
+				运动情况
+				<p class="mui-pull-right tips">{$patient.motion}</p>
+			</a>
+		</li>
+	</ul>
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a href="{:U('portal/user/modify',array('data'=>$patient['allergic'],'flg'=>allergic,'menu'=>过敏史,'check'=>check))}" class="mui-navigate-right">
+				过敏史
+				<hr>
+				<i class="mui-pull-right tips">{$patient.allergic}</i>
+			</a>
+		</li>
+	</ul>
+</div>-->
+<form class="mui-input-group" style="background-color:#efeff4 !important;">
+	<div class="mui-input-row" style="background-color:#ffffff;width:90%;margin-left:5%;border-radius:10px;margin-top:10px;">
+		<label style="width:27% !important;">密码框框</label>
+		<i style="border-right:1px dashed #B0B0B0;"></i>
+		<input type="password" class="mui-input-password" placeholder="请输入密码" style="padding:15px;width: 65% !important;">
+	</div>
+
+	<div class="mui-input-row" style="background-color:#ffffff;width:90%;margin-left:5%;border-radius:10px;margin-top:10px;">
+		<label style="width:27% !important;"><span style="border-right:1px dashed #B0B0B0;">密码框框</span></label>
+		<input type="password" class="mui-input-password" placeholder="请输入密码" style="padding:15px;width: 73% !important;">
+	</div>
+</form>
+</body>
+<script type="text/javascript">
+</script>
+</html>
