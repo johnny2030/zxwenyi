@@ -10,7 +10,7 @@
 .rongcloud-container * {
     padding: 0;
     margin: 0;
-    font-size: 14px;
+    font-size: 1rem !important;
     font-weight: 400;
 }
 
@@ -175,8 +175,8 @@ ul {
     padding: 0;
 }
 .rongcloud-kefuListBox{
-    width: 194px;
-    height: 470px;
+    width: 11.5%;
+    height: 60% !important;
     position: absolute;
     /*bottom: 0px;*/
     /*top:0px;*/
@@ -188,8 +188,8 @@ ul {
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px;
     border-radius: 5px;
-    margin-left: 500px !important;
-    margin-bottom: 300px !important;
+    margin-left: 25% !important;
+    margin-bottom: 10% !important;
 }
 #zhichiBtnBox .rongcloud-people{
     background-position: 0 -411px;
@@ -211,7 +211,7 @@ ul {
     position: absolute;
     top:0px;
     bottom: 0px;
-    width: 194px;
+    width: 100%;
     border-radius: 4px;
 }
 .rongcloud-kefuListBox.rongcloud-both .rongcloud-kefuList{
@@ -226,20 +226,19 @@ ul {
 }
 .rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-people {
      vertical-align: middle;
-     margin-right: 10px;
-     width: 20px;
+     margin-right: 3%;
+     width: 11.5%;
      border: none;
-     height: 20px;
+     height: 1.3rem;
      background-size: 45px auto;
 }
 .rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-voice {
      vertical-align: middle;
-     width: 20px;
+     width: 11.5%;
      border: none;
-     height: 20px;
-     margin-right: 10px;
+     height: 11.5%;
+     margin-right: 3%;
      cursor: pointer;
-
      background-size: 20px 20px ;
      display: inline-block;
 
@@ -264,15 +263,15 @@ ul {
 .rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-arrow-down{
     background-position: 0 -65px;
     vertical-align: middle;
-    width: 24px;
+    width: 11.5%;
     border: none;
     height: 24px;
-    margin-left: 10px;
+    margin-left: 3%;
     margin-right: -5px;
 }
 .rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-recent{
     color: #fff;
-    font-size: 14px;
+    font-size: 1rem;
     margin: 0;
     padding: 0;
     cursor:default;
@@ -559,7 +558,7 @@ ul {
     color: #6b6f7c;
     font-size: 13px;
     text-align: right;
-    min-width: 55px;
+    min-width: 10%;
 }
 
 .rongcloud-chat_item .rongcloud-ext .rongcloud-attr {
@@ -607,8 +606,11 @@ ul {
     overflow: hidden;
     z-index: 99999;
     box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px;
-    margin-left:500px !important;
-    margin-bottom:300px !important;
+    margin-left:25% !important;
+    margin-bottom:10% !important;
+    height:60% !important;
+    width:30% !important;
+    left:11.8% !important;
 }
 .rongcloud-kefuChatBox.rongcloud-fullScreen{
     width: 100%!important;
