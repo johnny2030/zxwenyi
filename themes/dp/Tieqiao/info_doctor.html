@@ -4,75 +4,73 @@
 		<tc_include file="Public/TQHead"/>
 	</head>
 	<body>
-	<div class="mui-content personal">
+	<div class="mui-content">
 		<div class="head">
 			<a href="{:U('portal/user/uploadImg')}"><img src="{$doctor.photo}"/></a>
-			<h4><a href="{:U('portal/user/modify',array('data'=>$doctor['name'],'flg'=>name,'menu'=>姓名))}" style="color: #FFFFFF;">{$doctor.name}</a></h4>
+			<h4>{$doctor.name}</h4>
 		</div>
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['hospital'],'flg'=>hospital,'menu'=>医院))}" class="mui-navigate-right">
-					医院
-					<i class="mui-pull-right tips">{$doctor.hospital_n}</i>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['office'],'flg'=>office,'menu'=>科室))}" class="mui-navigate-right">
-					科室
-					<i class="mui-pull-right tips">{$doctor.office_n}</i>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['tag'],'flg'=>tag,'menu'=>具体科室))}" class="mui-navigate-right">
-					具体科室
-					<i class="mui-pull-right tips">{$doctor.tag_n}</i>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['position'],'flg'=>position,'menu'=>职位))}" class="mui-navigate-right">
-					职位
-					<i class="mui-pull-right tips">{$doctor.position}</i>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['phone'],'flg'=>phone,'menu'=>手机号码))}" class="mui-navigate-right">
-					手机号码
-					<i class="mui-pull-right tips">{$doctor.phone}</i>
-				</a>
-			</li>
-		</ul>
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['genius'],'flg'=>genius,'menu'=>擅长,'check'=>check))}" class="mui-navigate-right">
-					擅长
-					<hr>
-					<p class="mui-ellipsis-2">{$doctor.genius}</p>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['major'],'flg'=>major,'menu'=>专业方向,'check'=>check))}" class="mui-navigate-right">
-					专业方向
-					<hr>
-					<p class="mui-ellipsis-2">{$doctor.major}</p>
-				</a>
-			</li>
-			<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['introduce'],'flg'=>introduce,'menu'=>个人简介,'check'=>check))}" class="mui-navigate-right">
-					个人简介
-					<hr>
-					<p class="mui-ellipsis-2">{$doctor.introduce}</p>
-				</a>
-			</li>
-			<!--<li class="mui-table-view-cell">
-				<a href="{:U('portal/user/modify',array('data'=>$doctor['introduce'],'flg'=>introduce,'menu'=>个人简介))}" class="mui-navigate-right">
-					工作时间
-					<hr>
-					<p class="mui-ellipsis-2">{$doctor.introduce}</p>
-				</a>
-			</li>-->
-		</ul>
+		<form method="post" name="info" action="{:U('portal/user/info_doctor')}">
+			<div class="mui-content-padded">
+				<div class="mui-input-row">
+					<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入姓名" value="{$doctor.name}">
+				</div>
+				<div class="mui-input-row">
+					<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="{$doctor.hospital}">
+				</div>
+				<div class="mui-input-row">
+					<select id="office" name="office" class="u-inpt of-sel">
+						<notempty name="doctor.office">
+							<option value="">请选择科室</option>
+							<foreach name="list" item="o">
+								<if condition="$o.id eq $doctor['office']">
+									<option value="{$o.id}" selected>{$o.name}</option>
+									<else />
+									<option value="{$o.id}">{$o.name}</option>
+								</if>
+							</foreach>
+							<else />
+							<option value="" selected>请选择科室</option>
+							<foreach name="list" item="o">
+								<option value="{$o.id}">{$o.name}</option>
+							</foreach>
+						</notempty>
+					</select>
+				</div>
+				<div class="mui-input-row">
+					<input type="text" id="tag" name="tag" class="u-inpt tg-sel mui-input-clear" placeholder="请输入具体科室名称" value="{$doctor.tag}">
+				</div>
+				<div class="mui-input-row">
+					<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="{$doctor.position}">
+				</div>
+				<div class="mui-input-row">
+					<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="{$doctor.phone}">
+				</div>
+				<div class="mui-input-row">
+					<textarea id="introduce" name="introduce" placeholder="请输入个人介绍" class="u-textarea">{$doctor.introduce}</textarea>
+				</div>
+				<div class="mui-button-row">
+					<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:50%;border-radius:10px;">保存</button>
+					<!--<button id='confirmBtn' type="button" class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>-->
+				</div>
+			</div>
+		</form>
 	</div>
 	</body>
 	<script type="text/javascript">
+        mui.init({
+            swipeBack: true //启用右滑关闭功能
+        });
+        document.getElementById("confirmBtn").addEventListener('tap', function() {
+            var btnArray = ['是', '否'];
+            mui.confirm('确认保存信息？', '铁樵健康提醒您', btnArray, function(e) {
+                if (e.index == 0) {
+                    $("form[name='info']").submit();
+                    setTimeout(function () { window.location.href = "http://localhost/zxwenyi/index.php?g=portal&m=user&a=info_doctor"; }, 200);
+                    mui.toast('保存成功！');
+                } else {
+                    return;
+                }
+            })
+        });
 	</script>
 </html>

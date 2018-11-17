@@ -3,7 +3,7 @@
 <head>
 	<tc_include file="Public/TQHead"/>
 	<link rel="stylesheet" type="text/css" href="__TMPL__Public/mui/css/mui.picker.min.css" />
-	<script src="__TMPL__Public/mui/js//mui.picker.min.js"></script>
+	<script src="__TMPL__Public/mui/js/mui.picker.min.js"></script>
 </head>
 <body>
 <div class="mui-content">
@@ -14,7 +14,7 @@
 	<form method="post" name="info" action="{:U('portal/user/info_patient')}">
 		<div class="mui-content-padded">
 			<div class="mui-input-row">
-				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="{$patient.name}">
+				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入姓名" value="{$patient.name}">
 			</div>
 			<div class="mui-input-row">
 				<input type="text" id="birthday" name="birthday" data-options='{"type":"date","beginYear":1900,"endYear":2050}' class="u-inpt u-birthday" placeholder="年-月-日" value="{$patient.birthday}" readonly="readonly">
@@ -154,7 +154,7 @@
         mui.confirm('确认保存信息？', '铁樵健康提醒您', btnArray, function(e) {
             if (e.index == 0) {
                 $("form[name='info']").submit();
-                window.location.href = "http://localhost/zxwenyi/index.php?g=portal&m=user&a=info_patient";
+                setTimeout(function () { window.location.href = "http://localhost/zxwenyi/index.php?g=portal&m=user&a=info_patient"; }, 200);
                 mui.toast('保存成功！');
             } else {
                 return;
