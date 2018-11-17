@@ -100,4 +100,35 @@ class CommonMethodController extends HomebaseController {
         $data['list'] = $list;
         $this->ajaxReturn($data);
     }
+    //上传图片
+    public function uploadImg(){
+        $id = (int)session('login_id');
+        $fg = $_POST['fg'];
+        if ($fg == 1){
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
+            $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
+            $img = $wechat->downloadWeixinFile($media_id,'');
+            $filename='upload_img/head_tq/'.$this->salt('5').$this->msectime().'.jpg';
+            file_put_contents($filename, $img['body']);
+            $data['photo'] = '../'.$filename;
+            $data['update_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_user_model->where(array('id' => $id))->save($data);
+        }else{
+            require_once 'today/Wechat_zj.php';
+            $wechat = new \Wechat_zj( $this );
+            $media_id = $_POST['media_id'];//前端返回的上传后的媒体id
+            $img = $wechat->downloadWeixinFile($media_id,'');
+            $filename='upload_img/head_zj/'.$this->salt('5').$this->msectime().'.jpg';
+            file_put_contents($filename, $img['body']);
+            $data['photo'] = '../'.$filename;
+            $data['update_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_user_model->where(array('id' => $id))->save($data);
+        }
+        if($result){
+            $this->ajaxReturn(1);
+        }else{
+            $this->ajaxReturn(0);
+        }
+    }
 }

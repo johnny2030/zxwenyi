@@ -1,14 +1,20 @@
 <!doctype html>
 <html>
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->getSignPackage_tq();
+?>
 <head>
 	<tc_include file="Public/TQHead"/>
 	<link rel="stylesheet" type="text/css" href="__TMPL__Public/mui/css/mui.picker.min.css" />
 	<script src="__TMPL__Public/mui/js/mui.picker.min.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
 <div class="mui-content">
 	<div class="head">
-		<a href="{:U('portal/user/uploadImg')}"><img src="{$patient.photo}"/></a>
+		<a href="javascript:void(0)" id="uploadImage"><img src="{$patient.photo}"/></a>
 		<h4>{$patient.name}</h4>
 	</div>
 	<form method="post" name="info" action="{:U('portal/user/info_patient')}">
@@ -154,7 +160,7 @@
         mui.confirm('确认保存信息？', '铁樵健康提醒您', btnArray, function(e) {
             if (e.index == 0) {
                 $("form[name='info']").submit();
-                setTimeout(function () { window.location.href = "http://localhost/zxwenyi/index.php?g=portal&m=user&a=info_patient"; }, 200);
+                setTimeout(function () { window.location.href = "index.php?g=portal&m=user&a=info_patient"; }, 200);
                 mui.toast('保存成功！');
             } else {
                 return;
@@ -227,5 +233,91 @@
 		}
 		mui('#familyData').popover('hide');
     }
+    wx.config({
+        appId: '<?php echo $signPackage["appId"];?>',
+        timestamp: '<?php echo $signPackage["timestamp"];?>',
+        nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+        signature: '<?php echo $signPackage["signature"];?>',
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'startRecord',
+            'stopRecord',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage'
+        ]
+    });
+    wx.ready(function () {
+        wx.checkJsApi({
+            jsApiList: [
+                'startRecord',
+                'stopRecord',
+                'chooseImage',
+                'previewImage',
+                'uploadImage',
+                'downloadImage'
+            ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+                if (res.checkResult.getLocation == false) {
+                    alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                    return;
+                }
+            }
+        });
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        $("#uploadImage").click(function () {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    images.localId = res.localIds;
+                    if (images.localId.length == 0) {
+                        alert('请先选择图片');
+                        return;
+                    }
+                    if (images.localId.length > 1) {
+                        alert('目前仅支持单张图片上传,请重新上传');
+                        images.localId = [];
+                        return;
+                    }
+                    // 上传照片
+                    wx.uploadImage({
+                        localId: images.localId.toString(),
+                        isShowProgressTips: 0,
+                        success: function (res) {
+                            images.serverId = res.serverId;
+                            $.ajax({
+                                url: 'index.php?g=portal&m=commonMethod&a=uploadImg',
+                                type: 'post',
+                                data: {'fg':'1','media_id': images.serverId.toString()},
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data == 1){
+                                        window.location.href = "index.php?g=portal&m=user&a=info_patient";
+                                    } else {
+                                        alert("修改失败");
+                                    }
+                                },
+                                error: function (xhr, errorType, error) {
+                                    console.log(error);
+                                }
+                            });
+                        },
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                }
+            });
+        });
+    });
+    wx.error(function (res) {
+        alert(res.errMsg);
+    });
 </script>
 </html>
