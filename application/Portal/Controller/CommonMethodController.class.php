@@ -72,11 +72,18 @@ class CommonMethodController extends HomebaseController {
         $where['card_number'] = array('eq',$m_card);
         $where['card_pwd'] = array('eq',$p_card);
         $card = $this->common_card_model->where($where)->find();
+        $data = array();
         if (empty($card) || empty($card['card_time'])){
-            $this->ajaxReturn('0');
+            $data['status'] = 0;
+        }elseif ($card['status'] == 1){
+            $data['status'] = 1;
+        }elseif ($card['status'] == 2){
+            $data['status'] = 2;
         }else{
-            $this->ajaxReturn($card['card_time']);
+            $data['t_card'] = $card['card_time'];
+            $data['m_card_id'] = $card['id'];
         }
+        $this->ajaxReturn($data);
     }
     //获取健康状况（首菜单）
     function get_healthy_f_info(){

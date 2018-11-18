@@ -12,6 +12,7 @@ class UserController extends HomebaseController {
     private $common_office_model;
     private $common_hospital_model;
     private $common_health_model;
+    private $common_card_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -21,13 +22,19 @@ class UserController extends HomebaseController {
         $this->common_office_model = D( 'Common_office' );
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_health_model = D( 'Common_health' );
+        $this->common_card_model = D( 'Common_card' );
 	}
     //患者登记
     public function register_patient() {
         $id = (int)session('login_id');
         if ( IS_POST ) {
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
-            if ($result) {
+            $data = array();
+            $data['user_id'] = $id;
+            $data['status'] = 1;
+            $data['use_time'] = date('Y-m-d H:i:s',time());
+            $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
+            if ($result&&$results) {
                 R('User/info_patient');
             } else {
                 $this->error('登记失败！');
