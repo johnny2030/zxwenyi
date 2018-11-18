@@ -28,7 +28,6 @@ class MessagesController extends HomebaseController {
     public function index() {
         $where = array();
         $where['m.type'] = array('eq',2);
-        $where['m.status'] = array('eq',0);
         $where['m.del_flg'] = array('eq',0);
         $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
         $this->assign( 'msg_list', $msg_list );
@@ -38,7 +37,6 @@ class MessagesController extends HomebaseController {
     public function forward() {
         $where = array();
         $where['m.type'] = array('eq',1);
-        $where['m.status'] = array('eq',0);
         $where['m.del_flg'] = array('eq',0);
         $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
         $this->assign( 'msg_list', $msg_list );

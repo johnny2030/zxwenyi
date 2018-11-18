@@ -425,7 +425,9 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 	border:1px solid #D4D4D4;
 }
 .label_info{
-	width: 25% !important;
+	width: 30% !important;
+	font-size:1rem;
+	padding:11px 0px 11px 15px !important;
 }
 .span_info{
 	height:36px;
@@ -435,7 +437,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 	width: 3%;
 }
 .input_info{
-	width: 70% !important;
+	width: 65% !important;
 }
 .sel_info{
 	background-color: #ffffff !important;

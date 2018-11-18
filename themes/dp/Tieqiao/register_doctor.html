@@ -14,12 +14,7 @@
 				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="hospital" name="hospital" class="u-inpt c-job">
-					<option value="" selected>请选择医院</option>
-					<foreach name="hlist" item="h">
-						<option value="{$h.id}">{$h.name}</option>
-					</foreach>
-				</select>
+				<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="">
 			</div>
 			<div class="mui-input-row">
 				<select id="office" name="office" class="u-inpt of-sel" onchange="set_tag()">
@@ -30,17 +25,10 @@
 				</select>
 			</div>
 			<div class="mui-input-row">
-				<select id="tag" name="tag" class="u-inpt tg-sel">
-					<option value="" selected>请选择具体科室</option>
-				</select>
+				<input type="text" id="tag" name="tag" class="u-inpt tg-sel mui-input-clear" placeholder="请输入具体科室名称" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="position" name="position" class="u-inpt pt-sel">
-					<option value="" selected>请选择职位</option>
-					<option value="主任医师">主任医师</option>
-					<option value="副主任医师">副主任医师</option>
-					<option value="主治医师">主治医师</option>
-				</select>
+				<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="">
 			</div>
 			<div class="mui-input-row">
 				<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="">

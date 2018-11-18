@@ -84,9 +84,9 @@
 			</div>
 			<div class="mui-popover pro_info" id="familyData">
 				<ul class="mui-table-view" id="areaData" style="max-height: 190px;">
-					<div class="mui-card" style="max-height: 170px;">
+					<div class="mui-card" style="max-height: 170px;margin: 0px !important;">
 						<div class="mui-card-content">
-							<select id="helty1" name="helty1" class="sel_info pro_sel" onclick="getHealthy()"></select>
+							<select id="helty1" name="helty1" class="sel_info pro_sel" onchange="getHealthy()"></select>
 							<select id="helty2" name="helty2" class="sel_info pro_sel" style="display: none;"></select>
 							<button type="button" class="mui-btn mui-btn-primary pro_btn" onclick="return setHealthy();">确认</button>
 						</div>
@@ -171,7 +171,9 @@
             async:false,
             type : "get",
             url : "index.php?g=portal&m=commonMethod&a=get_healthy_f_info",
-            data : {},
+            data : {
+                'up_id' : 0
+            },
             dataType : "json",
             success : function(data) {
                 var selct = $("#helty1");
