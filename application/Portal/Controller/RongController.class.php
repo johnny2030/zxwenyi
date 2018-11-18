@@ -114,7 +114,7 @@ class RongController extends HomebaseController {
     public function end_chat() {
         $t = date('Y-m-d H:i:s',time());
         $data = array();
-        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-2hour"));
+        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-1day"));
         $where = array();
         $where['p_id'] = array('eq',$_GET['userId']);
         $where['d_id'] = array('eq',session('login_id'));
@@ -145,7 +145,7 @@ class RongController extends HomebaseController {
     }
     public function checkUser() {
         $id = session('login_id');
-        $user = $this->common_user_model->field('status')->find($id);
+        $user = $this->common_user_model->field('type')->find($id);
         $this->ajaxReturn($user);
     }
     public function getUpToken(){
@@ -247,6 +247,7 @@ class RongController extends HomebaseController {
         }
     }
     public function set_time(){
+        $id=session('login_id');
         $msg_id = $_GET['msgId'];
         $msg_info = $this->common_messages_model->find($msg_id);
         if ($msg_info['status'] == 0){
@@ -267,6 +268,8 @@ class RongController extends HomebaseController {
             }else{
                 $this->ajaxReturn('1');
             }
+        }elseif ($msg_info['doctor_id'] == $id){
+            $this->ajaxReturn('0');
         }else{
             $this->ajaxReturn('2');
         }

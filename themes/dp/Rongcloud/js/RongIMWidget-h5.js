@@ -339,7 +339,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 'a':'checkUser'
             }
         }).success(function (res) {
-            if(res.status == 1){
+            if(res.type == 1){
                 var subsp = document.getElementById("subsp");
                 var compileFn=$compile('<ul class="rongcloud-clearfix rongcloud-voices"><a href="#" ng-click="showMore()"><li class="rongcloud-sprite-voice"></li></a></ul>');
                 var $dom=compileFn($scope);
