@@ -2439,7 +2439,7 @@ angular.module('RongWebIMWidget').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('./ts/conversationlist/conversationList.tpl.html',
-    "<div id=rong-conversation-list class=\"rongcloud-main rongcloud-kefuList\" ng-show=conversationListServer.showSelf><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"index.php\"></a><div class=\"rongcloud-title rongcloud-title-f\"><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>最近联系人</a></div><a href=\"javascript:void 0\" ng-click=setconversation_kefu()><i class='chat'>咨询</i></a></header><div class=rongcloud-chatBox id=chatBox><div class=rongcloud-chatArea><div class=rongcloud-chatList><conversation-item ng-repeat=\"item in conversationListServer.conversationList\" item=item></conversation-item></div></div></div></div></div>"
+    "<div id=rong-conversation-list class=\"rongcloud-main rongcloud-kefuList\" ng-show=conversationListServer.showSelf><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\"></a><div class=\"rongcloud-title rongcloud-title-f\"><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>最近联系人</a></div><a href=\"javascript:void 0\" ng-click=setconversation_kefu()><i class='chat'>咨询</i></a></header><div class=rongcloud-chatBox id=chatBox><div class=rongcloud-chatArea><div class=rongcloud-chatList><conversation-item ng-repeat=\"item in conversationListServer.conversationList\" item=item></conversation-item></div></div></div></div></div>"
   );
 
 

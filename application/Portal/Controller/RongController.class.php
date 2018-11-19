@@ -112,13 +112,16 @@ class RongController extends HomebaseController {
         }
     }
     public function end_chat() {
-        $t = date('Y-m-d H:i:s',time());
-        $data = array();
-        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-1day"));
         $where = array();
         $where['p_id'] = array('eq',$_GET['userId']);
         $where['d_id'] = array('eq',session('login_id'));
-        $this->common_chattime_model->where($where)->save($data);
+        $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
+
+        $data = array();
+        $t = date('Y-m-d H:i:s',time());
+        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-1day"));
+        $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
+
         $where_msg = array();
         $where_msg['user_id'] = array('eq',$_GET['userId']);
         $where_msg['doctor_id'] = array('eq',session('login_id'));
@@ -202,7 +205,7 @@ class RongController extends HomebaseController {
         if ($user['type'] == 0){
             $data=array(
                 'serviceInfo'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#00CD00"),
-                'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
                 'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
                 'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
                 'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
@@ -211,7 +214,7 @@ class RongController extends HomebaseController {
             if ($user['status'] == 0){
                 $data=array(
                     'serviceInfo'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
-                    'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                    'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
                     'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
                     'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
                     'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
@@ -238,7 +241,7 @@ class RongController extends HomebaseController {
         }else{
             $data=array(
                 'serviceInfo'=>array('value'=>urlencode("您好，您的问题医生已经回复，请及时查看。"),'color'=>"#00CD00"),
-                'serviceType'=>array('value'=>urlencode('问题谘询'),'color'=>'#4876FF'),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
                 'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
                 'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
                 'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF0000'),
