@@ -64,10 +64,21 @@ class UserController extends HomebaseController {
         }else{
             session('flg',null);
             $id = (int)session('login_id');
-            $where = array();
-            $where['u.id'] = array('eq',$id);
-            $patient = $this->common_user_model->alias('u')->field('u.*,h.name as health_n')->join('__COMMON_HEALTH__ h ON u.healthy=h.id','left')->where($where)->select();
-            $this->assign( 'patient', $patient[0] );
+            $patient = $this->common_user_model->find($id);
+
+            $where_h = array();
+            $where_h['up_id'] = array('eq',0);
+            $where_h['del_flg'] = array('eq',0);
+            $list = $this->common_health_model->where($where_h)->select();
+
+            $where_s = array();
+            $where_s['up_id'] = array('eq',$patient['health']);
+            $where_s['del_flg'] = array('eq',0);
+            $lists = $this->common_health_model->where($where_s)->select();
+
+            $this->assign( 'list', $list );
+            $this->assign( 'lists', $lists );
+            $this->assign( 'patient', $patient );
             $this->display('../Tieqiao/info_patient');
         }
     }
