@@ -574,7 +574,7 @@ class Wechat_tq {
             "touser":"'.$open_id.'",
             "msgtype":"mpnews",
             "mpnews":{
-                "media_id":"mNdVxM-2RSlGmkcMe0p9v8vARtULkCj1_6Tl8AhEk8o"
+                "media_id":"'.$media_id.'"
             }
         }';
         $url = $this->WX_SEND_CUSTOMMES_URL.'?access_token='.$accessToken;

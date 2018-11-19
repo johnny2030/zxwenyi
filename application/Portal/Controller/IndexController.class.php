@@ -54,9 +54,7 @@ class IndexController extends HomebaseController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         $open_id=session('open_id');
-        $result = $wechat->customSendMedia($open_id,'mNdVxM-2RSlGmkcMe0p9v25prBwgiaAlX4I8jyQ25_A');
-        $this->assign( 'patient', $result );
-        $this->display();
+        $wechat->customSendMedia($open_id,'mNdVxM-2RSlGmkcMe0p9v25prBwgiaAlX4I8jyQ25_A');
     }
 }
 
