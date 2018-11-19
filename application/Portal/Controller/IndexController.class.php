@@ -15,27 +15,15 @@ class IndexController extends HomebaseController {
     //首页
 	public function index() {
         $this->display('../Tieqiao/index');
-        /*$open_id = session('open_id');
-        $where = array();
-        $where['open_id'] = array('eq',$open_id);
-        $user = $this->common_user_model->where($where)->find();
-        if (session('login_id') == ""){
-            session('login_id',$user['id']);
-        }
-        $check = A('Check');
-        if (!$check->check_info($user)){
-            if ($user['status'] == 1){
-                $this->register_doctor();
-            }else{
-                $this->register_patient();
-            }
+    }
+    public function user_info() {
+        $id = (int)session('login_id');
+        $user = $this->common_user_model->find($id);
+        if ($user['type'] == 1){
+            R('User/info_patient');
         }else{
-            if ($user['status'] == 1){
-                R('Doctor/index');
-            }else{
-                R('Patient/index');
-            }
-        }*/
+            R('User/info_doctor');
+        }
     }
     //获取素材总数
     function get_materialcount() {
@@ -65,7 +53,8 @@ class IndexController extends HomebaseController {
     function send_material() {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
-        $result = $wechat->customSendMedia('oiizC04BxX-ieip24KiYScDKpWA8','mNdVxM-2RSlGmkcMe0p9v25prBwgiaAlX4I8jyQ25_A');
+        $open_id=session('open_id');
+        $result = $wechat->customSendMedia($open_id,'mNdVxM-2RSlGmkcMe0p9v25prBwgiaAlX4I8jyQ25_A');
         $this->assign( 'patient', $result );
         $this->display();
     }
