@@ -207,12 +207,14 @@
                 selct.empty();
                 if(data.list.length > 0){
                     var list = data.list;
+                    selct.append("<option value=''>请选择具体疾病</option>");
                     for (i=0;i<list.length;i++){
                         var county = list[i];
                         selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
                     }
                     show.css("display","block");
                 }else{
+                    $("#hy").val("");
                     show.css("display","none");
                 }
             }

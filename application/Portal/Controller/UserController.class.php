@@ -108,6 +108,10 @@ class UserController extends HomebaseController {
         $flg = session('flg');
         if ( IS_POST && empty($flg)) {
             $id = (int)session('login_id');
+            $healthy = $_POST['healthy'];
+            if (empty($healthy)){
+                $_POST['healthy'] = '0';
+            }
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result){
