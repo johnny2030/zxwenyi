@@ -19,7 +19,7 @@ class IndexController extends HomebaseController {
     public function user_info() {
         $id = (int)session('login_id');
         $user = $this->common_user_model->find($id);
-        if ($user['type'] == 1){
+        if ($user['type'] == 0){
             R('User/info_patient');
         }else{
             R('User/info_doctor');
