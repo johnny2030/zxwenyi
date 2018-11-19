@@ -112,6 +112,23 @@ class Wechat_tq {
      * 发送模板消息
      */
     private $WX_SEND_TEMPLATE_URL = 'https://api.weixin.qq.com/cgi-bin/message/template/send';
+    /**
+     * 获取素材总数
+     */
+    private $WX_GET_MATERIAL_COUNT_URL = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount';
+    /**
+     * 获取素材列表
+     */
+    private $WX_BG_MATERIAL_URL = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material';
+    /**
+     * 获取永久素材
+     */
+    private $WX_GET_MATERIAL_URL = 'https://api.weixin.qq.com/cgi-bin/material/get_material';
+    /**
+     * 根据OpenID列表群发
+     */
+    private $WX_SEND_MATERIAL_URL = 'https://api.weixin.qq.com/cgi-bin/message/mass/send';
+
 
 	public function Wechat( $systemObj ) {
 		$this->systemObj = $systemObj;
@@ -550,6 +567,19 @@ class Wechat_tq {
         $url = $this->WX_SEND_CUSTOMMES_URL.'?access_token='.$accessToken;
         return \Today\Today::httpRequest( $url,$txt );
     }
+    //发送客服消息（图文media_id）
+    public function customSendMedia($open_id,$media_id){
+        $accessToken = $this->getAccessToken();
+        $template = '{
+            "touser":"'.$open_id.'",
+            "msgtype":"mpnews",
+            "mpnews":{
+                "media_id":"mNdVxM-2RSlGmkcMe0p9v8vARtULkCj1_6Tl8AhEk8o"
+            }
+        }';
+        $url = $this->WX_SEND_CUSTOMMES_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $url, $template );
+    }
     //发送模板消息
     public function templateSend($open_id,$url,$data,$topcolor='#7B68EE'){
         $accessToken = $this->getAccessToken();
@@ -563,6 +593,46 @@ class Wechat_tq {
         $json_template = json_encode($template);
         $urls = $this->WX_SEND_TEMPLATE_URL.'?access_token='.$accessToken;
         return \Today\Today::httpRequest( $urls, urldecode($json_template) );
+    }
+    //获取素材总数
+    public function get_materialcount(){
+        $accessToken = $this->getAccessToken();
+        $url = $this->WX_GET_MATERIAL_COUNT_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $url );
+    }
+    //获取素材列表
+    public function bg_material(){
+        $accessToken = $this->getAccessToken();
+        $txt = '{
+            "type":"news",
+            "offset":0,
+            "count":20
+        }';
+        $url = $this->WX_BG_MATERIAL_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $url,$txt );
+    }
+    //获取素材列表
+    public function get_material($media_id){
+        $accessToken = $this->getAccessToken();
+        $txt = '{
+            "media_id":"'.$media_id.'"
+        }';
+        $url = $this->WX_GET_MATERIAL_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $url,$txt );
+    }
+    //群发
+    public function send_material($open_id,$media_id){
+        $accessToken = $this->getAccessToken();
+        $txt = '{
+            "touser":["'.$open_id.'"],
+            "mpnews":{
+                "media_id":"'.$media_id.'"
+            },
+            "msgtype":"mpnews",
+            "send_ignore_reprint":0
+        }';
+        $url = $this->WX_SEND_MATERIAL_URL.'?access_token='.$accessToken;
+        return \Today\Today::httpRequest( $url,$txt );
     }
     //转发/群发模板消息推送
     public function templateForward($open_id,$url,$data,$topcolor='#7B68EE'){
