@@ -70,8 +70,10 @@
             var btnArray = ['是', '否'];
             mui.confirm('确认保存信息？', '专家联盟提醒您', btnArray, function(e) {
                 if (e.index == 0) {
-                    $("form[name='info']").submit();
-                    mui.toast('保存成功！');
+                    if (check_form()){
+                        $("form[name='info']").submit();
+                        mui.toast('保存成功！');
+					}
                 } else {
                     return;
                 }
@@ -163,6 +165,8 @@
         wx.error(function (res) {
             alert(res.errMsg);
         });
+	</script>
+	<script type="text/javascript">
         function check_form() {
             if(!check_name()){
                 return false;
