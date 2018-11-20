@@ -8,21 +8,16 @@
 	<header id="header" class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">医生注册</h1>
 	</header>
-	<form method="post" action="{:U('portal/user/register_doctor')}">
+	<form method="post" action="{:U('portal/userZJ/register_doctor')}">
 		<div class="mui-content-padded" style="margin-top: 4rem;">
 			<div class="mui-input-row">
 				<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入用户姓名" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="hospital" name="hospital" class="u-inpt c-job">
-					<option value="" selected>请选择医院</option>
-					<foreach name="hlist" item="h">
-						<option value="{$h.id}">{$h.name}</option>
-					</foreach>
-				</select>
+				<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="office" name="office" class="u-inpt of-sel" onchange="set_tag()">
+				<select id="office" name="office" class="u-inpt of-sel">
 					<option value="" selected>请选择科室</option>
 					<foreach name="olist" item="o">
 						<option value="{$o.id}">{$o.name}</option>
@@ -30,17 +25,10 @@
 				</select>
 			</div>
 			<div class="mui-input-row">
-				<select id="tag" name="tag" class="u-inpt tg-sel">
-					<option value="" selected>请选择具体科室</option>
-				</select>
+				<input type="text" id="tag" name="tag" class="u-inpt tg-sel mui-input-clear" placeholder="请输入具体科室名称" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="position" name="position" class="u-inpt pt-sel">
-					<option value="" selected>请选择职位</option>
-					<option value="主任医师">主任医师</option>
-					<option value="副主任医师">副主任医师</option>
-					<option value="主治医师">主治医师</option>
-				</select>
+				<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="">
 			</div>
 			<div class="mui-input-row">
 				<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="">
@@ -87,9 +75,9 @@
         }
     }
     function check_hospital(){
-        var hospital = $('#hospital option:selected').val();
+        var hospital = $("#hospital").val();
         if (hospital.length==0){
-            alert("请选择医院！");
+            alert("医院不能为空！");
             $("#hospital").css("border-color","red");
             return false;
         } else{
@@ -109,9 +97,9 @@
         }
     }
     function check_tag(){
-        var tag = $('#tag option:selected').val();
+        var tag = $("#tag").val();
         if (tag.length==0){
-            alert("请选择具体科室！");
+            alert("具体科室不能为空！");
             $("#tag").css("border-color","red");
             return false;
         } else{
@@ -120,9 +108,9 @@
         }
     }
     function check_position(){
-        var position = $('#position option:selected').val();
+        var position = $("#position").val();
         if (position.length==0){
-            alert("请选择职位！");
+            alert("职位不能为空！");
             $("#position").css("border-color","red");
             return false;
         } else{
@@ -156,9 +144,9 @@
         $.ajax({
             async:false,
             type : "get",
-            url : "index.php?g=portal&m=commonMethod&a=check_phone",
+            url : "index.php?g=portal&m=commonMethodZJ&a=check_phone",
             data : {
-                'phone' : phone
+                'phone' : phone,
             },
             dataType : "json",
             success : function(data) {
@@ -166,31 +154,6 @@
                     return true;
                 } else {
                     return false;
-                }
-            }
-        });
-    }
-    function set_tag() {
-        var office = $('#office option:selected').val();
-        $.ajax({
-            async:false,
-            type : "get",
-            url : "index.php?g=portal&m=commonMethod&a=get_tag",
-            data : {
-                'office' : office
-            },
-            dataType : "json",
-            success : function(data) {
-                var tag = $("#tag");
-                tag.empty();
-                if(data.list != null && data.list.length > 0){
-                    var list = data.list;
-                    for (i=0;i<list.length;i++){
-                        var tg = list[i];
-                        tag.append("<option value='"+tg.id+"'>"+tg.name+"</option>");
-                    }
-                }else{
-                    tag.append("<option value=''>请选择具体科室</option>");
                 }
             }
         });

@@ -53,6 +53,10 @@ class UserController extends HomebaseController {
 	    $flg = session('flg');
         if ( IS_POST && empty($flg)) {
             $id = (int)session('login_id');
+            $healthy = $_POST['healthy'];
+            if (empty($healthy)){
+                $_POST['healthy'] = 0;
+            }
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result){
@@ -163,67 +167,5 @@ class UserController extends HomebaseController {
     //咨询问诊
     public function question() {
         R('Rong/index');
-    }
-    //信息修改
-    public function modify() {
-        if ( IS_POST ) {
-            $id = (int)session('login_id');
-            $user = $this->common_user_model->find($id);
-            if(!empty($_POST['phone']) && $_POST['phone'] != $user['phone']){
-                $where = array();
-                $where['phone'] = array('eq',$_POST['phone']);
-                $check_user = $this->common_user_model->where($where)->find();
-                if (!empty($check_user)) $this->error('该手机号已被使用！');
-            }
-            if(!empty($_POST['province']) && !empty($_POST['city'])){
-                $county = $_POST['county'];
-                if (empty($county)){
-                    $_POST['county'] = '0';
-                }
-            }
-            $_POST['update_time'] = date('Y-m-d H:i:s',time());
-            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
-            if ($result) {
-                if ($user['type'] == 0){
-                    R('User/info_patient');
-                }else{
-                    R('User/info_doctor');
-                }
-            } else {
-                $this->error('修改失败！');
-            }
-        } else {
-            $data = $_GET['data'];//数据
-            $flg = $_GET['flg'];//数据库字段名
-            $menu = $_GET['menu'];//页面字段名
-            $check = $_GET['check'];//介绍/擅长
-            if ($flg == 'hospital'){
-                $where = array();
-                $where['del_flg'] = array('eq',0);
-                $list = $this->common_hospital_model->where($where)->select();
-                $this->assign( 'list', $list );
-            }elseif ($flg == 'office'){
-                $where = array();
-                $where['del_flg'] = array('eq',0);
-                $list = $this->common_office_model->where($where)->select();
-                $this->assign( 'list', $list );
-            }elseif ($flg == 'tag'){
-                $where = array();
-                $where['del_flg'] = array('eq',0);
-                $list = $this->common_tag_model->where($where)->select();
-                $this->assign( 'list', $list );
-            }elseif ($flg == 'healthy'){
-                $where = array();
-                $where['up_id'] = array('eq',0);
-                $where['del_flg'] = array('eq',0);
-                $list = $this->common_health_model->where($where)->select();
-                $this->assign( 'list', $list );
-            }
-            $this->assign( 'data', $data );
-            $this->assign( 'flg', $flg );
-            $this->assign( 'menu', $menu );
-            $this->assign( 'check', $check );
-            $this->display('../Tieqiao/modify');
-        }
     }
 }

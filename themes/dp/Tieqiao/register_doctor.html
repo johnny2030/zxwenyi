@@ -17,7 +17,7 @@
 				<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="office" name="office" class="u-inpt of-sel" onchange="set_tag()">
+				<select id="office" name="office" class="u-inpt of-sel">
 					<option value="" selected>请选择科室</option>
 					<foreach name="olist" item="o">
 						<option value="{$o.id}">{$o.name}</option>
@@ -75,9 +75,9 @@
         }
     }
     function check_hospital(){
-        var hospital = $('#hospital option:selected').val();
+        var hospital = $("#hospital").val();
         if (hospital.length==0){
-            alert("请选择医院！");
+            alert("医院不能为空！");
             $("#hospital").css("border-color","red");
             return false;
         } else{
@@ -97,9 +97,9 @@
         }
     }
     function check_tag(){
-        var tag = $('#tag option:selected').val();
+        var tag = $("#tag").val();
         if (tag.length==0){
-            alert("请选择具体科室！");
+            alert("具体科室不能为空！");
             $("#tag").css("border-color","red");
             return false;
         } else{
@@ -108,9 +108,9 @@
         }
     }
     function check_position(){
-        var position = $('#position option:selected').val();
+        var position = $("#position").val();
         if (position.length==0){
-            alert("请选择职位！");
+            alert("职位不能为空！");
             $("#position").css("border-color","red");
             return false;
         } else{
@@ -146,7 +146,8 @@
             type : "get",
             url : "index.php?g=portal&m=commonMethod&a=check_phone",
             data : {
-                'phone' : phone
+                'phone' : phone,
+                'status' : 0
             },
             dataType : "json",
             success : function(data) {
@@ -154,31 +155,6 @@
                     return true;
                 } else {
                     return false;
-                }
-            }
-        });
-    }
-    function set_tag() {
-        var office = $('#office option:selected').val();
-        $.ajax({
-            async:false,
-            type : "get",
-            url : "index.php?g=portal&m=commonMethod&a=get_tag",
-            data : {
-                'office' : office
-            },
-            dataType : "json",
-            success : function(data) {
-                var tag = $("#tag");
-                tag.empty();
-                if(data.list != null && data.list.length > 0){
-                    var list = data.list;
-                    for (i=0;i<list.length;i++){
-                        var tg = list[i];
-                        tag.append("<option value='"+tg.id+"'>"+tg.name+"</option>");
-                    }
-                }else{
-                    tag.append("<option value=''>请选择具体科室</option>");
                 }
             }
         });
