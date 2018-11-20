@@ -23,12 +23,8 @@ class IndexZJController extends HomebaseZJController {
         $id = (int)session('login_id');
         if ( IS_POST ) {
             $_POST['type'] = 1;
-            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
-            if ($result) {
-                R('UserZJ/info_doctor');
-            } else {
-                $this->error('登记失败！');
-            }
+            $this->common_user_model->where(array('id' => $id))->save($_POST);
+            R('UserZJ/info_doctor');
         }else{
             $where = array();
             $where['del_flg'] = array('eq',0);

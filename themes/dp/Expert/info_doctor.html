@@ -15,7 +15,7 @@
 			<a href="javascript:void(0)" id="uploadImage"><img src="{$doctor.photo}"/></a>
 			<h4>{$doctor.name}</h4>
 		</div>
-		<form method="post" name="info" action="{:U('portal/userZJ/info_doctor')}">
+		<form method="post" name="info" action="{:U('portal/userZJ/info_doctor_add')}">
 			<div class="mui-content-padded">
 				<div class="mui-input-row">
 					<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入姓名" value="{$doctor.name}">
@@ -163,5 +163,117 @@
         wx.error(function (res) {
             alert(res.errMsg);
         });
+        function check_form() {
+            if(!check_name()){
+                return false;
+            }else if(!check_hospital()){
+                return false;
+            }else if(!check_office()){
+                return false;
+            }else if(!check_tag()){
+                return false;
+            }else if(!check_position()){
+                return false;
+            }else if(!vailPhone()){
+                return false;
+            }else {
+                return true;
+            }
+        }
+        function check_name(){
+            var name = $("#name").val();
+            if (name.length==0){
+                alert("用户姓名不能为空！");
+                $("#name").css("border-color","red");
+                return false;
+            } else{
+                $("#name").css("border-color","");
+                return true;
+            }
+        }
+        function check_hospital(){
+            var hospital = $("#hospital").val();
+            if (hospital.length==0){
+                alert("医院不能为空！");
+                $("#hospital").css("border-color","red");
+                return false;
+            } else{
+                $("#hospital").css("border-color","");
+                return true;
+            }
+        }
+        function check_office(){
+            var office = $('#office option:selected').val();
+            if (office.length==0){
+                alert("请选择科室！");
+                $("#office").css("border-color","red");
+                return false;
+            } else{
+                $("#office").css("border-color","");
+                return true;
+            }
+        }
+        function check_tag(){
+            var tag = $("#tag").val();
+            if (tag.length==0){
+                alert("具体科室不能为空！");
+                $("#tag").css("border-color","red");
+                return false;
+            } else{
+                $("#tag").css("border-color","");
+                return true;
+            }
+        }
+        function check_position(){
+            var position = $("#position").val();
+            if (position.length==0){
+                alert("职位不能为空！");
+                $("#position").css("border-color","red");
+                return false;
+            } else{
+                $("#position").css("border-color","");
+                return true;
+            }
+        }
+        function vailPhone(){
+            var phone = $("#phone").val();
+            var flag = false;
+            var myreg = /^1[34578]\d{9}$/;
+            if(phone.length == 0){
+                alert("手机号码不能为空！");
+            }else if(phone.length !=11){
+                alert("请输入有效的手机号码！");
+            }else if(!myreg.test(phone)){
+                alert("请输入有效的手机号码！");
+            }else if(check_phone()){
+                alert("该手机号已经注册！");
+            }else{
+                flag = true;
+                $("#phone").css("border-color","");
+            }
+            if(!flag){
+                $("#phone").css("border-color","red");
+            }
+            return flag;
+        }
+        function check_phone() {
+            var phone = $("#phone").val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethodZJ&a=check_phone",
+                data : {
+                    'phone' : phone,
+                },
+                dataType : "json",
+                success : function(data) {
+                    if (data == 0){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        }
 	</script>
 </html>
