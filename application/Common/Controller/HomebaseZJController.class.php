@@ -46,11 +46,6 @@ class HomebaseZJController extends AppframeController {
                 $where['open_id'] = array('eq',session('open_id'));
                 $user = D('Common_user')->where($where)->find();
                 session('login_id',$user['id']);
-                if (empty($user['name']) || empty($user['hospital']) || empty($user['office']) || empty($user['tag']) || empty($user['position']) || empty($user['phone'])) {
-                    R('UserZJ/register_doctor');
-                }else{
-                    R('UserZJ/info_doctor');
-                }
             }
         }
 		if (session('open_id') == "" && !isset($_GET['code'])){

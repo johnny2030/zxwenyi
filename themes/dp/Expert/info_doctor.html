@@ -6,7 +6,7 @@
 	$signPackage = $jssdk->getSignPackage_zj();
 ?>
 	<head>
-		<tc_include file="Public/TQHead"/>
+		<tc_include file="Public/ZJHead"/>
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	</head>
 	<body>
@@ -15,7 +15,7 @@
 			<a href="javascript:void(0)" id="uploadImage"><img src="{$doctor.photo}"/></a>
 			<h4>{$doctor.name}</h4>
 		</div>
-		<form method="post" name="info" action="{:U('portal/user/info_doctor')}">
+		<form method="post" name="info" action="{:U('portal/userZJ/info_doctor')}">
 			<div class="mui-content-padded">
 				<div class="mui-input-row">
 					<input type="text" id="name" name="name" class="u-inpt u-name mui-input-clear" placeholder="请输入姓名" value="{$doctor.name}">

@@ -3,10 +3,9 @@
  * 咨询问诊
  */
 namespace Portal\Controller;
-use Common\Controller\HomebaseZJController;
 
 require_once 'today/Wechat_zj.php';
-class MessagesZJController extends HomebaseZJController {
+class MessagesZJController extends CheckZJController {
 
     private $common_user_model;
     private $common_tag_model;

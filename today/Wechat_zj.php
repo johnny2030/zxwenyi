@@ -202,7 +202,7 @@ class Wechat_zj {
 	public function getJSApiTicket() {
 		$mdl_wxtoken = D( 'Wxtoken_zj' );
 
-		$ticket = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken where tname='JSticket'" );
+		$ticket = $mdl_wxtoken->query( "select *, (unix_timestamp(now())-ttime) as seconds from ".C( 'DB_PREFIX' )."wxtoken_zj where tname='JSticket'" );
 		$ticket = $ticket[0];
 
 		if ( $ticket['seconds'] < 3600 && !empty( $ticket['token'] ) ) {

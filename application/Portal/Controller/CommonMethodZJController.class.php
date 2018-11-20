@@ -1,8 +1,7 @@
 <?php
 namespace Portal\Controller;
-use Common\Controller\HomebaseZJController;
 
-class CommonMethodZJController extends HomebaseZJController {
+class CommonMethodZJController extends CheckZJController {
 
     private $common_user_model;
     private $common_tag_model;
