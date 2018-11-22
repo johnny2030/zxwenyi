@@ -5,9 +5,21 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('doctor/index')}">医生信息</a></li>
 		</ul>
+		<div id="show_result" class="alert alert-success alert-warning hide">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="false">
+				&times;
+			</button>
+			<span id="result">成功！很好地完成了提交。</span>
+		</div>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入医生姓名">
-			<button class="btn btn-primary">搜索</button>
+			<select id="check" name="check" style="width: 200px;">
+				<option value="">请选择审核状态</option>
+				<option value="0">未审核</option>
+				<option value="1">审核通过</option>
+				<option value="2">审核失败</option>
+			</select>
+			<button id="search" class="btn btn-primary">搜索</button>
 			<a class="btn btn-danger" href="{:U('doctor/index')}">清空</a>
 		</form>
 		<form class="js-ajax-form" method="post">
@@ -24,9 +36,9 @@
 						<th width="50">科室</th>
 						<th width="50">具体科室</th>
 						<th width="80">职位</th>
-						<th width="80">擅长</th>
 						<th width="80">手机号</th>
 						<th width="80">平台</th>
+						<th width="80">状态</th>
 						<th width="100">关注时间</th>
 						<th width="100">操作</th>
 					</tr>
@@ -40,7 +52,6 @@
 						<td>{$vo.office_n}</td>
 						<td>{$vo.tag}</td>
 						<td>{$vo.position}</td>
-						<td>{$vo.genius}</td>
 						<td>{$vo.phone}</td>
 						<td>
 							<if condition="$vo.status eq 0">
@@ -50,11 +61,45 @@
 								专家联盟
 							</if>
 						</td>
+						<td>
+							<if condition="$vo.check eq 0">
+								未审核
+							</if>
+							<if condition="$vo.check eq 1">
+								审核通过
+							</if>
+							<if condition="$vo.check eq 2">
+								审核失败
+							</if>
+						</td>
 						<td>{$vo.create_time}</td>
 						<td>
+							<if condition="$vo.check eq 0">
+								<a style="margin-top: 5px;" href="{:U('doctor/check',array('id'=>$vo['id'],'check'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定通过？">通过</a>
+								<button style="margin-top: 5px;" class="btn btn-warning btn-small" data-toggle="modal" data-target="#myModal">驳回</button>
+								<!--<a style="margin-top: 5px;" href="{:U('doctor/check',array('id'=>$vo['id'],'check'=>2))}" class="btn btn-warning btn-small js-ajax-delete" data-toggle="modal" data-target="#myModal" data-msg="确定驳回？">驳回</a>-->
+							</if>
 							<a style="margin-top: 5px;" href="{:U('doctor/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title" id="myModalLabel">
+										驳回原因
+									</h4>
+								</div>
+								<div class="modal-body" style="height: 100px;text-align: center;">
+									<textarea type="text" id="reason" name="reason" value="" style="width:95%; height:80%;border-radius:6px;" placeholder="请输入驳回原因"></textarea>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal" id="btn_result">关闭</button>
+									<button type="button" class="btn btn-primary" onclick="check_confirm()">确认</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal -->
+					</div>
 				</foreach>
 				<tfoot>
 					<tr>
@@ -65,9 +110,9 @@
 						<th width="50">科室</th>
 						<th width="50">具体科室</th>
 						<th width="80">职位</th>
-						<th width="80">擅长</th>
 						<th width="80">手机号</th>
 						<th width="80">平台</th>
+						<th width="80">状态</th>
 						<th width="100">关注时间</th>
 						<th width="100">操作</th>
 					</tr>
@@ -96,38 +141,32 @@
 				$("#cid-form").submit();
 			});
 		});
-	</script>
-	<script type="text/javascript">
-        //获取窗口的高度
-        var windowHeight;
-        //获取窗口的宽度
-        var windowWidth;
-        //获取弹窗的宽度
-        var popWidth;
-        //获取弹窗高度
-        var popHeight;
-        function init(){
-            windowHeight=$(window).height();
-            windowWidth=$(window).width();
-            popHeight=$(".window").height();
-            popWidth=$(".window").width();
-        }
-        //关闭窗口的方法
-        function closeWindow(){
-            $(".title img").click(function(){
-                $(this).parent().parent().hide("slow");
+		function check_confirm(id) {
+            var reason = $("#reason").val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "{:U('doctor/check')}",
+                data : {
+                    'id' : id,
+                    'reason' : reason,
+                    'check' : 2,
+                },
+                dataType : "json",
+                success : function(data) {
+                    if (data == 0){
+                        alert("驳回成功");
+                        setInterval(function() { window.location.href="{:U('doctor/index')}"; }, 2000);
+					} else {
+                        $('#myModal').modal('hide');
+                        $("#show_result").removeClass("hide");
+                        setInterval(function() {
+                            $("#show_result").addClass("hide");
+                            window.location.href="{:U('doctor/index')}";
+						}, 2000);
+					}
+                }
             });
-        }
-        //定义弹出居中窗口的方法
-        function popCenterWindow(){
-            init();
-            //计算弹出窗口的左上角Y的偏移量
-            var popY=(windowHeight-popHeight)/2;
-            var popX=(windowWidth-popWidth)/2;
-            //alert('jihua.cnblogs.com');
-            //设定窗口的位置
-            $("#center").css("top",popY).css("left",popX).slideToggle("slow");
-            closeWindow();
         }
 	</script>
 </body>

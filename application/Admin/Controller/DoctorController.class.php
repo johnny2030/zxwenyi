@@ -99,4 +99,25 @@ class DoctorController extends AdminbaseController {
             }
         }
     }
+    //审核通过/驳回
+    function check(){
+	    if ( IS_POST ){
+
+        }else{
+	        $id = $_GET['id'];
+            $reason = $_GET['reason'];
+            $check = $_GET['check'];
+            $data = array();
+            if (empty($reason)){
+                $data['reason'] = $reason;
+            }
+            $data['check'] = $check;
+            $result = $this->common_user_model->where(array('id' => $id))->save($data);
+            if ($result){
+                $this->ajaxReturn(0);
+            }else{
+                $this->ajaxReturn(1);
+            }
+        }
+    }
 }
