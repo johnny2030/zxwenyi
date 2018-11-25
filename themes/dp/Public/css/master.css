@@ -493,3 +493,6 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 	border-radius: 10px;
 	height: 120px;
 }
+.agreement{
+	color: red;
+}

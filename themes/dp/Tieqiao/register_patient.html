@@ -32,6 +32,9 @@
 					<div class="mui-input-row">
 						<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="" onchange="vailPhone()">
 					</div>
+                    <div class="mui-input-row mui-checkbox">
+                        <a href="#modal" style="color: red;">请阅读《益年健》使用须知，并同意以上的各项条款</a>
+                    </div>
 					<!--<div class="mui-input-row">
 						<input type="text" id="v_code" name="v_code" class="u-inpt v-code mui-input-clear" placeholder="请输入验证码" value="">
 						<button type="button" class="mui-btn mui-btn-primary v-code-btn">获取验证码</button>
@@ -39,6 +42,46 @@
 					<div class="mui-button-row">
 						<button type="submit" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">确认</button>&nbsp;&nbsp;
 						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+					</div>
+				</div>
+				<div id="modal" class="mui-modal">
+					<header class="mui-bar mui-bar-nav">
+						<a class="mui-icon mui-icon-close mui-pull-right" href="#modal"></a>
+						<h1 class="mui-title">《益年健》会员卡<span style="color: red;">使用须知</span></h1>
+					</header>
+					<div class="mui-content" style="height: 100%;">
+						<div class="mui-content-padded">
+							<!--<p>1、《益年健》是一款以面向单位或团体为其成员集体购买的以中西医结合为特色的年度健康咨询服务产品。</p>
+							<p>2、《益年健》仅对持卡者本人的健康问题进行咨询服务。</p>
+							<p>3、会员卡持有者<span class="agreement">进入上海铁樵健康管理咨询有限公司APP（铁樵健康），点击页面中的《益年健》标志，在认真阅读并同意本使用须知后</span>，进行注册登记，激活开通使用。</p>
+							<p>4、《益年健》是会员卡持有者的“医学顾问，健康使者”。对会员卡持有者在养生、保健、预防、治疗和康复中的问题进行医学和健康知识的宣传和普及，其所有活动均不属于医疗行为，也不承担医疗范畴的任何责任和风险。所有与会员卡持有者疾病有关的诊断和治疗都必须在医疗机构进行。</p>
+                            <p>5、《益年健》主要为线上服务产品，会员卡持有者可通过电脑或手机下载APP<span class="agreement">（或关注微信公众号）</span>，用文字提出咨询要求，并可上传相关资料<span class="agreement">（如化验单，检查报告等）</span>；如文字交流尚不能充分表达本人的需求，可要求通话咨询，为了保证咨询质量，会员卡持有者和咨询专家的通话将会被录音。</p>
+                            <p>6、健康和医学咨询是科学性很强的一项工作，为了更好地为会员卡持有者服务，对会员卡持有者提出的咨询要求<span class="agreement">《益年健》</span>将尽量指派合适的专家进行答复，因此咨询的应答会有一定的延时。一般情况下，在每天20:00点以前的咨询请求当天都会收到答复。对于一些急症方面的问题，不建议会员卡持有者在线咨询，而应及时去就近医疗机构就医。  </p>
+                            <p>7、《益年健》为年度会员卡，？自购买日起次月生效，其<span class="agreement">使用</span>期限为购卡次月起的12个月<span class="agreement">（卡背面最好注明有效期限）</span>。会员卡持有者取得会员卡后不及时开通注册，将会减少会员卡的有效使用期限。？</p>
+							<p>
+								<span>8、《益年健》的服务内容</span>
+								<p>（1）为会员卡持有者解读常规体检报告中提出的问题；</p>
+								<p>（2）根据体检结果对会员卡持有者进行疾病风险提示；</p>
+								<p>（3）对会员卡持有者提出的常见疾病的防治问题进行咨询；</p>
+								<p>（4）对会员卡持有者提出的常用药物应用问题进行咨询；</p>
+								<p>（5）对会员卡持有者有关中医养生保健方面的问题进行咨询；</p>
+                                <p>（6）在购卡单位组织下，《益年健》可为其所属会员卡持有者提供冬令膏方<span class="agreement">开方</span>服务，膏方的药材和加工费由会员卡持有者自行承担。</p>
+								<p>（7）会员卡持有者咨询如涉及疑难病症，咨询专家主要是对疾病的进一步的诊断、治疗、或就医途径提出建议；</p>
+								<p>（8）如有会员卡持有者希望线下咨询，《益年健》可提供部分中西医结合高级专家的门诊时间和执业医院供会员选择，并代为联系，就医费用会员卡持有者自理；</p>
+                                <p>（9）会员卡持有者如要求推荐或约请特定专科或特定专家进行咨询服务，<span class="agreement">《益年健》</span>将尽量予以协助安排，但需收取相应服务费用（费用另定）；</p>
+                                <p>（10）<span class="agreement">《益年健》</span>对会员卡持有者身份信息和健康资料具有保密义务，在非咨询时段，即使平台的专家也无权调取相关资料；</p>
+							</p>-->
+                            <p>9、会员卡持有者应在注册时填报身份证号码和联系电话，便于<span class="agreement">《益年健》</span>在会员卡持有者需<span class="agreement">《益年健》</span>协助线下咨询时进行预约服务（目前各医疗机构挂号均实行身份实名制）。</p>
+                            <p>10、为了保证服务质量，会员卡持有者应在注册时填写提供自己的健康资料，使咨询专家对持卡者的健康状况有比较充分的了解，以便更好地为会员卡持有者提出针对性的建议；会员卡持有者未向<span class="agreement">《益年健》提供真实的个人及健康信息的，《益年健》不承担由此造成的后果</span>。</p>
+                            <p>11、《益年健》会员卡持有者在每一年度有效期内可免费咨询12次，超过12次将收费人民币80元/次。<span class="agreement">（费用在什么时间通过什么方式支付，在APP软件中有设置吗？)</span></p>
+                            <p>12、《益年健》会员卡持有者的的近亲属（配偶、父母、子女）如需<span class="agreement">《益年健》</span>提供服务，可缴费成为附加会员，享受与会员卡持有者同等的服务。</p>
+                            <p>13、会员卡持有者<span class="agreement">请注意保管好本卡及密码，若因各种无法确定的原因，使持卡者无法获得相关服务</span>或对《益年健》咨询服务过程中的意见和建议，均可向<span class="agreement">《益年健》</span>客服反映。</p>
+                            <p><span class="agreement mui-checkbox" style="font-size: 18px;"><input type="checkbox" id="check" name="check" style="position: unset;">&nbsp;&nbsp;我已阅读《益年健》使用须知，并同意以上的各项条款</span></p>
+						</div>
+                        <div>
+                            <a class="mui-btn mui-btn-primary footer-btn" onclick="return check_box();return false;" href="#modal" id="agree_on">同意</a>
+                            <a class="mui-btn mui-btn-danger footer-btn" onclick="return check_box();return false;" href="#modal" id="agree_off">不同意</a>
+                        </div>
 					</div>
 				</div>
 			</form>
@@ -59,6 +102,8 @@
             }else if(!check_t_card()){
                 return false;
             }else if(!vailPhone()){
+                return false;
+            }else if(!check_box()){
                 return false;
             }else {
                 return true;
@@ -245,6 +290,14 @@
                     }
                 });
 			}
+        }
+        function check_box() {
+            if ($("#check").prop("checked")){
+                return true;
+            } else {
+                alert("请确认勾选使用须知");
+                return false;
+            }
         }
 	</script>
 </html>
