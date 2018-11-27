@@ -1,0 +1,22 @@
+<admintpl file="header" />
+</head>
+<style type="text/css">
+	a{
+		margin: 10px;
+	}
+</style>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('UploadInfo/index')}">数据导入</a></li>
+		</ul>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_user')}','批量导入用户信息')">批量导入用户信息</a>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_doctor')}','批量导入医生信息')">批量导入医生信息</a>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_office')}','批量导入科室信息')">批量导入科室信息</a>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_tag')}','批量导入具体科室信息')">批量导入具体科室信息</a>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_health')}','批量导入健康状况信息')">批量导入健康状况信息</a>
+		<a class="btn btn-primary" href="javascript:open_iframe_dialog('{:U('UploadInfo/upload_card')}','批量导入会员卡信息')">批量导入会员卡信息</a>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

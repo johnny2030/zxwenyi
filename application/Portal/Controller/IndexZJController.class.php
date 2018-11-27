@@ -13,11 +13,6 @@ class IndexZJController extends HomebaseZJController {
         $this->common_user_model = D( 'Common_user' );
         $this->common_office_model = D( 'Common_office' );
     }
-
-    //首页
-	public function index() {
-
-    }
     //医生登记（专家登记）
     public function register_doctor_zj() {
         $id = (int)session('login_id');
