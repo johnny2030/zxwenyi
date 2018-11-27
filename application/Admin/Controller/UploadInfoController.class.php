@@ -6,10 +6,6 @@ namespace Admin\Controller;
 
 use Common\Controller\AdminbaseController;
 
-require_once 'today/excel/PHPExcel.php';
-require_once 'today/excel/PHPExcel/IOFactory.php';
-require_once 'today/excel/PHPExcel/Reader/Excel5.php';
-require_once 'today/excel/PHPExcel/Reader/Excel2007.php';
 class UploadInfoController extends AdminbaseController {
 
     private $common_user_model;
@@ -36,19 +32,27 @@ class UploadInfoController extends AdminbaseController {
                 'exts' => array( 'xls', 'xlsx' ),
                 'autoSub' => false
             );
+            vendor('PHPExcel.PHPExcel');
             $upload = new \Think\Upload( $uploadConfig );
             $info = $upload->upload();
             $file = './'.C( 'UPLOADPATH' ).$info['file_name']['savepath'].$info['file_name']['savename'];
-            $reader = \PHPExcel_IOFactory::createReader( end( explode( '.', $file ) ) == 'xls' ? 'Excel5' : 'Excel2007' );
-            $obj = $reader->load( $file );
-            $sheet = $obj->getSheet(0);
+            if(!file_exists($file)){
+                die('文件不存在');
+            }
+            //获取文件类型
+            $file_suffix = pathinfo($file)['extension'];
+            //设置模板根据不同的excel版本
+            $excel_temple = array('xls'=>'Excel5','xlsx'=>'Excel2007');
+            $objReader = \PHPExcel_IOFactory::createReader($excel_temple[$file_suffix]);//配置成2003版本，因为office版本可以向下兼容
+            $objPHPExcel = $objReader->load($file,$encode='utf-8');//$file 为解读的excel文件
+            $sheet = $objPHPExcel->getSheet(0);
             $rowCount = $sheet->getHighestRow();
             $realRowCount = 0;
             $importCount = 0;
             $user_info_add = array();
             for ( $i = 2; $i <= $rowCount; $i++ ) {
                 $phone = $sheet->getCell( 'A'.$i )->getValue();
-                $create_time = $sheet->getCell( 'B'.$i )->getValue();
+                $create_time = $sheet->getCell( 'B'.$i )->getFormattedValue();
                 $m_card_id = $sheet->getCell( 'C'.$i )->getValue();
                 $i_card = $sheet->getCell( 'D'.$i )->getValue();
                 $name = $sheet->getCell( 'E'.$i )->getValue();
@@ -61,8 +65,7 @@ class UploadInfoController extends AdminbaseController {
                 $realRowCount++;
                 $importCount++;
                 $user_info_add[] = array(
-                    "phone" => $phone, "create_time" => $create_time, "m_card_id" => $m_card_id, "i_card" => $i_card, "name" => $name, "open_id" => $open_id, "birthday" => $birthday,
-                    "sex" => $sex, "nation" => $nation, "weight" => $weight, "height" => $height
+                    "phone" => $phone, "create_time" => $create_time, "m_card_id" => $m_card_id, "i_card" => $i_card, "name" => $name, "open_id" => $open_id, "birthday" => $birthday, "sex" => $sex, "nation" => $nation, "weight" => $weight, "height" => $height
                 );
             }
             foreach ($user_info_add as $table_user) {
@@ -85,17 +88,24 @@ class UploadInfoController extends AdminbaseController {
                 'exts' => array( 'xls', 'xlsx' ),
                 'autoSub' => false
             );
+            vendor('PHPExcel.PHPExcel');
             $upload = new \Think\Upload( $uploadConfig );
             $info = $upload->upload();
             $file = './'.C( 'UPLOADPATH' ).$info['file_name']['savepath'].$info['file_name']['savename'];
-            $reader = \PHPExcel_IOFactory::createReader( end( explode( '.', $file ) ) == 'xls' ? 'Excel5' : 'Excel2007' );
-            $obj = $reader->load( $file );
-            $sheet = $obj->getSheet(0);
+            if(!file_exists($file)){
+                die('文件不存在');
+            }
+            //获取文件类型
+            $file_suffix = pathinfo($file)['extension'];
+            //设置模板根据不同的excel版本
+            $excel_temple = array('xls'=>'Excel5','xlsx'=>'Excel2007');
+            $objReader = \PHPExcel_IOFactory::createReader($excel_temple[$file_suffix]);//配置成2003版本，因为office版本可以向下兼容
+            $objPHPExcel = $objReader->load($file,$encode='utf-8');//$file 为解读的excel文件
+            $sheet = $objPHPExcel->getSheet(0);
             $rowCount = $sheet->getHighestRow();
             $realRowCount = 0;
             $importCount = 0;
             $doctor_info_add = array();
-            $time = date('Y-m-d H:i:s',time());
             for ( $i = 2; $i <= $rowCount; $i++ ) {
                 $practice_number = $sheet->getCell( 'A'.$i )->getValue();
                 $name = $sheet->getCell( 'B'.$i )->getValue();
