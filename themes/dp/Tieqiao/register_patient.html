@@ -33,8 +33,8 @@
 						<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="" onchange="vailPhone()">
 					</div>
                     <div class="mui-input-row mui-checkbox">
-						<input type="hidden" id="ck" name="ck" value="0">
-                        <a href="#" id="cka" style="color: red;" onclick="show_info();">请阅读《益年健》使用须知，并同意以上的各项条款</a>
+						<input type="checkbox" id="check" name="check" style="position: unset;">
+                        <a href="#" id="cka" style="color: red;" onclick="show_box();">我已阅读《益年健》使用须知，并同意以上的各项条款</a>
                     </div>
 					<!--<div class="mui-input-row">
 						<input type="text" id="v_code" name="v_code" class="u-inpt v-code mui-input-clear" placeholder="请输入验证码" value="">
@@ -77,10 +77,8 @@
 				<p>11、《益年健》会员卡持有者在每一年度有效期内可免费咨询12次，超过12次将收费人民币80元/次。<span class="agreement">（费用在什么时间通过什么方式支付，在APP软件中有设置吗？)</span></p>
 				<p>12、《益年健》会员卡持有者的的近亲属（配偶、父母、子女）如需<span class="agreement">《益年健》</span>提供服务，可缴费成为附加会员，享受与会员卡持有者同等的服务。</p>
 				<p>13、会员卡持有者<span class="agreement">请注意保管好本卡及密码，若因各种无法确定的原因，使持卡者无法获得相关服务</span>或对《益年健》咨询服务过程中的意见和建议，均可向<span class="agreement">《益年健》</span>客服反映。</p>
-				<p><span class="agreement mui-checkbox" style="font-size: 14px;"><input type="checkbox" id="check" name="check" style="position: unset;">&nbsp;&nbsp;我已阅读《益年健》使用须知，并同意以上的各项条款</span></p>
 				<div class="mui-button-row">
-					<button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="check_box(0);">同意</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="check_box(1);">不同意</button>
+					<button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="show_info();">确认</button>
 				</div>
 			</div>
 		</div>
@@ -101,7 +99,7 @@
                 return false;
             }else if(!vailPhone()){
                 return false;
-            }else if(!check_box(0)){
+            }else if(!check_box()){
                 return false;
             }else {
                 return true;
@@ -110,8 +108,8 @@
         function check_name(){
             var name = $("#name").val();
             if (name.length==0){
-                alert("用户姓名不能为空！");
                 $("#name").css("border-color","red");
+                mui.alert('用户姓名不能为空！', '温馨提醒');
                 return false;
 			} else{
                 $("#name").css("border-color","");
@@ -132,7 +130,7 @@
             var years = year_now-year;
             var yues = yue_now-yue;
             var dates = date_now-date;
-            if (years>0&&years<100){
+            if (years>0&&years<150){
                 if (yues<0){
                     years = years - 1;
 				}else if (yues == 0){
@@ -145,9 +143,9 @@
                 $("#age").val('');
 			}
             if(i_card.length == 0){
-                alert("身份证号码不能为空！");
+                mui.alert('身份证号码不能为空！', '温馨提醒');
             }else if(!myreg.test(i_card)){
-                alert("请输入有效的身份证号码！");
+                mui.alert('请输入有效的身份证号码！', '温馨提醒');
             }else{
                 flag = true;
                 $("#i_card").css("border-color","");
@@ -160,8 +158,8 @@
         function check_age(){
             var age = $("#age").val();
             if (age.length==0){
-                alert("年龄不能为空！");
                 $("#age").css("border-color","red");
+                mui.alert('年龄不能为空！', '温馨提醒');
                 return false;
             } else{
                 $("#age").css("border-color","");
@@ -171,10 +169,10 @@
         function check_m_card(){
             var m_card = $("#m_card").val();
             if (m_card.length==0){
-                alert("会员卡号不能为空！");
                 $("#m_card").css("border-color","red");
                 $("#t_card").val("");
                 $("#m_card_id").val("");
+                mui.alert('会员卡号不能为空！', '温馨提醒');
                 return false;
             } else{
                 check_card();
@@ -185,10 +183,10 @@
         function check_p_card(){
             var p_card = $("#p_card").val();
             if (p_card.length==0){
-                alert("会员卡密码不能为空！");
                 $("#p_card").css("border-color","red");
                 $("#t_card").val("");
                 $("#m_card_id").val("");
+                mui.alert('会员卡密码不能为空！', '温馨提醒');
                 return false;
             } else{
                 check_card();
@@ -199,8 +197,8 @@
         function check_t_card(){
             var t_card = $("#t_card").val();
             if (t_card.length==0){
-                alert("会员卡信息有误！");
                 $("#t_card").css("border-color","red");
+                mui.alert('会员卡信息有误！', '温馨提醒');
                 return false;
             } else{
                 $("#t_card").css("border-color","");
@@ -212,13 +210,13 @@
             var flag = false;
             var myreg = /^1[34578]\d{9}$/;
             if(phone.length == 0){
-                alert("手机号码不能为空！");
+                mui.alert('手机号码不能为空！', '温馨提醒');
             }else if(phone.length !=11){
-                alert("请输入有效的手机号码！");
+                mui.alert('请输入有效的手机号码！', '温馨提醒');
             }else if(!myreg.test(phone)){
-                alert("请输入有效的手机号码！");
+                mui.alert('请输入有效的手机号码！', '温馨提醒');
             }else if(check_phone()){
-                alert("该手机号已经注册！");
+                mui.alert('该手机号已经注册！', '温馨提醒');
             }else{
                 flag = true;
                 $("#phone").css("border-color","");
@@ -266,19 +264,19 @@
                             $("#p_card").css("border-color","red");
                             $("#t_card").val("");
                             $("#m_card_id").val("");
-                            alert("会员卡信息有误，请核实后重新输入");
+                            mui.alert('会员卡信息有误，请核实后重新输入', '温馨提醒');
 						} else if (data.status == 0){
                             $("#m_card").css("border-color","red");
                             $("#p_card").css("border-color","red");
                             $("#t_card").val("");
                             $("#m_card_id").val("");
-                            alert("此会员卡已使用，请核实后重新输入");
+                            mui.alert('此会员卡已使用，请核实后重新输入', '温馨提醒');
 						} else if (data.status == 0){
                             $("#m_card").css("border-color","red");
                             $("#p_card").css("border-color","red");
                             $("#t_card").val("");
                             $("#m_card_id").val("");
-                            alert("此会员卡已过期，请核实后重新输入");
+                            mui.alert('此会员卡已过期，请核实后重新输入', '温馨提醒');
 						} else {
                             $("#m_card").css("border-color","");
                             $("#p_card").css("border-color","");
@@ -289,32 +287,21 @@
                 });
 			}
         }
-        function show_info() {
-            $("#news").css("display","block");
-            $("#info").css("display","none")
-        }
-        function check_box(flg) {
-            if (flg == 0){
-                if ($("#check").prop("checked")){
-                    $("#cka").css("color","#007aff");
-                    $("#ck").val("1");
-
-                    $("#news").css("display","none");
-                    $("#info").css("display","block")
-                    return true;
-                } else {
-                    mui.alert('请确认勾选使用须知', '温馨提醒');
-                    return false;
-                }
-			} else {
-                $("#cka").css("color","red");
-                $("#ck").val("0");
-                $("#check").prop("checked",false);
-
-                $("#news").css("display","none");
-                $("#info").css("display","block")
+        function check_box() {
+            if ($("#check").prop("checked")){
+                return true;
+            } else {
+                mui.alert('请确认勾选使用须知', '温馨提醒');
                 return false;
-			}
+            }
+        }
+        function show_box() {
+            $("#news").css("display","block");
+            $("#info").css("display","none");
+        }
+        function show_info() {
+            $("#news").css("display","none");
+            $("#info").css("display","block");
         }
 	</script>
 </html>

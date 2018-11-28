@@ -204,20 +204,20 @@ class RongController extends HomebaseController {
         $wechat = new \Wechat_tq( $this );
         if ($user['type'] == 0){
             $data=array(
-                'serviceInfo'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#00CD00"),
-                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
-                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
-                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
-                'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+                'serviceInfo'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#36648B"),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
+                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
             );
             $wechat->templateSend($user['open_id'],$url,$data);
             if ($user['status'] == 0){
                 $data=array(
-                    'serviceInfo'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
-                    'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
-                    'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
-                    'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+                    'serviceInfo'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#36648B"),
+                    'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
+                    'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
+                    'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
                 );
                 $wechat->templateSend($sendUser['open_id'],$url,$data);
             }else{
@@ -230,21 +230,21 @@ class RongController extends HomebaseController {
                 $where['del_flg'] = array('eq',0);
                 $msg_info = $this->common_messages_model->where($where)->select();
                 $data=array(
-                    'first'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#00CD00"),
-                    'keyword1'=>array('value'=>urlencode($msg_info[0]['title']),'color'=>'#4876FF'),
-                    'keyword2'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+                    'first'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#36648B"),
+                    'keyword1'=>array('value'=>urlencode($msg_info[0]['title']),'color'=>'#36648B'),
+                    'keyword2'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
                 );
                 $wechat_zj->templateSend($sendUser['open_id'],$url,$data);
             }
 
         }else{
             $data=array(
-                'serviceInfo'=>array('value'=>urlencode("您好，您的问题医生已经回复，请及时查看。"),'color'=>"#00CD00"),
-                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#4876FF'),
-                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#4876FF'),
-                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#4876FF'),
-                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF0000'),
+                'serviceInfo'=>array('value'=>urlencode("您好，您的问题医生已经回复，请及时查看。"),'color'=>"#36648B"),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
+                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#36648B'),
             );
             $wechat->templateSend($sendUser['open_id'],$url,$data);
         }

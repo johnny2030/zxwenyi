@@ -17,7 +17,7 @@
 				<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="">
 			</div>
 			<div class="mui-input-row">
-				<select id="office" name="office" class="u-inpt of-sel">
+				<select id="office" name="office" class="u-inpt of-sel" onchange="set_tag()">
 					<option value="" selected>请选择科室</option>
 					<foreach name="olist" item="o">
 						<option value="{$o.id}">{$o.name}</option>
@@ -25,10 +25,17 @@
 				</select>
 			</div>
 			<div class="mui-input-row">
-				<input type="text" id="tag" name="tag" class="u-inpt tg-sel mui-input-clear" placeholder="请输入具体科室名称" value="">
+				<select id="tag" name="tag" class="u-inpt tg-sel">
+					<option value="" selected>请选择具体科室</option>
+				</select>
 			</div>
 			<div class="mui-input-row">
-				<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="">
+				<select id="position" name="position" class="u-inpt pt-sel">
+					<option value="" selected>请选择职位</option>
+					<option value="主任医师">主任医师</option>
+					<option value="副主任医师">副主任医师</option>
+					<option value="主治医师">主治医师</option>
+				</select>
 			</div>
 			<div class="mui-input-row">
 				<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="">
@@ -97,9 +104,9 @@
         }
     }
     function check_tag(){
-        var tag = $("#tag").val();
+        var tag = $('#tag option:selected').val();
         if (tag.length==0){
-            alert("具体科室不能为空！");
+            alert("请选择具体科室！");
             $("#tag").css("border-color","red");
             return false;
         } else{
@@ -108,9 +115,9 @@
         }
     }
     function check_position(){
-        var position = $("#position").val();
+        var position = $('#position option:selected').val();
         if (position.length==0){
-            alert("职位不能为空！");
+            alert("请选择职位！");
             $("#position").css("border-color","red");
             return false;
         } else{
@@ -155,6 +162,31 @@
                     return true;
                 } else {
                     return false;
+                }
+            }
+        });
+    }
+    function set_tag() {
+        var office = $('#office option:selected').val();
+        $.ajax({
+            async:false,
+            type : "get",
+            url : "index.php?g=portal&m=commonMethod&a=get_tag",
+            data : {
+                'office' : office
+            },
+            dataType : "json",
+            success : function(data) {
+                var tag = $("#tag");
+                tag.empty();
+                if(data.list != null && data.list.length > 0){
+                    var list = data.list;
+                    for (i=0;i<list.length;i++){
+                        var tg = list[i];
+                        tag.append("<option value='"+tg.id+"'>"+tg.name+"</option>");
+                    }
+                }else{
+                    tag.append("<option value=''>请选择具体科室</option>");
                 }
             }
         });

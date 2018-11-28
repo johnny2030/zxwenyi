@@ -24,7 +24,7 @@
 					<input type="text" id="hospital" name="hospital" class="u-inpt c-job mui-input-clear" placeholder="请输入医院名称" value="{$doctor.hospital}">
 				</div>
 				<div class="mui-input-row">
-					<select id="office" name="office" class="u-inpt of-sel">
+					<select id="office" name="office" class="u-inpt of-sel" onchange="set_tag()">
 						<notempty name="doctor.office">
 							<option value="">请选择科室</option>
 							<foreach name="list" item="o">
@@ -43,7 +43,20 @@
 					</select>
 				</div>
 				<div class="mui-input-row">
-					<input type="text" id="tag" name="tag" class="u-inpt tg-sel mui-input-clear" placeholder="请输入具体科室名称" value="{$doctor.tag}">
+					<select id="tag" name="tag" class="u-inpt tg-sel">
+						<notempty name="doctor.tag">
+							<option value="">请选择具体科室</option>
+							<foreach name="tlist" item="t">
+								<if condition="$t.id eq $doctor['tag']">
+									<option value="{$t.id}" selected>{$t.name}</option>
+									<else />
+									<option value="{$t.id}">{$t.name}</option>
+								</if>
+							</foreach>
+							<else />
+							<option value="" selected>请选择具体科室</option>
+						</notempty>
+					</select>
 				</div>
 				<div class="mui-input-row">
 					<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="{$doctor.position}">
@@ -55,8 +68,8 @@
 					<textarea id="introduce" name="introduce" placeholder="请输入个人介绍" class="u-textarea">{$doctor.introduce}</textarea>
 				</div>
 				<div class="mui-button-row">
-					<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:50%;border-radius:10px;">保存</button>
-					<!--<button id='confirmBtn' type="button" class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>-->
+					<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:35%;border-radius:10px;">保存</button>
+					<button id="cancelBtn" type="button" class="mui-btn mui-btn-danger footer-btn" style="width:35%;border-radius:10px;margin-left: 5%;">取消</button>
 				</div>
 			</div>
 		</form>
@@ -72,6 +85,17 @@
                 if (e.index == 0) {
                     $("form[name='info']").submit();
                     mui.toast('保存成功！');
+                } else {
+                    return;
+                }
+            })
+        });
+        document.getElementById("cancelBtn").addEventListener('tap', function() {
+            var btnArray = ['是', '否'];
+            mui.confirm('将回到最近一次保存状态，确认？', '铁樵健康提醒您', btnArray, function(e) {
+                if (e.index == 0) {
+                    window.location.href = "index.php?g=portal&m=user&a=info_doctor";
+                    mui.toast('取消成功！');
                 } else {
                     return;
                 }
@@ -163,5 +187,30 @@
         wx.error(function (res) {
             alert(res.errMsg);
         });
+        function set_tag() {
+            var office = $('#office option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_tag",
+                data : {
+                    'office' : office
+                },
+                dataType : "json",
+                success : function(data) {
+                    var tag = $("#tag");
+                    tag.empty();
+                    if(data.list != null && data.list.length > 0){
+                        var list = data.list;
+                        for (i=0;i<list.length;i++){
+                            var tg = list[i];
+                            tag.append("<option value='"+tg.id+"'>"+tg.name+"</option>");
+                        }
+                    }else{
+                        tag.append("<option value=''>请选择具体科室</option>");
+                    }
+                }
+            });
+        }
 	</script>
 </html>

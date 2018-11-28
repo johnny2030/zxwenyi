@@ -112,10 +112,6 @@ class UserController extends HomebaseController {
         $flg = session('flg');
         if ( IS_POST && empty($flg)) {
             $id = (int)session('login_id');
-            $healthy = $_POST['healthy'];
-            if (empty($healthy)){
-                $_POST['healthy'] = '0';
-            }
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result){
@@ -131,7 +127,9 @@ class UserController extends HomebaseController {
             $where = array();
             $where['del_flg'] = array('eq',0);
             $list = $this->common_office_model->where($where)->select();
+            $tlist = $this->common_tag_model->where($where)->select();
             $this->assign( 'list', $list );
+            $this->assign( 'tlist', $tlist );
             $this->assign( 'doctor', $doctor );
             $this->display('../Tieqiao/info_doctor');
         }
@@ -160,7 +158,7 @@ class UserController extends HomebaseController {
     //医生详情
     public function doctor_detail() {
         $user_id = $_GET['user_id'];
-        $doctor = $this->common_user_model->alias('u')->field('u.*,o.name as office_n')->join('__COMMON_OFFICE__ o ON u.office=o.id')->where(array('u.id' => $user_id))->find();
+        $doctor = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $user_id))->find();
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }

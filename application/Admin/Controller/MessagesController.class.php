@@ -218,10 +218,10 @@ class MessagesController extends AdminbaseController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         $data=array(
-            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#00CD00"),
-            'keyword1'=>array('value'=>urlencode($user['name']),'color'=>'#4876FF'),
-            'keyword2'=>array('value'=>urlencode($msg_info['title']),'color'=>'#4876FF'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
+            'keyword1'=>array('value'=>urlencode($user['name']),'color'=>'#36648B'),
+            'keyword2'=>array('value'=>urlencode($msg_info['title']),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
         );
         $wechat->templateForward($sendUser['open_id'],$url,$data);
     }
@@ -230,10 +230,10 @@ class MessagesController extends AdminbaseController {
         $wechat = new \Wechat_zj( $this );
         $time = date('Y-m-d H:i:s',time());
         $data=array(
-            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#00CD00"),
-            'keyword1'=>array('value'=>urlencode($msg_info['title']),'color'=>'#4876FF'),
-            'keyword2'=>array('value'=>urlencode($time),'color'=>'#4876FF'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF0000'),
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
+            'keyword1'=>array('value'=>urlencode($msg_info['title']),'color'=>'#36648B'),
+            'keyword2'=>array('value'=>urlencode($time),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
         );
         $wechat->templateForward($sendUser['open_id'],$url,$data);
     }

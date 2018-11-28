@@ -112,8 +112,8 @@
 			</div>
 			<input type="hidden" id="hy" name="hy" value="{$patient.healthy}">
 			<div class="mui-button-row">
-				<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:50%;border-radius:10px;">保存</button>
-				<!--<button id='confirmBtn' type="button" class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>-->
+				<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:35%;border-radius:10px;">保存</button>
+				<button id="cancelBtn" type="button" class="mui-btn mui-btn-danger footer-btn" style="width:35%;border-radius:10px;margin-left: 5%;">取消</button>
 			</div>
 		</div>
 	</form>
@@ -186,6 +186,17 @@
             if (e.index == 0) {
                 $("form[name='info']").submit();
                 mui.toast('保存成功！');
+            } else {
+                return;
+            }
+        })
+    });
+    document.getElementById("cancelBtn").addEventListener('tap', function() {
+        var btnArray = ['是', '否'];
+        mui.confirm('将回到最近一次保存状态，确认？', '铁樵健康提醒您', btnArray, function(e) {
+            if (e.index == 0) {
+                window.location.href = "index.php?g=portal&m=user&a=info_patient";
+                mui.toast('取消成功！');
             } else {
                 return;
             }
