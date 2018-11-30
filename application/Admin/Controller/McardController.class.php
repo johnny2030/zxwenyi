@@ -27,7 +27,7 @@ class McardController extends AdminbaseController {
         $where['c.del_flg'] = array('eq',0);
 		$count = $this->common_card_model->alias('c')->where($where)->count();
 		$page = $this->page($count, 20);
-		$list = $this->common_card_model->alias('c')->field('c.*,u.name as name')->join('__COMMON_USER__ u ON c.user_id=u.id','left')->where($where)->limit( $page->firstRow, $page->listRows )->order("c.create_time desc")->select();
+		$list = $this->common_card_model->alias('c')->field('c.*,u.name as name')->join('__COMMON_USER__ u ON c.user_id=u.id','left')->where($where)->limit( $page->firstRow, $page->listRows )->order("c.status desc,c.card_number asc")->select();
 		$this->assign("page", $page->show('Admin'));
 		$this->assign( 'list', $list );
 		$this->display();

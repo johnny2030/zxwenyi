@@ -11,7 +11,7 @@
 				<tr>
 					<th style="width: 100px;">科室信息</th>
 					<td>
-						<input type="file" name="file_name" accept=".xls,.xlsx" />导入科室信息
+						<input type="file" id="file_name" name="file_name" accept=".xls,.xlsx" />导入科室信息
 					</td>
 				</tr>
 			</table>
@@ -86,11 +86,11 @@
 					},
 					//验证规则
 					rules : {
-						'doctor' : { required : 1 }
+						'file_name' : { required : 1 }
 					},
 					//验证未通过提示消息
 					messages : {
-						'doctor' : { required : "请选择上传文件" }
+						'file_name' : { required : "请选择上传文件" }
 					},
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,

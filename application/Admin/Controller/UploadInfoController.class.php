@@ -11,6 +11,7 @@ class UploadInfoController extends AdminbaseController {
     private $common_user_model;
     private $common_office_model;
     private $common_card_model;
+    private $common_tag_model;
 	
 	function _initialize() {
 		parent::_initialize();
@@ -18,6 +19,7 @@ class UploadInfoController extends AdminbaseController {
         $this->common_user_model = D( 'Common_user' );
         $this->common_office_model = D( 'Common_office' );
         $this->common_card_model = D( 'Common_card' );
+        $this->common_tag_model = D( 'Common_tag' );
 	}
 	//数据导入列表
 	function index() {
@@ -148,39 +150,35 @@ class UploadInfoController extends AdminbaseController {
                 'exts' => array( 'xls', 'xlsx' ),
                 'autoSub' => false
             );
+            vendor('PHPExcel.PHPExcel');
             $upload = new \Think\Upload( $uploadConfig );
             $info = $upload->upload();
             $file = './'.C( 'UPLOADPATH' ).$info['file_name']['savepath'].$info['file_name']['savename'];
-            $reader = \PHPExcel_IOFactory::createReader( end( explode( '.', $file ) ) == 'xls' ? 'Excel5' : 'Excel2007' );
-            $obj = $reader->load( $file );
-            $sheet = $obj->getSheet(0);
+            if(!file_exists($file)){
+                die('文件不存在');
+            }
+            //获取文件类型
+            $file_suffix = pathinfo($file)['extension'];
+            //设置模板根据不同的excel版本
+            $excel_temple = array('xls'=>'Excel5','xlsx'=>'Excel2007');
+            $objReader = \PHPExcel_IOFactory::createReader($excel_temple[$file_suffix]);//配置成2003版本，因为office版本可以向下兼容
+            $objPHPExcel = $objReader->load($file,$encode='utf-8');//$file 为解读的excel文件
+            $sheet = $objPHPExcel->getSheet(0);
             $rowCount = $sheet->getHighestRow();
             $realRowCount = 0;
             $importCount = 0;
-            $doctor_info_add = array();
+            $office_info_add = array();
             $time = date('Y-m-d H:i:s',time());
             for ( $i = 2; $i <= $rowCount; $i++ ) {
-                $practice_number = $sheet->getCell( 'A'.$i )->getValue();
-                $name = $sheet->getCell( 'B'.$i )->getValue();
-                $sex = $sheet->getCell( 'C'.$i )->getValue();
-                $age = $sheet->getCell( 'D'.$i )->getValue();
-                $money = $sheet->getCell( 'E'.$i )->getValue();
-                $hospital = $sheet->getCell( 'F'.$i )->getValue();
-                $office = $sheet->getCell( 'G'.$i )->getValue();
-                $tag = $sheet->getCell( 'H'.$i )->getValue();
-                $phone = $sheet->getCell( 'I'.$i )->getValue();
-                $area = $sheet->getCell( 'J'.$i )->getValue();
-                $proportion = $sheet->getCell( 'K'.$i )->getValue();
-                $speciality = $sheet->getCell( 'L'.$i )->getValue();
+                $name = $sheet->getCell( 'A'.$i )->getValue();
                 $realRowCount++;
                 $importCount++;
-                $doctor_info_add[] = array(
-                    "practice_number" => $practice_number, "name" => $name, "sex" => $sex, "age" => $age, "money" => $money, "hospital" => $hospital, "office" => $office,
-                    "tag" => $tag, "area" => $area, "speciality" => $speciality, "phone" => $phone, "proportion" => $proportion, "create_time" => $time
+                $office_info_add[] = array(
+                    "name" => $name, "create_time" => $time
                 );
             }
-            foreach ($doctor_info_add as $table_doctor) {
-                $this->common_user_model->add($table_doctor);
+            foreach ($office_info_add as $table_office) {
+                $this->common_office_model->add($table_office);
             }
             @unlink( $file );
             $this->success( '成功导入'.$importCount.'条科室记录', U( 'uploadInfo/index' ) );
@@ -199,39 +197,37 @@ class UploadInfoController extends AdminbaseController {
                 'exts' => array( 'xls', 'xlsx' ),
                 'autoSub' => false
             );
+            vendor('PHPExcel.PHPExcel');
             $upload = new \Think\Upload( $uploadConfig );
             $info = $upload->upload();
             $file = './'.C( 'UPLOADPATH' ).$info['file_name']['savepath'].$info['file_name']['savename'];
-            $reader = \PHPExcel_IOFactory::createReader( end( explode( '.', $file ) ) == 'xls' ? 'Excel5' : 'Excel2007' );
-            $obj = $reader->load( $file );
-            $sheet = $obj->getSheet(0);
+            if(!file_exists($file)){
+                die('文件不存在');
+            }
+            //获取文件类型
+            $file_suffix = pathinfo($file)['extension'];
+            //设置模板根据不同的excel版本
+            $excel_temple = array('xls'=>'Excel5','xlsx'=>'Excel2007');
+            $objReader = \PHPExcel_IOFactory::createReader($excel_temple[$file_suffix]);//配置成2003版本，因为office版本可以向下兼容
+            $objPHPExcel = $objReader->load($file,$encode='utf-8');//$file 为解读的excel文件
+            $sheet = $objPHPExcel->getSheet(0);
             $rowCount = $sheet->getHighestRow();
             $realRowCount = 0;
             $importCount = 0;
-            $doctor_info_add = array();
+            $tag_info_add = array();
             $time = date('Y-m-d H:i:s',time());
             for ( $i = 2; $i <= $rowCount; $i++ ) {
-                $practice_number = $sheet->getCell( 'A'.$i )->getValue();
-                $name = $sheet->getCell( 'B'.$i )->getValue();
-                $sex = $sheet->getCell( 'C'.$i )->getValue();
-                $age = $sheet->getCell( 'D'.$i )->getValue();
-                $money = $sheet->getCell( 'E'.$i )->getValue();
-                $hospital = $sheet->getCell( 'F'.$i )->getValue();
-                $office = $sheet->getCell( 'G'.$i )->getValue();
-                $tag = $sheet->getCell( 'H'.$i )->getValue();
-                $phone = $sheet->getCell( 'I'.$i )->getValue();
-                $area = $sheet->getCell( 'J'.$i )->getValue();
-                $proportion = $sheet->getCell( 'K'.$i )->getValue();
-                $speciality = $sheet->getCell( 'L'.$i )->getValue();
+                $name = $sheet->getCell( 'A'.$i )->getValue();
+                $office_id = $sheet->getCell( 'B'.$i )->getValue();
+
                 $realRowCount++;
                 $importCount++;
-                $doctor_info_add[] = array(
-                    "practice_number" => $practice_number, "name" => $name, "sex" => $sex, "age" => $age, "money" => $money, "hospital" => $hospital, "office" => $office,
-                    "tag" => $tag, "area" => $area, "speciality" => $speciality, "phone" => $phone, "proportion" => $proportion, "create_time" => $time
+                $tag_info_add[] = array(
+                    "office_id" => $office_id, "name" => $name, "create_time" => $time
                 );
             }
-            foreach ($doctor_info_add as $table_doctor) {
-                $this->common_user_model->add($table_doctor);
+            foreach ($tag_info_add as $table_tag) {
+                $this->common_tag_model->add($table_tag);
             }
             @unlink( $file );
             $this->success( '成功导入'.$importCount.'条具体科室记录', U( 'uploadInfo/index' ) );
@@ -318,25 +314,15 @@ class UploadInfoController extends AdminbaseController {
             $rowCount = $sheet->getHighestRow();
             $realRowCount = 0;
             $importCount = 0;
+            $time = date('Y-m-d H:i:s',time());
             $m_card_add = array();
             for ( $i = 2; $i <= $rowCount; $i++ ) {
-                $practice_number = $sheet->getCell( 'A'.$i )->getValue();
-                $name = $sheet->getCell( 'B'.$i )->getValue();
-                $sex = $sheet->getCell( 'C'.$i )->getValue();
-                $age = $sheet->getCell( 'D'.$i )->getValue();
-                $money = $sheet->getCell( 'E'.$i )->getValue();
-                $hospital = $sheet->getCell( 'F'.$i )->getValue();
-                $office = $sheet->getCell( 'G'.$i )->getValue();
-                $tag = $sheet->getCell( 'H'.$i )->getValue();
-                $phone = $sheet->getCell( 'I'.$i )->getValue();
-                $area = $sheet->getCell( 'J'.$i )->getValue();
-                $proportion = $sheet->getCell( 'K'.$i )->getValue();
-                $speciality = $sheet->getCell( 'L'.$i )->getValue();
+                $card_number = $sheet->getCell( 'A'.$i )->getValue();
+                $card_pwd = $sheet->getCell( 'B'.$i )->getValue();
                 $realRowCount++;
                 $importCount++;
                 $m_card_add[] = array(
-                    "practice_number" => $practice_number, "name" => $name, "sex" => $sex, "age" => $age, "money" => $money, "hospital" => $hospital, "office" => $office,
-                    "tag" => $tag, "area" => $area, "speciality" => $speciality, "phone" => $phone, "proportion" => $proportion, "create_time" => $time
+                    "card_number" => $card_number, "card_pwd" => $card_pwd, "card_time" => "1年", "create_time" => $time
                 );
             }
             foreach ($m_card_add as $table_card) {
