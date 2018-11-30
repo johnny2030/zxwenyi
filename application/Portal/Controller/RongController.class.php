@@ -172,8 +172,8 @@ class RongController extends HomebaseController {
         $result = $wechat->downloadWeixinFile($media_id,'');
         $prefix=explode("/", $result['header']['content_type']);
         $filename=$this->salt('5').$this->msectime().'.'.$prefix[1];
-        \Think\Log::write('语音文件名:'.$filename,'WARN');
-        /*file_put_contents($filename, $result['body']);
+        /*\Think\Log::write('语音文件名:'.$filename,'WARN');
+        file_put_contents($filename, $result['body']);
           $str = file_get_contents('./test.png');
           echo base64_encode($str);
         */

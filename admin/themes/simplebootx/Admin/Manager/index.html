@@ -4,7 +4,8 @@
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('manager/index')}">管理员信息</a></li>
-			<li><a href="{:U('manager/add')}">添加管理员</a></li>
+			<li><a href="{:U('manager/add_pc')}">添加pc端管理员</a></li>
+			<li><a href="{:U('manager/add_mp')}">添加移动端管理员</a></li>
 		</ul>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入管理员姓名">
@@ -22,6 +23,7 @@
 						<th width="50">姓名</th>
 						<th width="50">头像</th>
 						<th width="50">状态</th>
+						<th width="50">类别</th>
 						<th width="100">更新时间</th>
 						<th width="100">创建时间</th>
 						<th width="100">操作</th>
@@ -47,14 +49,22 @@
 								已启用
 							</if>
 						</td>
+						<td>
+							<if condition="$vo.type eq 2">
+								pc端管理员
+							</if>
+							<if condition="$vo.type eq 3">
+								移动端管理员
+							</if>
+						</td>
 						<td>{$vo.update_time}</td>
 						<td>{$vo.create_time}</td>
 						<td>
 							<if condition="$vo.flg eq 0">
-								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'flg'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定启用？">启用</a>
+								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'type'=>$vo['type'],'flg'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定启用？">启用</a>
 							</if>
 							<if condition="$vo.flg eq 1">
-								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'flg'=>0))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定停用？">停用</a>
+								<a style="margin-top: 5px;" href="{:U('manager/set_manager',array('id'=>$vo['id'],'type'=>$vo['type'],'flg'=>0))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定停用？">停用</a>
 							</if>
 							<a style="margin-top: 5px;" href="{:U('manager/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-small">编辑</a>
 							<a style="margin-top: 5px;" href="{:U('manager/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>

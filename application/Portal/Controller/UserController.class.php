@@ -167,10 +167,22 @@ class UserController extends HomebaseController {
     //咨询问诊
     public function question() {
         if ( IS_POST ) {
-            $_POST['user_id'] = (int)session('login_id');
+            $id = (int)session('login_id');
+            $_POST['user_id'] = $id;
             $_POST['create_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_messages_model->add($_POST);
             if ($result) {
+                $where = array();
+                $where['del_flg'] = array('eq',0);
+                $where['status'] = array('eq',0);
+                $where['type'] = array('eq',3);
+                $where['flg'] = array('eq',1);
+                $list = $this->common_user_model->field('open_id')->where($where)->select();
+                $user = $this->common_user_model->field('name')->find($id);
+                foreach($list as $value){
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=advice';
+                    $this->template_send_tq($_POST['title'],$user['name'],$value['open_id'],$url);
+                }
                 $this->ajaxReturn('0');
             } else {
                 $this->ajaxReturn('1');
@@ -178,5 +190,28 @@ class UserController extends HomebaseController {
         } else {
             $this->display('../Tieqiao/question');
         }
+    }
+    public function template_send_tq($title,$name,$open_id,$url) {
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
+        $data=array(
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
+            'keyword1'=>array('value'=>urlencode($name),'color'=>'#36648B'),
+            'keyword2'=>array('value'=>urlencode($title),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+        );
+        $wechat->templateForward($open_id,$url,$data);
+    }
+    public function template_send_zj($msg_info,$sendUser,$url) {
+        require_once 'today/Wechat_zj.php';
+        $wechat = new \Wechat_zj( $this );
+        $time = date('Y-m-d H:i:s',time());
+        $data=array(
+            'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
+            'keyword1'=>array('value'=>urlencode($msg_info['title']),'color'=>'#36648B'),
+            'keyword2'=>array('value'=>urlencode($time),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+        );
+        $wechat->templateForward($sendUser['open_id'],$url,$data);
     }
 }

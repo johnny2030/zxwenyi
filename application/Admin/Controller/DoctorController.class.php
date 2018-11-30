@@ -26,7 +26,7 @@ class DoctorController extends AdminbaseController {
         $where['u.del_flg'] = array('eq',0);
 		$count = $this->common_user_model->alias('u')->where($where)->count();
 		$page = $this->page($count, 20);
-		$list = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where($where)->order('u.create_time desc')->select();
+		$list = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where($where)->order('u.create_time desc')->select();
 		$this->assign("page", $page->show('Admin'));
 		$this->assign( 'list', $list );
 		$this->display();

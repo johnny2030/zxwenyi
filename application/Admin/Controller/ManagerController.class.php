@@ -22,17 +22,17 @@ class ManagerController extends AdminbaseController {
         $name=I('name');
         $this->assign( 'name', $name );
         if ( $name ) $where['name'] = array('like',"%$name%");
-        $where['type'] = array('eq',2);
+        $where['type'] = array(['eq',2],['eq',3],'or');
         $where['del_flg'] = array('eq',0);
         $count = $this->common_user_model->where($where)->count();
         $page = $this->page($count, 20);
-        $list = $this->common_user_model->where($where)->order('create_time desc')->select();
+        $list = $this->common_user_model->where($where)->select();
         $this->assign("page", $page->show('Admin'));
         $this->assign( 'list', $list );
         $this->display();
 	}
-    //添加管理员
-    function add() {
+    //添加管理员（pc端）
+    function add_pc() {
         if ( IS_POST ) {
             //图片上传
             $_POST['smeta']['thumb'] = sp_asset_relative_url($_POST['smeta']['thumb']);
@@ -48,6 +48,28 @@ class ManagerController extends AdminbaseController {
                 $this->error('添加管理员失败！');
             }
         } else {
+            $this->display();
+        }
+    }
+    //添加管理员（移动端）
+    function add_mp() {
+        if ( IS_POST ) {
+            $_POST['type'] = 3;
+            $result = $this->common_user_model->where(array('id' => $_POST['user_id']))->save($_POST);
+            if ($result) {
+                //记录日志
+                LogController::log_record($result,1);
+                $this->success('添加管理员成功！');
+            } else {
+                $this->error('添加管理员失败！');
+            }
+        } else {
+            $where = array();
+            $where['type'] = array('eq',1);
+            $where['status'] = array('eq',0);
+            $where['del_flg'] = array('eq',0);
+            $list = $this->common_user_model->field('name')->where($where)->order('create_time desc')->select();
+            $this->assign( 'user_list', $list );
             $this->display();
         }
     }
@@ -73,17 +95,20 @@ class ManagerController extends AdminbaseController {
 			$this->display();
 		}
 	}
-    //设置为管理员
+    //设置为管理员（pc端）
     function set_manager() {
         $id = intval( I( 'get.id' ) );
+        $type = $_GET['type'];
         $flg = $_GET['flg'];
-        if ($flg == 1){
-            $where = array();
-            $where['flg'] = array('eq',1);
-            $where['del_flg'] = array('eq',0);
-            $manager = $this->common_user_model->where($where)->find();
-            if(!empty($manager)){
-                $this->error('已有管理员启用，请先停用！');
+        if($type == 2){
+            if ($flg == 1){
+                $where = array();
+                $where['flg'] = array('eq',1);
+                $where['del_flg'] = array('eq',0);
+                $manager = $this->common_user_model->where($where)->find();
+                if(!empty($manager)){
+                    $this->error('已有管理员启用，请先停用！');
+                }
             }
         }
         $data = array();

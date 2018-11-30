@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<h1 class="mui-title">群发</h1>
+	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="send_many()">发送</button>
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+</header>
+<div id="tabbar-with-chat" class="mui-content main">
+	<form method="post" name="info" action="{:U('portal/messages/send_handle')}">
+		<input type="hidden" name="msg_id" value="{$msg_id}">
+		<div class="mui-card-content">
+			<ul class="mui-table-view">
+				<foreach name="list" item="l">
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="{$l.photo}">
+						<div class="mui-media-body">
+							<span class="mui-pull-right red-color strong"></span>{$l.name}
+							<span class="blue-color">{$l.position}</span>
+							<h5 class='mui-ellipsis'>{$l.hospital}</h5>
+							<p class="mui-ellipsis-2 mui-h6">{$l.office_n}-{$l.tag_n}</p>
+						</div>
+						<a href="#">
+							<div class="mui-checkbox mui-right">
+								<input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$l.id}" style="position:unset;float: right;">
+							</div>
+						</a>
+					</li>
+				</foreach>
+			</ul>
+		</div>
+	</form>
+</div>
+	<script type="text/javascript">
+        function send_many() {
+            if ($("input[type='checkbox']").is(':checked')){
+                var btnArray = ['确定', '取消'];
+                mui.confirm('确定群发给选中的医生？', '铁樵健康提醒您', btnArray, function(e) {
+                    if (e.index == 0) {
+                        $("form[name='info']").submit();
+                    } else {
+                        return;
+                    }
+                })
+			} else {
+                alert("请至少选中一个医生！")
+			}
+        }
+	</script>
+</body>
+</html>
