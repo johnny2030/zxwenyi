@@ -19,21 +19,80 @@
 	}
 </style>
 <body ng-controller="main">
-<form action="{:U('portal/index/register_doctor')}">
 	<header id="header" class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">咨询问诊</h1>
 	</header>
-	<div style="text-align: center;">
-		<textarea class="input" rows="8" style="border-radius: 10px; width: 80%;margin-top: 3rem;" placeholder="请输入咨询内容"></textarea>
+	<form method="post" action="{:U('portal/user/question')}">
+		<div style="text-align: center;">
+			<input type="text" class="input" style="border-radius: 6px; width: 80%;margin-top: 2.5rem;border:1px solid #090909 !important;" placeholder="请输入咨询概述(例：头疼、恶心呕吐等)" id="title">
+			<textarea class="input" rows="8" style="border-radius: 10px; width: 80%;margin-top: 0.5rem;" placeholder="请输入详细咨询内容（例：病症持续时间、期间是否治疗、是否伴随有其他不良反应等）" id="content"></textarea>
+		</div>
+		<span style="color: red;margin-left: 10%;">*请如实填写您的症状，以便医生能够给您准确的指导</span>
+		<div class="mui-button-row">
+			<button type="button" id="confirmBtn" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
+			<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+		</div>
+	<div class="kefubtn" ng-click="show()">打开会话>></div>
+	<div>
+		<rong-widget></rong-widget>
 	</div>
-	<div class="mui-button-row">
-		<button type="submit" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
-		<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-	</div>
-</form>
-<div class="kefubtn" ng-click="show()">打开会话>></div>
-<div>
-	<rong-widget></rong-widget>
-</div>
 </body>
+<script type="text/javascript">
+    function check_form() {
+        if(!check_title()){
+            return false;
+        }else if(!check_content()){
+            return false;
+        }else {
+            var btnArray = ['确认', '取消'];
+            var title = $("#title").val();
+            var content = $("#content").val();
+            mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
+                if (e.index == 0) {
+                    $.ajax({
+                        async:false,
+                        type : "post",
+                        url : "index.php?g=portal&m=user&a=question",
+                        data : {
+                            'title' : title,
+                            'content' : content
+                        },
+                        dataType : "json",
+                        success : function(data) {
+                            if (data == 0){
+                                $("#title").val("");
+                                $("#content").val("");
+                                mui.alert('咨询成功，医生稍后将会联系您，请耐心等待', '温馨提醒');
+                            } else {
+                                alert("咨询失败");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+    function check_title(){
+        var title = $("#title").val();
+        if (title.length==0){
+            alert("咨询概述不能为空！");
+            $("#title").css("border-color","red");
+            return false;
+        } else{
+            $("#title").css("border-color","#090909");
+            return true;
+        }
+    }
+    function check_content(){
+        var content = $("#content").val();
+        if (content.length==0){
+            alert("咨询内容不能为空！");
+            $("#content").css("border-color","red");
+            return false;
+        } else{
+            $("#content").css("border-color","#090909");
+            return true;
+        }
+    }
+</script>
 </html>

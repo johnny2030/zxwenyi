@@ -42,6 +42,15 @@ class MessagesController extends HomebaseController {
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/forward');
     }
+    //用户咨询
+    public function advice() {
+        $where = array();
+        $where['m.type'] = array('eq',0);
+        $where['m.del_flg'] = array('eq',0);
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $this->assign( 'msg_list', $msg_list );
+        $this->display('../Tieqiao/advice');
+    }
     //详情
     public function detail() {
 	    $id = $_GET['id'];

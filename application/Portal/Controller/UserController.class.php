@@ -13,6 +13,7 @@ class UserController extends HomebaseController {
     private $common_hospital_model;
     private $common_health_model;
     private $common_card_model;
+    private $common_messages_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -23,6 +24,7 @@ class UserController extends HomebaseController {
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_health_model = D( 'Common_health' );
         $this->common_card_model = D( 'Common_card' );
+        $this->common_messages_model = D( 'Common_messages' );
 	}
     //患者登记
     public function register_patient() {
@@ -164,6 +166,17 @@ class UserController extends HomebaseController {
     }
     //咨询问诊
     public function question() {
-        R('Rong/index');
+        if ( IS_POST ) {
+            $_POST['user_id'] = (int)session('login_id');
+            $_POST['create_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_messages_model->add($_POST);
+            if ($result) {
+                $this->ajaxReturn('0');
+            } else {
+                $this->ajaxReturn('1');
+            }
+        } else {
+            $this->display('../Tieqiao/question');
+        }
     }
 }
