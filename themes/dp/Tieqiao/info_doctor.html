@@ -59,7 +59,23 @@
 					</select>
 				</div>
 				<div class="mui-input-row">
-					<input type="text" id="position" name="position" class="u-inpt pt-sel mui-input-clear" placeholder="请输入职位名称" value="{$doctor.position}">
+					<select id="position" name="position" class="u-inpt pt-sel">
+						<notempty name="doctor.position">
+							<option value="">请选择职位名称</option>
+							<foreach name="plist" item="p">
+								<if condition="$p.id eq $doctor['position']">
+									<option value="{$p.id}" selected>{$p.name}</option>
+									<else />
+									<option value="{$p.id}">{$p.name}</option>
+								</if>
+							</foreach>
+							<else />
+							<option value="" selected>请选择职位名称</option>
+							<foreach name="plist" item="p">
+								<option value="{$p.id}">{$p.name}</option>
+							</foreach>
+						</notempty>
+					</select>
 				</div>
 				<div class="mui-input-row">
 					<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="{$doctor.phone}">

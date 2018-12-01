@@ -39,9 +39,9 @@ class HealthController extends AdminbaseController {
             if ($result) {
                 //记录日志
                 LogController::log_record($result,1);
-                $this->success('添加职位信息成功！');
+                $this->success('添加健康状况成功！');
             } else {
-                $this->error('添加职位信息失败！');
+                $this->error('添加健康状况失败！');
             }
         } else {
             $this->display();
@@ -55,9 +55,9 @@ class HealthController extends AdminbaseController {
             if ($result) {
                 //记录日志
                 LogController::log_record($id,2);
-                $this->success('编辑职位信息成功！');
+                $this->success('编辑健康状况成功！');
             } else {
-                $this->error('编辑职位信息失败！');
+                $this->error('编辑健康状况失败！');
             }
         } else {
             $id = intval( I( 'get.id' ) );
@@ -119,7 +119,7 @@ class HealthController extends AdminbaseController {
         $where['del_flg'] = array('eq',0);
         $count = $this->common_health_model->where($where)->count();
         $page = $this->page($count, 20);
-        $list = $this->common_health_model->where($where)->limit( $page->firstRow, $page->listRows )->order("create_time desc")->select();
+        $list = $this->common_health_model->where($where)->limit( $page->firstRow, $page->listRows )->order("id desc")->select();
         $this->assign("page", $page->show('Admin'));
         $this->assign( 'list', $list );
         $this->display();
@@ -133,9 +133,9 @@ class HealthController extends AdminbaseController {
             if ($result) {
                 //记录日志
                 LogController::log_record($result,1);
-                $this->success('添加职位信息成功！');
+                $this->success('添加健康状况成功！');
             } else {
-                $this->error('添加职位信息失败！');
+                $this->error('添加健康状况失败！');
             }
         } else {
             $up_id = $_GET['up_id'];
@@ -151,9 +151,9 @@ class HealthController extends AdminbaseController {
             if ($result) {
                 //记录日志
                 LogController::log_record($id,2);
-                $this->success('编辑职位信息成功！');
+                $this->success('编辑健康状况成功！');
             } else {
-                $this->error('编辑职位信息失败！');
+                $this->error('编辑健康状况失败！');
             }
         } else {
             $id = intval( I( 'get.id' ) );

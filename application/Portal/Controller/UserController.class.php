@@ -14,6 +14,7 @@ class UserController extends HomebaseController {
     private $common_health_model;
     private $common_card_model;
     private $common_messages_model;
+    private $common_position_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -25,6 +26,7 @@ class UserController extends HomebaseController {
         $this->common_health_model = D( 'Common_health' );
         $this->common_card_model = D( 'Common_card' );
         $this->common_messages_model = D( 'Common_messages' );
+        $this->common_position_model = D( 'Common_position' );
 	}
     //患者登记
     public function register_patient() {
@@ -104,8 +106,10 @@ class UserController extends HomebaseController {
             $where['del_flg'] = array('eq',0);
             $hlist = $this->common_hospital_model->where($where)->select();
             $olist = $this->common_office_model->where($where)->select();
+            $plist = $this->common_position_model->where($where)->select();
             $this->assign( 'hlist', $hlist );
             $this->assign( 'olist', $olist );
+            $this->assign( 'plist', $plist );
             $this->display('../Tieqiao/register_doctor');
         }
     }
@@ -130,8 +134,10 @@ class UserController extends HomebaseController {
             $where['del_flg'] = array('eq',0);
             $list = $this->common_office_model->where($where)->select();
             $tlist = $this->common_tag_model->where($where)->select();
+            $plist = $this->common_position_model->where($where)->select();
             $this->assign( 'list', $list );
             $this->assign( 'tlist', $tlist );
+            $this->assign( 'plist', $plist );
             $this->assign( 'doctor', $doctor );
             $this->display('../Tieqiao/info_doctor');
         }
@@ -149,10 +155,10 @@ class UserController extends HomebaseController {
         $office_id = $_GET['office_id'];
         $ofc = $this->common_office_model->find($office_id);
         $where = array();
-        $where['del_flg'] = array('eq',0);
-        $where['office'] = array('eq',$office_id);
-        $where['type'] = array('eq',1);
-        $list = $this->common_user_model->where($where)->select();
+        $where['u.del_flg'] = array('eq',0);
+        $where['u.office'] = array('eq',$office_id);
+        $where['u.type'] = array('eq',1);
+        $list = $this->common_user_model->alias('u')->field('u.*,p.name as position_n')->join('__COMMON_POSITION__ p ON u.position=p.id','left')->where($where)->select();
         $this->assign( 'office_n', $ofc['name'] );
         $this->assign( 'list', $list );
         $this->display('../Tieqiao/doctor_list');
@@ -160,7 +166,7 @@ class UserController extends HomebaseController {
     //医生详情
     public function doctor_detail() {
         $user_id = $_GET['user_id'];
-        $doctor = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id')->join('__COMMON_TAG__ t ON u.tag=t.id')->where(array('u.id' => $user_id))->find();
+        $doctor = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where(array('u.id' => $user_id))->find();
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }

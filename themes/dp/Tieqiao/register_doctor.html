@@ -32,9 +32,9 @@
 			<div class="mui-input-row">
 				<select id="position" name="position" class="u-inpt pt-sel">
 					<option value="" selected>请选择职位</option>
-					<option value="主任医师">主任医师</option>
-					<option value="副主任医师">副主任医师</option>
-					<option value="主治医师">主治医师</option>
+					<foreach name="plist" item="p">
+						<option value="{$p.id}">{$p.name}</option>
+					</foreach>
 				</select>
 			</div>
 			<div class="mui-input-row">
