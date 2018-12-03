@@ -63,9 +63,9 @@
 			</div>
 		</div>
 		<div style="text-align: center;">
-			<button type="button" class="mui-btn mui-btn-success footer-btn" onclick="forward('{$msg.id}')">转发</button>
-			<a class="mui-btn mui-btn-warning footer-btn" href="{:U('portal/messages/send_show',array('id'=>$msg['id']))}">群发</a>
-			<button type="button" class="mui-btn mui-btn-primary footer-btn" ng-click="setconversation('{$msg.id}')">立即回复</button>
+			<a class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" onclick="forward('{$msg.id}')">群发</a>
+			<a class="mui-btn mui-btn-warning footer-btn" href="{:U('portal/messages/send_show',array('id'=>$msg['id']))}">转发</a>
+			<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')">立即回复</a>
 		</div>
 		<div>
 			<rong-widget></rong-widget>

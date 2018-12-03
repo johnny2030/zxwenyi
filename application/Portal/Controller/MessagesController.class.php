@@ -82,7 +82,7 @@ class MessagesController extends HomebaseController {
             $where = array();
             $where['type'] = array('eq',1);
             $where['del_flg'] = array('eq',0);
-            $list = $this->common_user_model->field('open_id')->where($where)->select();
+            $list = $this->common_user_model->where($where)->select();
             $msg_info = $this->common_messages_model->field('title')->find($id);
             $user = $this->common_user_model->field('name')->find($msg_info['user_id']);
             foreach ($list as $sendUser) {
@@ -122,7 +122,7 @@ class MessagesController extends HomebaseController {
             $msg_info = $this->common_messages_model->field('title')->find($msg_id);
             $user = $this->common_user_model->field('name')->find($msg_info['user_id']);
             foreach ($ids as $id) {
-                $sendUser = $this->common_user_model->field('open_id')->find($id);
+                $sendUser = $this->common_user_model->find($id);
                 if ($sendUser['status'] == 0){
                     $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=index';
                     $this->template_send_tq($msg_info['title'],$user['name'],$sendUser['open_id'],$url);

@@ -39,6 +39,7 @@ class UserController extends HomebaseController {
             $data['use_time'] = date('Y-m-d H:i:s',time());
             $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
             if ($result&&$results) {
+                session('flg','redt');
                 R('User/info_patient');
             } else {
                 $this->error('登记失败！');
@@ -97,6 +98,7 @@ class UserController extends HomebaseController {
             $_POST['type'] = 1;
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
+                session('flg','redt');
                 R('User/info_doctor');
             } else {
                 $this->error('登记失败！');
