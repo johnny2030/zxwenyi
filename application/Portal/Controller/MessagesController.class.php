@@ -53,6 +53,10 @@ class MessagesController extends HomebaseController {
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/advice');
     }
+    //评价结论
+    public function evaluate() {
+        $this->display('../Tieqiao/evaluate');
+    }
     //详情（医生）
     public function detail() {
 	    $id = $_GET['id'];

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" class="feedback">
+	<head>
+		<tc_include file="Public/TQHead"/>
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/feedback.css" />
+		<script type="text/javascript" src="__TMPL__Public/js/feedback.js" charset="utf-8"></script>
+		<script type="text/javascript">
+            mui('.mui-scroll-wrapper').scroll();
+		</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">发送</button>
+			<h1 class="mui-title">咨询反馈</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<div class="mui-card">
+					<div class="mui-card-header mui-card-media">
+						<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 55px;height: 55px;"/>
+						<div class="mui-media-body">
+							<p>李医生</p>
+							<p>长海医院－内科</p>
+						</div>
+					</div>
+					<div class="mui-card-content">
+						<p>医生结论&意见医生结论&意见医生结论&意见医生结论&意见医生结论&意见医生结论&意见</p>
+					</div>
+					<div class="mui-card-footer">总结时间：2018-12-05 14:41:07</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content" style="padding-top: 5px !important;">
+			<div class="mui-content-padded">
+				<div class="mui-card">
+					<div class="mui-card-header mui-card-media">
+						<img src="__TMPL__Tieqiao/images/patient.jpg" style="width: 55px;height: 55px;"/>
+						<div class="mui-media-body">
+							<p>测试用户</p>
+							<p>男－28</p>
+						</div>
+					</div>
+					<div class="mui-card-content">
+						<p>用户结论&意见用户结论&意见用户结论&意见用户结论&意见用户结论&意见用户结论&意见</p>
+					</div>
+					<div class="mui-card-footer">总结时间：2018-12-05 15:12:33</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content" style="padding-top: 20px !important;">
+			<div class="mui-content-padded">
+				<div class="mui-card">
+					<div class="mui-card-header">
+						<span>结论和意见</span>
+					</div>
+					<div class="mui-card-content">
+						<div class="row mui-input-row">
+							<textarea id='question' class="mui-input-clear question" placeholder="请详细描述你的结论和意见..."></textarea>
+						</div>
+					</div>
+					<div class="mui-card-footer">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">联系方式</div>
+								<div class="icons mui-inline" style="margin-left: 6px;">
+									<input id='contact' type="text" class="contact" placeholder="(选填,方便我们联系你 )" style="height:20px;margin-bottom:0px;padding:0px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-card-footer">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">咨询评分</div>
+								<div class="icons mui-inline" style="margin-left: 6px;">
+									<i data-index="1" class="mui-icon mui-icon-star"></i>
+									<i data-index="2" class="mui-icon mui-icon-star"></i>
+									<i data-index="3" class="mui-icon mui-icon-star"></i>
+									<i data-index="4" class="mui-icon mui-icon-star"></i>
+									<i data-index="5" class="mui-icon mui-icon-star"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-button-row">
+						<button type="button" id="confirmBtn" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
+						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<div class="mui-inline">结论和意见</div>
+			</div>
+			<div class="row mui-input-row">
+				<textarea id='questions' class="mui-input-clear question" placeholder="请详细描述你的结论和意见..."></textarea>
+			</div>
+			<p>联系方式</p>
+			<div class="mui-input-row">
+				<input id='contacts' type="text" class="mui-input-clear contact" placeholder="(选填,方便我们联系你 )" />
+			</div>
+			<div class="mui-content-padded">
+				<div class="mui-inline">咨询评分</div>
+				<div class="icons mui-inline" style="margin-left: 6px;">
+					<i data-index="1" class="mui-icon mui-icon-star"></i>
+					<i data-index="2" class="mui-icon mui-icon-star"></i>
+					<i data-index="3" class="mui-icon mui-icon-star"></i>
+					<i data-index="4" class="mui-icon mui-icon-star"></i>
+					<i data-index="5" class="mui-icon mui-icon-star"></i>
+				</div>
+			</div>
+			<div class="mui-button-row">
+				<button type="button" id="confirmBtns" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+			</div>
+		</div>
+	</body>
+</html>
