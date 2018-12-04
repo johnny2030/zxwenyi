@@ -15,6 +15,7 @@ class UserController extends HomebaseController {
     private $common_card_model;
     private $common_messages_model;
     private $common_position_model;
+    private $common_record_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -27,6 +28,7 @@ class UserController extends HomebaseController {
         $this->common_card_model = D( 'Common_card' );
         $this->common_messages_model = D( 'Common_messages' );
         $this->common_position_model = D( 'Common_position' );
+        $this->common_record_model = D( 'Common_record' );
 	}
     //患者登记
     public function register_patient() {
@@ -179,25 +181,54 @@ class UserController extends HomebaseController {
             $_POST['user_id'] = $id;
             $_POST['create_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_messages_model->add($_POST);
-            if ($result) {
-                $where = array();
-                $where['del_flg'] = array('eq',0);
-                $where['status'] = array('eq',0);
-                $where['type'] = array('eq',3);
-                $where['flg'] = array('eq',1);
-                $list = $this->common_user_model->field('open_id')->where($where)->select();
-                $user = $this->common_user_model->field('name')->find($id);
-                foreach($list as $value){
-                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=advice';
-                    $this->template_send_tq($_POST['title'],$user['name'],$value['open_id'],$url);
-                }
-                $this->ajaxReturn('0');
-            } else {
-                $this->ajaxReturn('1');
+            if (!$result){
+                $this->formError[] = '咨询失败';
             }
+            if ($_POST['img'] != null && $_POST['img'] != ''){
+                $st = $this->uploadImg($_POST['img'],$result);
+                if (!$st){
+                    $this->formError[] = '上传病例图片失败';
+                }
+            }
+            $where = array();
+            $where['del_flg'] = array('eq',0);
+            $where['status'] = array('eq',0);
+            $where['type'] = array('eq',3);
+            $where['flg'] = array('eq',1);
+            $list = $this->common_user_model->field('open_id')->where($where)->select();
+            $user = $this->common_user_model->field('name')->find($id);
+            foreach($list as $value){
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=advice';
+                $this->template_send_tq($_POST['title'],$user['name'],$value['open_id'],$url);
+            }
+            $this->formError[] = '咨询成功，请耐心等待医生回复';
+            $this->assign( 'formError', $this->formError );
+            $this->display('../Tieqiao/question');
         } else {
             $this->display('../Tieqiao/question');
         }
+    }
+    //上传图片
+    public function uploadImg($img,$msg_id){
+        $id = (int)session('login_id');
+        require_once 'today/Wechat_tq.php';
+        $wechat = new \Wechat_tq( $this );
+        $cm=new CommonMethodController();
+        $flg = true;
+        foreach($img as $media_id){
+            $img = $wechat->downloadWeixinFile($media_id,'');
+            $filename='upload_img/record/'.$cm->salt('5').$cm->msectime().'.jpg';
+            file_put_contents($filename, $img['body']);
+            $data['message_id'] = $msg_id;
+            $data['user_id'] = $id;
+            $data['photo'] = '../'.$filename;
+            $data['create_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_record_model->add($data);
+            if (!$result){
+                $flg = false;
+            }
+        }
+        return $flg;
     }
     public function template_send_tq($title,$name,$open_id,$url) {
         require_once 'today/Wechat_tq.php';

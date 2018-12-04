@@ -1,8 +1,14 @@
 <!doctype html>
 <html ng-app="demo">
+<?php
+	require_once "today/wxjssdk.php";
+	$jssdk = new \wxjssdk();
+	$signPackage = $jssdk->getSignPackage_tq();
+?>
 <head>
 	<tc_include file="Public/TQHead"/>
 	<tc_include file="Public/RCHead"/>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <style>
 	.kefubtn{
@@ -17,70 +23,160 @@
 		color: white;
 		font-size: 20px;
 	}
+	a:hover, a:visited, a:link, a:active {
+		text-decoration:none;
+		color:#333;
+	}
 </style>
-<body ng-controller="main">
+<body ng-controller="main" style="background-color:#efeff4 !important;">
 	<header id="header" class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">咨询问诊</h1>
 	</header>
-	<form method="post" action="{:U('portal/user/question')}">
-		<div style="text-align: center;">
-			<input type="text" class="input" style="border-radius: 6px; width: 80%;margin-top: 2.5rem;border:1px solid #090909 !important;" placeholder="请输入咨询概述(例：头疼、恶心呕吐等)" id="title">
-			<textarea class="input" rows="8" style="border-radius: 10px; width: 80%;margin-top: 0.5rem;" placeholder="请输入详细咨询内容（例：病症持续时间、期间是否治疗、是否伴随有其他不良反应等）" id="content"></textarea>
+	<form method="post" action="{:U('portal/user/question')}" id="info_form">
+		<div class="mui-content all-pic">
+			<div class="mui-card" style="margin-top: 2rem;">
+				<tc_include file='Public:form_result' />
+				<div class="mui-card-content" style="padding: 10px !important;">
+					<textarea id="content" name="content" style="height: 5rem;" placeholder="请输入详细咨询内容（例：病症持续时间、期间是否治疗、是否伴随有其他不良反应等）"></textarea>
+				</div>
+				<!--页脚，放置补充信息或支持的操作-->
+				<div class="mui-card-footer" style="color: red;">*请如实填写您的症状，以便医生能够给您准确的指导</div>
+			</div>
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<span>病例图片</span><a class="mui-pull-right headdiv" href="javascript:void(0)" id="uploadImage">上传</a>
+				</div>
+				<ul class="mui-table-view mui-grid-view" id="record">
+				</ul>
+			</div>
+			<div class="mui-button-row">
+				<button type="button" id="confirmBtn" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+			</div>
 		</div>
-		<span style="color: red;margin-left: 10%;">*请如实填写您的症状，以便医生能够给您准确的指导</span>
-		<div class="mui-button-row">
-			<button type="button" id="confirmBtn" class="mui-btn mui-btn-primary footer-btn" onclick="return check_form();">提交</button>&nbsp;&nbsp;
-			<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-		</div>
+	</form>
 	<div class="kefubtn" ng-click="show()">打开会话>></div>
 	<div>
 		<rong-widget></rong-widget>
 	</div>
 </body>
+<!--底部结束-->
+<!--图片点击放大预览主要js开始-->
+<script type="text/javascript" src="__TMPL__Public/js/mui.zoom.js" ></script>
+<script type="text/javascript" src="__TMPL__Public/js/mui.previewimage.js" ></script>
+<!--图片点击放大预览主要js结束-->
+<!--点击添加上传图片js-->
+<script type="text/javascript" src="__TMPL__Public/js/main.js" ></script>
+<script>
+    mui.previewImage();//图片点击放大预览主要js
+</script>
 <script type="text/javascript">
-    function check_form() {
-        if(!check_title()){
-            return false;
-        }else if(!check_content()){
-            return false;
-        }else {
-            var btnArray = ['确认', '取消'];
-            var title = $("#title").val();
-            var content = $("#content").val();
-            mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
-                if (e.index == 0) {
-                    $.ajax({
-                        async:false,
-                        type : "post",
-                        url : "index.php?g=portal&m=user&a=question",
-                        data : {
-                            'title' : title,
-                            'content' : content
+    wx.config({
+        appId: '<?php echo $signPackage["appId"];?>',
+        timestamp: '<?php echo $signPackage["timestamp"];?>',
+        nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+        signature: '<?php echo $signPackage["signature"];?>',
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'startRecord',
+            'stopRecord',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage'
+        ]
+    });
+    wx.ready(function () {
+        wx.checkJsApi({
+            jsApiList: [
+                'startRecord',
+                'stopRecord',
+                'chooseImage',
+                'previewImage',
+                'uploadImage',
+                'downloadImage'
+            ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+                if (res.checkResult.getLocation == false) {
+                    alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                    return;
+                }
+            }
+        });
+        var images = {
+            localId: [],
+            serverId: []
+        };
+        $("#uploadImage").click(function () {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    images.localId = res.localIds;
+                    if (images.localId.length == 0) {
+                        alert('请先选择图片');
+                        return;
+                    }
+                    if (images.localId.length > 1) {
+                        alert('目前仅支持单张图片上传,请重新上传');
+                        images.localId = [];
+                        return;
+                    }
+                    // 上传照片
+                    wx.uploadImage({
+                        localId: images.localId.toString(),
+                        isShowProgressTips: 0,
+                        success: function (res) {
+                            images.serverId = res.serverId;
+                            wx.downloadImage({
+                                serverId: images.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+                                isShowProgressTips: 1, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    var localId = res.localId; // 返回图片下载后的本地ID
+									var html = "<li class='mui-table-view-cell mui-media mui-col-xs-6'>" +
+										"<img src='"+localId+"' style='width: 80%; max-height: 7rem;' data-preview-src='' date-preview-group='1'/>" +
+										"<input type='hidden' name='img[]' value='"+images.serverId+"' /></li>";
+                                    $("#record").append(html);
+                                }
+                            });
                         },
-                        dataType : "json",
-                        success : function(data) {
-                            if (data == 0){
-                                $("#title").val("");
-                                $("#content").val("");
-                                mui.alert('咨询成功，医生稍后将会联系您，请耐心等待', '温馨提醒');
-                            } else {
-                                alert("咨询失败");
-                            }
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
                         }
                     });
                 }
             });
+        });
+    });
+    wx.error(function (res) {
+        alert(res.errMsg);
+    });
+
+    function check_phone() {
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isAndroid){
+            alert("android");
+            return true;
+        }
+        if(isiOS){
+            alert("ios");
+            return false;
         }
     }
-    function check_title(){
-        var title = $("#title").val();
-        if (title.length==0){
-            alert("咨询概述不能为空！");
-            $("#title").css("border-color","red");
+    function check_form() {
+        if(!check_content()){
             return false;
-        } else{
-            $("#title").css("border-color","#090909");
-            return true;
+        }else {
+            var btnArray = ['确认', '取消'];
+            mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
+                if (e.index == 0) {
+                    var form = document.getElementById('info_form');
+                    form.submit();
+                }
+            });
         }
     }
     function check_content(){
