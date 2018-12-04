@@ -12,12 +12,20 @@
 		<foreach name="msg_list" item="msg">
 			<li class="mui-table-view-cell mui-media">
 				<a class="mui-navigate-right" href="{:U('portal/messages/detail',array('id'=>$msg['id']))}">
-					<img class="mui-media-object mui-pull-left" src="{$msg.photo}" style="width: 50px;height: 50px;">
+					<img class="mui-media-object mui-pull-left" src="{$msg.photo}" style="width: 60px;height: 60px;">
 					<div class="mui-media-body">
 						{$msg.name}
-						<p class='mui-ellipsis'>{$msg.title}</p>
+						<p class="mui-ellipsis">
+							<if condition="$msg.status eq 0"> 未处理
+								<elseif condition="$msg.status eq 1"/>处理中
+								<else />处理完毕
+							</if>
+						</p>
+						<p class="mui-ellipsis">
+							咨询时间：{$msg.create_time}
+						</p>
 					</div>
-					<div class="mui-pull-right" style="margin-top:-28px;font-size: 14px;color: #CD3333;margin-right:-20px;">
+					<div class="mui-pull-right" style="margin-top:-40px;font-size: 14px;color: #CD3333;margin-right:-20px;">
 						查看详情
 					</div>
 				</a>

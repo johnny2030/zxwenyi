@@ -13,6 +13,7 @@ class MessagesController extends HomebaseController {
     private $common_hospital_model;
     private $common_health_model;
     private $common_messages_model;
+    private $common_record_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -23,13 +24,14 @@ class MessagesController extends HomebaseController {
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_health_model = D( 'Common_health' );
         $this->common_messages_model = D( 'Common_messages' );
+        $this->common_record_model = D( 'Common_record' );
 	}
     //群发
     public function index() {
         $where = array();
         $where['m.type'] = array('eq',2);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/messages');
     }
@@ -38,7 +40,7 @@ class MessagesController extends HomebaseController {
         $where = array();
         $where['m.type'] = array('eq',1);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/forward');
     }
@@ -47,7 +49,7 @@ class MessagesController extends HomebaseController {
         $where = array();
         $where['m.type'] = array('eq',0);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/advice');
     }
@@ -57,7 +59,13 @@ class MessagesController extends HomebaseController {
         $where = array();
         $where['m.id'] = array('eq',$id);
         $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
+
+        $where_r = array();
+        $where_r['message_id'] = array('eq',$msg_Info['id']);
+        $where_r['user_id'] = array('eq',$msg_Info['user_id']);
+        $list = $this->common_record_model->where($where_r)->select();
         session('send_id',$msg_Info['user_id']);
+        $this->assign( 'list', $list );
         $this->assign( 'msg', $msg_Info );
         $this->display('../Tieqiao/customer_detail');
     }
@@ -67,7 +75,9 @@ class MessagesController extends HomebaseController {
         $where = array();
         $where['m.id'] = array('eq',$id);
         $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
+        $list = $this->common_record_model->where(array('user_id' => $msg_Info['user_id']))->select();
         session('send_id',$msg_Info['user_id']);
+        $this->assign( 'list', $list );
         $this->assign( 'msg', $msg_Info );
         $this->display('../Tieqiao/customer_detail_mg');
     }

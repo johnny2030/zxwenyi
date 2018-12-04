@@ -208,7 +208,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 
 /*医生详情开始*/
 .detail .top-bg{ height: 160px; width: 100%; background: url('../images/doctor-hd.jpg') no-repeat 5px; position: absolute; top: 0; left: 0; background-size: 100% 100%}
-.top-card{ background: #FFFFFF; height: 150px; width: 95%; position: relative;top: 70px; margin: 0 auto;  border-radius: 4px;-moz-box-shadow:0px 2px 3px #C4C4C4; -webkit-box-shadow:0px 2px 3px #C4C4C4; box-shadow:0px 2px 3px #C4C4C4;}
+.top-card{ background: #FFFFFF; height: 160px; width: 95%; position: relative;top: 70px; margin: 0 auto;  border-radius: 4px;-moz-box-shadow:0px 2px 3px #C4C4C4; -webkit-box-shadow:0px 2px 3px #C4C4C4; box-shadow:0px 2px 3px #C4C4C4;}
 .doctor-introduce{ margin-top: 85px;}
 .photo{  width: 100%; margin: 0 auto;}
 .photo img{ width: 75px; height: 75px; border-radius:50%; position: relative; top: -40px; left: 50%; margin-left: -37.5px;}
@@ -349,7 +349,7 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 	height: 40px;
 	width: 30%;
 	margin-bottom: 3rem;
-	margin-top: 1rem;
+	margin-top: 0.5rem;
 }
 /*科室咨询*/
 .off-hd{
