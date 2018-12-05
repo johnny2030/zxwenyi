@@ -14,6 +14,7 @@ class MessagesController extends HomebaseController {
     private $common_health_model;
     private $common_messages_model;
     private $common_record_model;
+    private $common_evaluate_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -25,6 +26,7 @@ class MessagesController extends HomebaseController {
         $this->common_health_model = D( 'Common_health' );
         $this->common_messages_model = D( 'Common_messages' );
         $this->common_record_model = D( 'Common_record' );
+        $this->common_evaluate_model = D( 'Common_evaluate' );
 	}
     //群发
     public function index() {
@@ -55,7 +57,43 @@ class MessagesController extends HomebaseController {
     }
     //评价结论
     public function evaluate() {
-        $this->display('../Tieqiao/evaluate');
+        $flg = session('flg');
+        if ( IS_POST  && empty($flg)) {
+            $id = (int)session('login_id');
+            $user = $this->common_user_model->find($id);
+            if ($user['type'] == 0){
+                $_POST['user_id'] = $id;
+                $_POST['user_time'] = date('Y-m-d H:i:s',time());
+            }else{
+                $_POST['doctor_id'] = $id;
+                $_POST['doctor_time'] = date('Y-m-d H:i:s',time());
+            }
+            if (empty($_POST['id'])){
+                $result = $this->common_evaluate_model->add($_POST);
+            }else{
+                $_POST['status'] = 1;
+                $result = $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
+            }
+            session('flg','redt');
+            R('Messages/evaluate');
+        }else{
+            session('flg',null);
+            $id = (int)session('login_id');
+            $user = $this->common_user_model->find($id);
+            $where = array();
+            $where['e.status'] = array('eq',0);
+            $where['e.del_flg'] = array('eq',0);
+            if ($user['type'] == 0){
+                $where['e.user_id'] = array('eq',$id);
+                $this->assign( 'elte_info', $user );
+            }else{
+                $where['e.doctor_id'] = array('eq',$id);
+                $this->assign( 'elte_info', $user );
+            }
+            $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.photo as uphoto,d.name as dname,d.photo as dphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->join('__COMMON_USER__ d ON e.doctor_id=d.id','left')->where($where)->find();
+            $this->assign( 'elte_info', $elte_info );
+            $this->display('../Tieqiao/evaluate');
+        }
     }
     //详情（医生）
     public function detail() {
