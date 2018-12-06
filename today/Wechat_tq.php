@@ -727,7 +727,7 @@ class Wechat_tq {
                               <FromUserName><![CDATA[%s]]></FromUserName>
                               <CreateTime>%s</CreateTime>
                               <MsgType><![CDATA[news]]></MsgType>
-                              <ArticleCount>1</ArticleCount>
+                              <ArticleCount>2</ArticleCount>
                               <Articles>
                               <item>
                               <Title><![CDATA[%s]]></Title>
