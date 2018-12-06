@@ -18,9 +18,25 @@
 							</td>
 						</tr>
 						<tr>
-							<th>链接地址</th>
+							<th width="100">菜单事件</th>
 							<td>
-								<input type="text" style="width: 500px;" id="url" name="url" value="" placeholder="请输入链接地址"/>
+								<select id="event" name="event" style="width: 200px;" onchange="setType();">
+									<option value="" selected>请选择菜单事件</option>
+									<option value="click">click</option>
+									<option value="view">view</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th width="100">事件类别</th>
+							<td>
+								<input type="text" style="width: 200px;" id="type" name="type" value="请选择菜单事件" readonly="readonly"/>
+							</td>
+						</tr>
+						<tr>
+							<th>事件内容</th>
+							<td>
+								<input type="text" style="width: 500px;" id="content" name="content" value="" placeholder="请输入事件内容"/>
 								<span class="form-required" style="color:red;"> *</span>
 							</td>
 						</tr>
@@ -101,13 +117,11 @@
 					},
                     //验证规则
                     rules : {
-                        'name' : { required : 1 },
-                        'url' : { required : 1 }
+                        'name' : { required : 1 }
                     },
                     //验证未通过提示消息
                     messages : {
-                        'name' : { required : "请输入菜单名" },
-                        'url' : { required : "请输入链接地址" }
+                        'name' : { required : "请输入菜单名" }
                     },
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,
@@ -163,6 +177,11 @@
 			});
 		////-------------------------
 		});
+		function setType() {
+            var event = $('#event option:selected').val();
+            if (event == "click") $('#type').val("key");
+			if (event == "view") $('#type').val("url");
+        }
 	</script>
 </body>
 </html>

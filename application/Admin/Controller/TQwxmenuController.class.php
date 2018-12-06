@@ -167,22 +167,12 @@ class TQwxmenuController extends AdminbaseController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         if ( isset( $_POST['ids'] )){
-            /*$where = array();*/
             $status = $_GET['status'];
             $num = count($_POST['ids']);
             $ids = implode( ',',  $_POST['ids'] );
             //使用
             if ($status == 1){
-                /*$where['status'] = array('eq',1);
-                $where['second'] = array('eq',0);
-                $where['del_flg'] = array('eq',0);
-                $count = $this->wxmenu_tq_model->where($where)->count();
-                if($count == 3) $this->error('启用菜单已满，最多可以启用三个菜单！');*/
                 if ($num>3) $this->error('最多可以启用三个菜单！');
-                /*//判断是否已设置
-                $where['id'] = array('in',$ids);
-                $expired = $this->wxmenu_tq_model->where($where)->count();
-                if (!empty($expired)) $this->error('选择菜单已经启用，请选择其他菜单！');*/
                 $menu_list = $this->wxmenu_tq_model->where( "id in ($ids)" )->select();
                 $data='{ "button":[ ';
                 $count = count($menu_list);
@@ -194,9 +184,9 @@ class TQwxmenuController extends AdminbaseController {
                     if($key+1 == $count){
                         if(empty($sub_list)){
                             $data .=  '{
-                            "type":"view",  
+                            "type":"'.$item['event'].'",  
                             "name":"'.$item['name'].'",  
-                            "url":"'.$item['url'].'"  
+                            "'.$item['type'].'":"'.$item['content'].'"  
                             }';
                         }else{
                             $data .=  '{  
@@ -207,16 +197,16 @@ class TQwxmenuController extends AdminbaseController {
                                 if($sub_key+1 == $sub_count){
                                     $data .='
                             {      
-                                "type":"view",  
+                                "type":"'.$sub['event'].'",  
                                 "name":"'.$sub['name'].'",  
-                                "url":"'.$sub['url'].'"  
+                                "'.$sub['type'].'":"'.$sub['content'].'"  
                             }';
                                 }else{
                                     $data .='
                             {      
-                                "type":"view",  
+                                "type":"'.$sub['event'].'",  
                                 "name":"'.$sub['name'].'",  
-                                "url":"'.$sub['url'].'"  
+                                "'.$sub['type'].'":"'.$sub['content'].'"  
                             },';
                                 }
                                 $ids .= ','.$sub['id'];
@@ -226,9 +216,9 @@ class TQwxmenuController extends AdminbaseController {
                     }else{
                         if(empty($sub_list)){
                             $data .=  '{
-                            "type":"view",  
+                            "type":"'.$item['event'].'",  
                             "name":"'.$item['name'].'",  
-                            "url":"'.$item['url'].'"  
+                            "'.$item['type'].'":"'.$item['content'].'"  
                             },';
                         }else{
                             $data .=  '{  
@@ -239,16 +229,16 @@ class TQwxmenuController extends AdminbaseController {
                                 if($sub_key+1 == $sub_count){
                                     $data .='
                             {      
-                                "type":"view",  
+                                "type":"'.$sub['event'].'",  
                                 "name":"'.$sub['name'].'",  
-                                "url":"'.$sub['url'].'"  
+                                "'.$sub['type'].'":"'.$sub['content'].'"  
                             }';
                                 }else{
                                     $data .='
                             {      
-                                "type":"view",  
+                                "type":"'.$sub['event'].'",  
                                 "name":"'.$sub['name'].'",  
-                                "url":"'.$sub['url'].'"  
+                                "'.$sub['type'].'":"'.$sub['content'].'"  
                             },';
                                 }
                                 $ids .= ','.$sub['id'];
@@ -301,19 +291,16 @@ class TQwxmenuController extends AdminbaseController {
             $where = array();
             $where['first'] = array('eq',$wxmenu['first']);
             $where['second'] = array('neq',0);
-            $where['status'] = array('eq',0);
             $where['del_flg'] = array('eq',0);
             $second = $this->wxmenu_tq_model->where($where)->max('second');
             if (empty($second)){
-                $data['second'] = 1;
+                $_POST['second'] = 1;
             }else{
-                $data['second'] = $second+1;
+                $_POST['second'] = $second+1;
             }
-            $data['first'] = $wxmenu['first'];
-            $data['name'] = $_POST['name'];
-            $data['url'] = $_POST['url'];
-            $data['create_time'] = date('Y-m-d H:i:s',time());
-            $result = $this->wxmenu_tq_model->add($data);
+            $_POST['first'] = $wxmenu['first'];
+            $_POST['create_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->wxmenu_tq_model->add($_POST);
             if ($result) {
                 //记录日志
                 LogController::log_record($result,1);

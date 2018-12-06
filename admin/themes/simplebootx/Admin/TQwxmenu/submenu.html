@@ -18,11 +18,13 @@
 					<th width="20"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 					<th width="50">排序</th>
 					<th width="150">菜单名</th>
-					<th width="300">链接地址</th>
+					<th width="150">菜单事件</th>
+					<th width="150">事件类别</th>
+					<th width="250">事件内容</th>
 					<th width="50">使用状态</th>
 					<th width="100">更新时间</th>
 					<th width="100">创建时间</th>
-					<th width="100">操作</th>
+					<th width="150">操作</th>
 				</tr>
 				</thead>
 				<foreach name="list" item="vo">
@@ -30,7 +32,9 @@
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
 						<td><input name='listorders[{$vo.id}]' class="input input-order mr5" type='text' size='3' value='{$vo.listorder}'></td>
 						<td>{$vo.name}</td>
-						<td>{$vo.url}</td>
+						<td>{$vo.event}</td>
+						<td>{$vo.type}</td>
+						<td>{$vo.content}</td>
 						<td>
 							<if condition="$vo.status eq 0">
 								未使用
@@ -52,11 +56,13 @@
 					<th width="20"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 					<th width="50">排序</th>
 					<th width="150">菜单名</th>
-					<th width="300">链接地址</th>
+					<th width="150">菜单事件</th>
+					<th width="150">事件类别</th>
+					<th width="250">事件内容</th>
 					<th width="50">使用状态</th>
 					<th width="100">更新时间</th>
 					<th width="100">创建时间</th>
-					<th width="100">操作</th>
+					<th width="150">操作</th>
 				</tr>
 				</tfoot>
 			</table>
