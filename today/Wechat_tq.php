@@ -707,36 +707,12 @@ class Wechat_tq {
             }
             //用户已关注时
             if(strtolower($postObj->Event) == 'click'){
-                $title = '您已关注铁樵健康';
-                $decription = '用我们贴心的服务，换您满意的微笑！';
-                $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
-                $url = 'http://tieqiao.zzzpsj.com/';
-                $time      = time();
-                $template  = "<xml>
-                              <ToUserName><![CDATA[%s]]></ToUserName>
-                              <FromUserName><![CDATA[%s]]></FromUserName>
-                              <CreateTime>%s</CreateTime>
-                              <MsgType><![CDATA[news]]></MsgType>
-                              <ArticleCount>1</ArticleCount>
-                              <Articles>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              </Articles>
-                              </xml>";
-                $info = sprintf($template, $toUser, $fromUser, $time, $title, $decription, $picurl, $url);
-                echo $info;
-                /*$EventKey = $postObj->EventKey;//菜单的自定义的key值，可以根据此值判断用户点击了什么内容，从而推送不同信息
-                \Think\Log::write('点击事件名:'.$EventKey,'WARN');
+                $EventKey = $postObj->EventKey;//菜单的自定义的key值，可以根据此值判断用户点击了什么内容，从而推送不同信息
                 switch($EventKey){
-                    case "newone" :  //菜单中key相关值
-                        $title = '您已关注铁樵健康';
-                        $decription = '测试资讯！';
-                        $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
-                        $url = 'http://tieqiao.zzzpsj.com/';
+                    case "newOne":
+                        $news_arr = array(
+                            'news1' => array('title' => '测试资讯', 'decription' => '测试资讯', 'PicUrl' => 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg', 'Url' => 'http://tieqiao.zzzpsj.com/'),
+                            'news2' => array('title' => '测试资讯123', 'decription' => '测试资讯123', 'PicUrl' => 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg', 'Url' => 'http://tieqiao.zzzpsj.com/'),);
                         $time      = time();
                         break;
                     case "lock_acount":
@@ -746,10 +722,6 @@ class Wechat_tq {
                         #返回的消息
                         break;
                 }
-                $ky = $postObj->EventKey;
-                if ($ky == 'newOne'){
-
-                }
                 $template  = "<xml>
                               <ToUserName><![CDATA[%s]]></ToUserName>
                               <FromUserName><![CDATA[%s]]></FromUserName>
@@ -763,10 +735,16 @@ class Wechat_tq {
                               <PicUrl><![CDATA[%s]]></PicUrl>
                               <Url><![CDATA[%s]]></Url>
                               </item>
+                              <item>
+                              <Title><![CDATA[%s]]></Title>
+                              <Description><![CDATA[%s]]></Description>
+                              <PicUrl><![CDATA[%s]]></PicUrl>
+                              <Url><![CDATA[%s]]></Url>
+                              </item>
                               </Articles>
                               </xml>";
-                $info = sprintf($template, $toUser, $fromUser, $time, $title, $decription, $picurl, $url);
-                echo $info;*/
+                $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url']);
+                echo $info;
             }
         }
     }

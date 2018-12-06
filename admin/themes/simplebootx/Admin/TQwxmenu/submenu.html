@@ -1,6 +1,13 @@
 <admintpl file="header"/>
 <link href="__PUBLIC__/simpleboot/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
 </head>
+<style>
+	table tr td{
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
+	}
+</style>
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
@@ -12,7 +19,7 @@
 				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/listorders')}">排序</button>
 				<button class="btn btn-danger btn-small js-ajax-submit" type="submit" data-action="{:U('TQwxmenu/delete')}" data-subcheck="true" data-msg="确定删除？">删除</button>
 			</div>
-			<table class="table table-hover table-bordered table-list">
+			<table class="table table-hover table-bordered table-list" style="table-layout:fixed;">
 				<thead>
 				<tr>
 					<th width="20"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>

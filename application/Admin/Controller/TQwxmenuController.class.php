@@ -173,14 +173,14 @@ class TQwxmenuController extends AdminbaseController {
             //使用
             if ($status == 1){
                 if ($num>3) $this->error('最多可以启用三个菜单！');
-                $menu_list = $this->wxmenu_tq_model->where( "id in ($ids)" )->select();
+                $menu_list = $this->wxmenu_tq_model->where( "id in ($ids)" )->order("listorder desc")->select();
                 $data='{ "button":[ ';
                 $count = count($menu_list);
                 foreach ( $menu_list as $key => $item){
                     $swhere['first'] = $item['first'];
                     $swhere['second'] = array('neq',0);
                     $swhere['del_flg'] = array('eq',0);
-                    $sub_list = $this->wxmenu_tq_model->where($swhere)->select();
+                    $sub_list = $this->wxmenu_tq_model->where($swhere)->order("listorder desc")->select();
                     if($key+1 == $count){
                         if(empty($sub_list)){
                             $data .=  '{
@@ -294,13 +294,17 @@ class TQwxmenuController extends AdminbaseController {
             $where['del_flg'] = array('eq',0);
             $second = $this->wxmenu_tq_model->where($where)->max('second');
             if (empty($second)){
-                $_POST['second'] = 1;
+                $data['second'] = 1;
             }else{
-                $_POST['second'] = $second+1;
+                $data['second'] = $second+1;
             }
-            $_POST['first'] = $wxmenu['first'];
-            $_POST['create_time'] = date('Y-m-d H:i:s',time());
-            $result = $this->wxmenu_tq_model->add($_POST);
+            $data['first'] = $wxmenu['first'];
+            $data['name'] = $_POST['name'];
+            $data['content'] = $_POST['content'];
+            $data['event'] = $_POST['event'];
+            $data['type'] = $_POST['type'];
+            $data['create_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->wxmenu_tq_model->add($data);
             if ($result) {
                 //记录日志
                 LogController::log_record($result,1);
