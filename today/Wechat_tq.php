@@ -711,9 +711,17 @@ class Wechat_tq {
                 switch($EventKey){
                     case "newOne":
                         $news_arr = array(
-                            'news1' => array('title' => '测试资讯', 'decription' => '测试资讯', 'PicUrl' => 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg', 'Url' => 'http://tieqiao.zzzpsj.com/'),
-                            'news2' => array('title' => '测试资讯123', 'decription' => '测试资讯123', 'PicUrl' => 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg', 'Url' => 'http://tieqiao.zzzpsj.com/'),);
-                        $time      = time();
+                            'news1' => array('title' => '为什么医生让我做了CT，又要做核磁共振？', 'decription' => '为什么医生让我做了CT，又要做核磁共振？', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/1.jpg', 'Url' => 'https://mp.weixin.qq.com/s?__biz=MzU1MjcxNzk2Mg==&mid=2247483726&idx=1&sn=b90ea22b52187a9b7ee351505b682f6e&chksm=fbfc9aabcc8b13bd451a27767269e81575e6ad75154acb26bd0b9776f6e7835bf0f81700f983&token=355504380&lang=zh_CN#rd'),
+                            'news2' => array('title' => '[传承创新一体 协作融合共赢］第十届江浙沪中西医结合高峰论坛2018年江浙沪中西医结合肿瘤学术年会圆满胜利召开', 'decription' => '[传承创新一体 协作融合共赢］第十届江浙沪中西医结合高峰论坛2018年江浙沪中西医结合肿瘤学术年会圆满胜利召开', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/2.jpg', 'Url' => 'https://mp.weixin.qq.com/s/Ya2Yc-bXiCHJwEZE-WVBxQ'),
+                            'news3' => array('title' => '史上最全体检报告漫画解读！速速收藏！', 'decription' => '史上最全体检报告漫画解读！速速收藏！', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/3.jpg', 'Url' => 'https://mp.weixin.qq.com/s?__biz=MzU1MjcxNzk2Mg==&mid=2247483726&idx=3&sn=ddb2c7614c6e17a6b3de381dd59d51b8&chksm=fbfc9aabcc8b13bd730c96cd0e3fc1458f9d8fcf48993461ccabeb9230b1a41694edd090111a&token=355504380&lang=zh_CN#rd'),
+                            'news4' => array('title' => 'CSPE 2018｜心律失常诊治讲座荟萃（一）', 'decription' => 'CSPE 2018｜心律失常诊治讲座荟萃（一）', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/4.jpg', 'Url' => 'https://mp.weixin.qq.com/s/AyVSP0QabkINsPaGm0kL4A'),
+                            'news5' => array('title' => '尿酸偏高但没有痛风表现，要紧吗？除了痛风，高尿酸血症还有更多危害！', 'decription' => '尿酸偏高但没有痛风表现，要紧吗？除了痛风，高尿酸血症还有更多危害！', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/5.jpg', 'Url' => 'https://mp.weixin.qq.com/s/EWHMSNZdtVU4wk6OsIznlg'),
+                            'news6' => array('title' => '珍藏版: 大肠癌的筛查及预防', 'decription' => '珍藏版: 大肠癌的筛查及预防', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/6.jpg', 'Url' => 'https://mp.weixin.qq.com/s?__biz=MzA4NDI5MzYzNA==&mid=2650621113&idx=5&sn=cb38e8ae7c86e0154ada99fe461dcd5a&chksm=87e085d4b0970cc222a80404c897c9f2a3a5b473bf80b11a30da768fff2451748df9812634a5&mpshare=1&scene=1&srcid=0822r375couehojXg0CGgpZ4&rd2werd=1#wechat_redirect'),
+                            'news7' => array('title' => '养生有道', 'decription' => '养生有道', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/7.png', 'Url' => 'https://mp.weixin.qq.com/s?__biz=MzU1MjcxNzk2Mg==&mid=2247483726&idx=7&sn=455743c742b1b44cdec990dd0ed31533&chksm=fbfc9aabcc8b13bd27eb91f333785b5da1cae246c931d33e45e2ba73cb781021b5f2c4372a58&token=355504380&lang=zh_CN#rd'),
+                            'news8' => array('title' => '亚健康状态和中医“治未病”', 'decription' => '亚健康状态和中医“治未病”', 'PicUrl' => 'http://tieqiao.zzzpsj.com/upload_img/push/8.jpg', 'Url' => 'https://mp.weixin.qq.com/s?__biz=MzU1MjcxNzk2Mg==&mid=2247483726&idx=8&sn=de2f8573f93158ce8cc4889337174701&chksm=fbfc9aabcc8b13bde15dec7234385f3bd0768a7a9878be52ebb0fbcc336e48dd81c7abfd208b&token=355504380&lang=zh_CN#rd')
+                        );
+                        $time = time();
+                        $count = 8;
                         break;
                     case "lock_acount":
                         #返回的消息
@@ -727,23 +735,19 @@ class Wechat_tq {
                               <FromUserName><![CDATA[%s]]></FromUserName>
                               <CreateTime>%s</CreateTime>
                               <MsgType><![CDATA[news]]></MsgType>
-                              <ArticleCount>2</ArticleCount>
-                              <Articles>
-                              <item>
+                              <ArticleCount>".$count."</ArticleCount>
+                              <Articles>";
+                for ($i=1;$i<=$count;$i++){
+                    $template  .= "<item>
                               <Title><![CDATA[%s]]></Title>
                               <Description><![CDATA[%s]]></Description>
                               <PicUrl><![CDATA[%s]]></PicUrl>
                               <Url><![CDATA[%s]]></Url>
-                              </item>
-                              <item>
-                              <Title><![CDATA[%s]]></Title>
-                              <Description><![CDATA[%s]]></Description>
-                              <PicUrl><![CDATA[%s]]></PicUrl>
-                              <Url><![CDATA[%s]]></Url>
-                              </item>
-                              </Articles>
+                              </item>";
+                }
+                $template  .= "</Articles>
                               </xml>";
-                $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url']);
+                $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url'], $news_arr['news3']['title'], $news_arr['news3']['decription'], $news_arr['news3']['PicUrl'], $news_arr['news3']['Url'], $news_arr['news4']['title'], $news_arr['news4']['decription'], $news_arr['news4']['PicUrl'], $news_arr['news4']['Url'], $news_arr['news5']['title'], $news_arr['news5']['decription'], $news_arr['news5']['PicUrl'], $news_arr['news5']['Url'], $news_arr['news6']['title'], $news_arr['news6']['decription'], $news_arr['news6']['PicUrl'], $news_arr['news6']['Url'], $news_arr['news7']['title'], $news_arr['news7']['decription'], $news_arr['news7']['PicUrl'], $news_arr['news7']['Url'], $news_arr['news8']['title'], $news_arr['news8']['decription'], $news_arr['news8']['PicUrl'], $news_arr['news8']['Url']);
                 echo $info;
             }
         }
