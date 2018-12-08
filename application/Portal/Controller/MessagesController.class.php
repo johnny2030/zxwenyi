@@ -89,11 +89,6 @@ class MessagesController extends CheckController  {
             $where['e.status'] = array('eq',0);
             $where['e.del_flg'] = array('eq',0);
             $where['e.msg_id'] = array('eq',$msg_id);
-            if ($user['type'] == 0){
-                $where['e.user_id'] = array('eq',$id);
-            }else{
-                $where['e.doctor_id'] = array('eq',$id);
-            }
             $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.age as age,u.sex as sex,u.photo as uphoto,d.name as dname,o.name as office_n,d.hospital as hospital,d.photo as dphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->join('__COMMON_USER__ d ON e.doctor_id=d.id','left')->join('__COMMON_OFFICE__ o ON d.office=o.id','left')->where($where)->find();
             $this->assign( 'type', $user['type'] );
             $this->assign( 'msg_id', $msg_id );
