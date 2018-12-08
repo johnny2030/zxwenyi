@@ -9,65 +9,82 @@
 		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 		<h1 class="mui-title">咨询反馈</h1>
 	</header>
-	<div class="mui-content">
-		<div class="mui-content-padded">
-			<div class="mui-card">
-				<div class="mui-card-header mui-card-media">
-					<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 55px;height: 55px;"/>
-					<div class="mui-media-body">
-						<p>李医生</p>
-						<p>长海医院－内科</p>
+	<notempty name="elte_info.doctor_id">
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<div class="mui-card">
+					<div class="mui-card-header mui-card-media">
+						<img src="{$elte_info.dphoto}" style="width: 55px;height: 55px;"/>
+						<div class="mui-media-body">
+							<p>{$elte_info.dname}</p>
+							<p>{$elte_info.hospital}－{$elte_info.office_n}</p>
+						</div>
 					</div>
+					<div class="mui-card-content">
+						<p>{$elte_info.content}</p>
+					</div>
+					<div class="mui-card-footer">提交时间：{$elte_info.doctor_time}</div>
 				</div>
-				<div class="mui-card-content">
-					<p>医生结论&意见医生结论&意见医生结论&意见医生结论&意见医生结论&意见医生结论&意见</p>
-				</div>
-				<div class="mui-card-footer">提交时间：2018-12-05 14:41:07</div>
 			</div>
 		</div>
-	</div>
-	<div class="mui-content" style="padding-top: 5px !important;">
-		<div class="mui-content-padded">
-			<div class="mui-card">
-				<div class="mui-card-header mui-card-media">
-					<img src="__TMPL__Tieqiao/images/patient.jpg" style="width: 55px;height: 55px;"/>
-					<div class="mui-media-body">
-						<p>测试用户</p>
-						<p>男－28</p>
+	</notempty>
+	<notempty name="elte_info.user_id">
+		<div class="mui-content" style="padding-top: 5px !important;">
+			<div class="mui-content-padded">
+				<div class="mui-card">
+					<div class="mui-card-header mui-card-media">
+						<img src="{$elte_info.uphoto}" style="width: 55px;height: 55px;"/>
+						<div class="mui-media-body">
+							<p>{$elte_info.uname}</p>
+							<p>
+								<if condition="$elte_info.sex eq 2">
+									<option value="1">男</option>
+									<option value="2" selected>女</option>
+									<else />
+									<option value="1" selected>男</option>
+									<option value="2">女</option>
+								</if>
+								－{$elte_info.age}</p>
+						</div>
 					</div>
-				</div>
-				<div class="mui-card-content">
-					<div class="mui-input-row">
-						<div class="mui-content-padded">
-							<div class="mui-inline">咨询评分</div>
-							<div class="icons mui-inline" style="margin-left: 6px;" id="star">
+					<div class="mui-card-content">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">咨询评分</div>
+								<div class="icons mui-inline" style="margin-left: 6px;" id="star">
+								</div>
 							</div>
 						</div>
 					</div>
+					<div class="mui-card-footer">提交时间：{$elte_info.user_time}</div>
 				</div>
-				<div class="mui-card-footer">提交时间：2018-12-05 15:12:33</div>
 			</div>
 		</div>
-	</div>
-	<div class="mui-content" style="padding-top: 15px !important;">
+	</notempty>
+	<div class="mui-content" style="padding-top: 3rem !important;">
 		<form method="post" name="info" action="{:U('portal/messages/evaluate')}">
-			<div class="mui-content-padded">
-				<div class="mui-inline">结论</div>
-			</div>
-			<div class="row mui-input-row">
-				<textarea id='content' class="mui-input-clear question" placeholder="请填写结论..."></textarea>
-			</div>
-			<div class="mui-content-padded">
-				<div class="mui-inline">咨询评分</div>
-				<div class="icons mui-inline" style="margin-left: 6px;">
-					<i data-index="2" class="mui-icon mui-icon-star"></i>
-					<i data-index="4" class="mui-icon mui-icon-star"></i>
-					<i data-index="6" class="mui-icon mui-icon-star"></i>
-					<i data-index="8" class="mui-icon mui-icon-star"></i>
-					<i data-index="10" class="mui-icon mui-icon-star"></i>
+			<input type="hidden" id="msg_id" name="msg_id" value="{$msg_id}"/>
+			<input type="hidden" id="id" name="id" value="{$elte_info.id}"/>
+			<if condition="$type eq 1">
+				<div class="mui-content-padded">
+					<div class="mui-inline">结论</div>
 				</div>
-				<input type="hidden" id="elte" name="elte" value="">
-			</div><br />
+				<div class="row mui-input-row">
+					<textarea id='content' name="content" class="mui-input-clear question" placeholder="请填写结论..."></textarea>
+				</div>
+				<else />
+				<div class="mui-content-padded">
+					<div class="mui-inline">咨询评分</div>
+					<div class="icons mui-inline" style="margin-left: 6px;">
+						<i data-index="2" class="mui-icon mui-icon-star"></i>
+						<i data-index="4" class="mui-icon mui-icon-star"></i>
+						<i data-index="6" class="mui-icon mui-icon-star"></i>
+						<i data-index="8" class="mui-icon mui-icon-star"></i>
+						<i data-index="10" class="mui-icon mui-icon-star"></i>
+					</div>
+					<input type="hidden" id="elte" name="elte" value="">
+				</div>
+			</if>
 			<div class="mui-button-row">
 				<button type="submit" id="confirmBtns" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
 				<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>

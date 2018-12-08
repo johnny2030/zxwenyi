@@ -74,28 +74,29 @@ class MessagesController extends CheckController  {
                 $_POST['doctor_time'] = date('Y-m-d H:i:s',time());
             }
             if (empty($_POST['id'])){
-                $result = $this->common_evaluate_model->add($_POST);
+                $this->common_evaluate_model->add($_POST);
             }else{
-                $_POST['status'] = 1;
-                $result = $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
+                $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
             }
             session('flg','redt');
             R('Messages/evaluate');
         }else{
             session('flg',null);
             $id = (int)session('login_id');
+            $msg_id = $_GET['msg_id'];
             $user = $this->common_user_model->find($id);
             $where = array();
             $where['e.status'] = array('eq',0);
             $where['e.del_flg'] = array('eq',0);
+            $where['e.msg_id'] = array('eq',$msg_id);
             if ($user['type'] == 0){
                 $where['e.user_id'] = array('eq',$id);
-                $this->assign( 'elte_info', $user );
             }else{
                 $where['e.doctor_id'] = array('eq',$id);
-                $this->assign( 'elte_info', $user );
             }
-            $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.photo as uphoto,d.name as dname,d.photo as dphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->join('__COMMON_USER__ d ON e.doctor_id=d.id','left')->where($where)->find();
+            $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.age as age,u.sex as sex,u.photo as uphoto,d.name as dname,o.name as office_n,d.hospital as hospital,d.photo as dphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->join('__COMMON_USER__ d ON e.doctor_id=d.id','left')->join('__COMMON_OFFICE__ o ON d.office=o.id','left')->where($where)->find();
+            $this->assign( 'type', $user['type'] );
+            $this->assign( 'msg_id', $msg_id );
             $this->assign( 'elte_info', $elte_info );
             $this->display('../Tieqiao/evaluate');
         }
