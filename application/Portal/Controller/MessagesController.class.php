@@ -117,7 +117,10 @@ class MessagesController extends HomebaseController {
         $where = array();
         $where['m.id'] = array('eq',$id);
         $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
-        $list = $this->common_record_model->where(array('user_id' => $msg_Info['user_id']))->select();
+        $where_r = array();
+        $where_r['message_id'] = array('eq',$msg_Info['id']);
+        $where_r['user_id'] = array('eq',$msg_Info['user_id']);
+        $list = $this->common_record_model->where($where_r)->select();
         session('send_id',$msg_Info['user_id']);
         $this->assign( 'list', $list );
         $this->assign( 'msg', $msg_Info );
