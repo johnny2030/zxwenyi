@@ -32,8 +32,8 @@
 					</h6>
 					<h6 class="mui-ellipsis">
 						<if condition="$msg.type eq 0"> 咨询中
-							<elseif condition="$msg.type eq 1"/>已转发
-							<else />已群发
+							<elseif condition="$msg.type eq 1"/>已群发
+							<else />已转发
 						</if>
 						－
 						<if condition="$msg.status eq 0"> 未处理
@@ -98,6 +98,7 @@
     mui.previewImage();//图片点击放大预览主要js
 </script>
 	<script type="text/javascript">
+        mui('body').on('tap','a',function(){document.location.href=this.href;});
 		function forward(id) {
             var btnArray = ['确定', '取消'];
             mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
@@ -113,8 +114,9 @@
                         success : function(data) {
                             if(data == 0){
                                 mui.toast('转发成功！');
+                                window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
                             }else{
-                                alert("转发失败");
+                                mui.toast("转发失败！");
                             }
                         }
                     });

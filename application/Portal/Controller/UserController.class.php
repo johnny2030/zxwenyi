@@ -3,9 +3,8 @@
  * 用户端
  */
 namespace Portal\Controller;
-use Common\Controller\HomebaseController;
 
-class UserController extends HomebaseController {
+class UserController extends CheckController {
 
     private $common_user_model;
     private $common_tag_model;
@@ -30,29 +29,14 @@ class UserController extends HomebaseController {
         $this->common_position_model = D( 'Common_position' );
         $this->common_record_model = D( 'Common_record' );
 	}
-    //患者登记
-    public function register_patient() {
+    //用户身份判断
+    public function user_info() {
         $id = (int)session('login_id');
-        if ( IS_POST ) {
-            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
-            $data = array();
-            $data['user_id'] = $id;
-            $data['status'] = 1;
-            $data['use_time'] = date('Y-m-d H:i:s',time());
-            $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
-            if ($result&&$results) {
-                session('flg','redt');
-                R('User/info_patient');
-            } else {
-                $this->error('登记失败！');
-            }
+        $user = $this->common_user_model->find($id);
+        if ($user['type'] == 0){
+            R('User/info_patient');
         }else{
-            $user = $this->common_user_model->find($id);
-            if (empty($user['i_card'])){
-                $this->display('../Tieqiao/register_patient');
-            }else{
-                R('User/info_patient');
-            }
+            R('User/info_doctor');
         }
     }
     //患者个人中心
@@ -91,30 +75,6 @@ class UserController extends HomebaseController {
             $this->assign( 'lists', $lists );
             $this->assign( 'patient', $patient );
             $this->display('../Tieqiao/info_patient');
-        }
-    }
-    //医生登记
-    public function register_doctor() {
-        if ( IS_POST ) {
-            $id = (int)session('login_id');
-            $_POST['type'] = 1;
-            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
-            if ($result) {
-                session('flg','redt');
-                R('User/info_doctor');
-            } else {
-                $this->error('登记失败！');
-            }
-        }else{
-            $where = array();
-            $where['del_flg'] = array('eq',0);
-            $hlist = $this->common_hospital_model->where($where)->select();
-            $olist = $this->common_office_model->where($where)->select();
-            $plist = $this->common_position_model->where($where)->select();
-            $this->assign( 'hlist', $hlist );
-            $this->assign( 'olist', $olist );
-            $this->assign( 'plist', $plist );
-            $this->display('../Tieqiao/register_doctor');
         }
     }
     //医生个人中心
@@ -199,7 +159,7 @@ class UserController extends HomebaseController {
             $user = $this->common_user_model->field('name')->find($id);
             foreach($list as $value){
                 $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=advice';
-                $this->template_send_tq($_POST['title'],$user['name'],$value['open_id'],$url);
+                $this->template_send_tq($_POST['content'],$user['name'],$value['open_id'],$url);
             }
             $this->formError[] = '咨询成功，请耐心等待医生回复';
             $this->assign( 'formError', $this->formError );

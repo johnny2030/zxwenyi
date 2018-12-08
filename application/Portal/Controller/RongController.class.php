@@ -1,11 +1,10 @@
 <?php
 namespace Portal\Controller;
-use Common\Controller\HomebaseController;
 
 require_once 'today/config.php';
 require_once 'today/RongCloud/rongcloud.php';
 require_once 'simplewind/Core/Library/Think/Upload/Driver/Qiniu.class.php';
-class RongController extends HomebaseController {
+class RongController extends CheckController {
 
     private $common_user_model;
     private $rong_token_model;

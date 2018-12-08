@@ -80,6 +80,18 @@
 				<div class="mui-input-row">
 					<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="{$doctor.phone}">
 				</div>
+				<div class="mui-input-row" style="background-color:#ffffff !important;border-radius:10px;border:1px solid #D4D4D4;margin-bottom:10px;">
+					<label class="label_info">审核状态</label>
+					<span class="span_info">|</span>
+					<if condition="$doctor['check'] eq 0">
+						<span class="input_info" style="font-size: 1rem;margin-left: 5px;">审核中</span>
+						<elseif condition="$doctor['check'] eq 1"/>
+						<span class="input_info" style="font-size: 1rem;margin-left: 5px;">审核成功</span>
+						<else />
+						<span class="input_info" style="font-size: 1rem;margin-left: 5px;">审核失败</span>
+					</if>
+
+				</div>
 				<div class="mui-input-row">
 					<textarea id="introduce" name="introduce" placeholder="请输入个人介绍" class="u-textarea">{$doctor.introduce}</textarea>
 				</div>

@@ -9,29 +9,32 @@ class CheckController extends HomebaseController {
         $id=session('login_id');
         $user = D('Common_user')->find($id);
         //判断信息是否完善
-        if (!$this->check_info($user)){
-            if ($user['status'] == 1){
-                R('Index/register_doctor');
-            }else{
+        if (!$user){
+            R('Index/register_patient');
+        }else if (empty($user['type']) || $user['type'] == 0){
+            if (!$this->check_info_pt($user)){
                 R('Index/register_patient');
+            }
+        }else{
+            if (!$this->check_info_dc($user)){
+                R('Index/register_doctor');
             }
         }
     }
-    //判断信息是否完善
-    public function check_info($user) {
-        //判断是否是医生
-        if ($user['status'] == 1){
-            if (empty($user['name']) || empty($user['sex']) || empty($user['phone']) || empty($user['age']) || empty($user['hospital']) || empty($user['office']) || empty($user['tag']) || empty($user['province']) || empty($user['city'])) {
-                return false;
-            }else{
-                return true;
-            }
+    //判断信息是否完善（医生）
+    public function check_info_dc($user) {
+        if (empty($user['hospital']) && empty($user['office']) && empty($user['tag']) && empty($user['position'])) {
+            return false;
         }else{
-            if (empty($user['name']) || empty($user['sex']) || empty($user['phone']) || empty($user['age']) || empty($user['province']) || empty($user['city'])) {
-                return false;
-            }else{
-                return true;
-            }
+            return true;
+        }
+    }
+    //判断信息是否完善（用户）
+    public function check_info_pt($user) {
+        if (empty($user['m_card_id'])) {
+            return false;
+        }else{
+            return true;
         }
     }
 }

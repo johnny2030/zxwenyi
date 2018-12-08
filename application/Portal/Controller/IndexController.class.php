@@ -5,24 +5,81 @@ use Common\Controller\HomebaseController;
 class IndexController extends HomebaseController {
 
     private $common_user_model;
+    private $common_position_model;
+    private $common_office_model;
+    private $common_hospital_model;
+    private $common_card_model;
 
     public function _initialize() {
         parent::_initialize();
 
         $this->common_user_model = D( 'Common_user' );
+        $this->common_office_model = D( 'Common_office' );
+        $this->common_position_model = D( 'Common_position' );
+        $this->common_hospital_model = D( 'Common_hospital' );
+        $this->common_card_model = D( 'Common_card' );
     }
 
     //首页
 	public function index() {
         $this->display('../Tieqiao/index');
     }
-    public function user_info() {
+    //医生注册
+    public function register_doctor() {
         $id = (int)session('login_id');
-        $user = $this->common_user_model->find($id);
-        if ($user['type'] == 0){
-            R('User/info_patient');
+        if ( IS_POST ) {
+            $_POST['type'] = 1;
+            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
+            if ($result) {
+                session('flg','redt');
+                R('User/info_doctor');
+            } else {
+                $this->error('登记失败！');
+            }
         }else{
-            R('User/info_doctor');
+            $user = $this->common_user_model->find($id);
+            if (empty($user['hospital']) && empty($user['office']) && empty($user['tag']) && empty($user['position'])) {
+                $where = array();
+                $where['del_flg'] = array('eq',0);
+/*                $hlist = $this->common_hospital_model->where($where)->select();
+                $this->assign( 'hlist', $hlist );*/
+                $olist = $this->common_office_model->where($where)->select();
+                $plist = $this->common_position_model->where($where)->select();
+                $this->assign( 'olist', $olist );
+                $this->assign( 'plist', $plist );
+                $this->display('../Tieqiao/register_doctor');
+            }else{
+                session('flg','redt');
+                R('User/info_doctor');
+            }
+            exit();
+        }
+    }
+    //用户注册
+    public function register_patient() {
+        $id = (int)session('login_id');
+        if ( IS_POST ) {
+            $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
+            $data = array();
+            $data['user_id'] = $id;
+            $data['status'] = 1;
+            $data['use_time'] = date('Y-m-d H:i:s',time());
+            $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
+            if ($result&&$results) {
+                session('flg','redt');
+                R('User/info_patient');
+            } else {
+                $this->error('登记失败！');
+            }
+        }else{
+            $user = $this->common_user_model->find($id);
+            if (empty($user['i_card'])){
+                $this->display('../Tieqiao/register_patient');
+            }else{
+                session('flg','redt');
+                R('User/info_patient');
+            }
+            exit();
         }
     }
     //获取素材总数
