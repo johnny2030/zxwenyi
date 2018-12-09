@@ -660,7 +660,7 @@ class Wechat_tq {
                 $title = '欢迎关注铁樵健康';
                 $decription = '用我们贴心的服务，换您满意的微笑！';
                 $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
-                $url = 'http://tieqiao.zzzpsj.com/';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=user_info';
                 $time      = time();
                 $template  = "<xml>
                               <ToUserName><![CDATA[%s]]></ToUserName>
@@ -685,7 +685,7 @@ class Wechat_tq {
                 $title = '您已关注铁樵健康';
                 $decription = '用我们贴心的服务，换您满意的微笑！';
                 $picurl = 'http://tieqiao.zzzpsj.com/themes/dp/Public/images/welcome.jpg';
-                $url = 'http://tieqiao.zzzpsj.com/';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=user_info';
                 $time      = time();
                 $template  = "<xml>
                               <ToUserName><![CDATA[%s]]></ToUserName>

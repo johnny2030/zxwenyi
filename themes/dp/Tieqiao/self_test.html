@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <tc_include file="Public/TQHead"/>
+</head>
+<style type="text/css">
+    .mui-radio input[type=radio]:before {font-size: 25px;}
+    .mui-radio input[type=radio]:checked:before {content: '\e442';}
+    .mui-radio label {padding-left:95% !important; width: 200% !important;}
+    .mui-radio-f {width: 15%;float: left;margin-left: -4%;}
+    .mui-radio-o {width: 15%;float: left;margin-left: 4%;}
+    .mui-button-row button{height: 35px;margin-bottom:2rem;margin-top:1rem;}
+</style>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">中医体质辨识表</h1>
+</header>
+<div class="mui-content">
+    <form method="post" name="info" action="{:U('portal/user/self_test')}">
+        <input type="hidden" id="type" name="type" value="{$type}"/>
+        <input type="hidden" id="types" name="types" value=""/>
+        <input type="hidden" id="result" name="result" value="{$result}"/>
+        <div class="mui-card">
+            <div class="mui-card-header mui-card-media">
+                <img src="__TMPL__Public/images/table_logo.png" style="width: 2rem;height: 2rem;"/>
+                <div class="mui-media-body" style="font-size:1rem;line-height:2rem;">
+                    <if condition="$type eq 1">
+                        第一组（阳虚质）
+                    </if>
+                    <if condition="$type eq 2">
+                        第二组（阴虚质）
+                    </if>
+                    <if condition="$type eq 3">
+                        第三组（气虚质）
+                    </if>
+                    <if condition="$type eq 4">
+                        第四组（痰湿质）
+                    </if>
+                    <if condition="$type eq 5">
+                        第五组（湿热质）
+                    </if>
+                    <if condition="$type eq 6">
+                        第六组（血瘀质）
+                    </if>
+                    <if condition="$type eq 7">
+                        第七组（特禀质）
+                    </if>
+                    <if condition="$type eq 8">
+                        第八组（气郁质）
+                    </if>
+                    <if condition="$type eq 9">
+                        第九组（平和质）
+                    </if>
+                </div>
+            </div>
+            <div class="mui-card-content">
+                <foreach name="list" item="l">
+                    <div class="mui-input-row">
+                        <div class="mui-content-padded">
+                            <p style="font-size: 1rem;color: black;">{$l.content}</p>
+                            <div class="mui-radio mui-left mui-radio-f">
+                                <label>没有</label>
+                                <input name="{$l.id}" type="radio" value="1">
+                            </div>
+                            <div class="mui-radio mui-left mui-radio-o">
+                                <label>很少</label>
+                                <input name="{$l.id}" type="radio" value="2">
+                            </div>
+                            <div class="mui-radio mui-left mui-radio-o">
+                                <label>有时</label>
+                                <input name="{$l.id}" type="radio" value="3">
+                            </div>
+                            <div class="mui-radio mui-left mui-radio-o">
+                                <label>经常</label>
+                                <input name="{$l.id}" type="radio" value="4">
+                            </div>
+                            <div class="mui-radio mui-left mui-radio-o">
+                                <label>总是</label>
+                                <input name="{$l.id}" type="radio" value="5">
+                            </div>
+                        </div>
+                    </div>
+                </foreach>
+            </div>
+            <div class="mui-button-row">
+                <if condition="$type eq 1">
+                    <button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="sub_form('add')">下一页</button>
+                    <elseif condition="$type eq 9"/>
+                    <button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="sub_form('end')">提交</button>
+                    <else />
+                    <button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="sub_form('remove')">上一页</button>&nbsp;&nbsp;
+                    <button type="button" class="mui-btn mui-btn-primary footer-btn" onclick="sub_form('add')">下一页</button>
+                </if>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    function sub_form(check){
+        if (check == 'add'){
+            var type = parseInt("{$type}") + 1;
+            $("#types").val(type);
+        } else if (check == 'remove'){
+            var type = parseInt("{$type}") - 1;
+            $("#types").val(type);
+        } else {
+            $("#types").val(0);
+        }
+        $("form[name='info']").submit();
+    }
+</script>
+</html>

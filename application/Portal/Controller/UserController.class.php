@@ -15,6 +15,9 @@ class UserController extends CheckController {
     private $common_messages_model;
     private $common_position_model;
     private $common_record_model;
+    private $common_determine_model;
+    private $common_result_model;
+    private $common_result_rel_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -28,6 +31,9 @@ class UserController extends CheckController {
         $this->common_messages_model = D( 'Common_messages' );
         $this->common_position_model = D( 'Common_position' );
         $this->common_record_model = D( 'Common_record' );
+        $this->common_determine_model = D( 'Common_determine' );
+        $this->common_result_model = D( 'Common_result' );
+        $this->common_result_rel_model = D( 'Common_result_rel' );
 	}
     //用户身份判断
     public function user_info() {
@@ -167,6 +173,106 @@ class UserController extends CheckController {
         } else {
             $this->display('../Tieqiao/question');
         }
+    }
+    function self_test(){
+	    if ( IS_POST ){
+            $type = $_POST['type'];
+            $types = $_POST['types'];
+            $result = $_POST['result'];
+            if (empty($result)){
+                $result = array();
+            }else{
+                $result = explode(",", $result);
+            }
+            if ($types == 0){
+                $rlt = array();
+                $lt = count($result) - 1;
+                $pinghe = $result[$lt];
+                $data = array();
+                if ($pinghe>=60){
+                    $flg = true;
+                    for ($i = 0;$i<$lt;$i++){
+                        if ($result[$i]>30){
+                            $flg = false;
+                        }
+                    }
+                    if($flg){
+                        $data['type'] = 1;
+                        $data['status'] = 1;
+                        $data['result'] = 1;
+                        $rlt[] = $this->common_result_rel_model->add($data);
+                    }else{
+                        for ($i = 0;$i<$lt;$i++){
+                            if ($result[$i]>40){
+                                $flg = false;
+                            }
+                        }
+                    }
+                    if($flg){
+                        $data['type'] = 9;
+                        $data['status'] = 2;
+                        $data['result'] = 1;
+                        $rlt[] = $this->common_result_rel_model->add($data);
+                    }
+                }
+                for ($i = 0;$i<$lt;$i++){
+                    if ($result[$i]>=40){
+                        $data['type'] = $i+1;
+                        $data['status'] = 1;
+                        $data['result'] = 1;
+                        $rlt[] = $this->common_result_rel_model->add($data);
+                    }elseif ($result[$i]>=30 && $result[$i]<=39){
+                        $data['type'] = $i+1;
+                        $data['status'] = 3;
+                        $data['result'] = 1;
+                        $rlt[] = $this->common_result_rel_model->add($data);
+                    }
+                }
+                $rlt = implode(",", $rlt);
+                $this->redirect('User/self_test_result', array('result' => $rlt));
+            }else{
+                if ($type>$types){
+                    $lt = count($result) - 1;
+                    unset($result[$lt]);
+                }else{
+                    $where = array();
+                    $where['type'] = $type;
+                    $list = $this->common_determine_model->where($where)->select();
+                    $num = count($list);
+                    $vl = 0;
+                    foreach($list as $data){
+                        $id = $data['id'];
+                        $vl += (int)$_POST[$id];
+                    }
+                    $vl = $vl - $num;
+                    $num = $num * 4;
+                    $result[] = floor($vl/$num*100);
+                }
+                $result = implode(",", $result);
+                $this->redirect('User/self_test', array('result' => $result,'type' => $types));
+            }
+        }else{
+            $type = $_GET['type'];
+            $result = $_GET['result'];
+            if (empty($type)){
+                $type = 1;
+            }
+            $where = array();
+            $where['type'] = $type;
+            $list = $this->common_determine_model->where($where)->select();
+            $this->assign( 'type', $type );
+            $this->assign( 'result', $result );
+            $this->assign( 'list', $list );
+            $this->display('../Tieqiao/self_test');
+        }
+    }
+    function self_test_result(){
+        $result = $_POST['result'];
+        $where = array();
+        $where['id'] = array('in',$result);
+        $list = $this->common_result_model->select();
+        $this->assign( 'list', $list );
+        $this->display('../Tieqiao/self_test_result');
     }
     //上传图片
     public function uploadImg($img,$msg_id){
