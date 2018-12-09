@@ -63,8 +63,9 @@ class MessagesController extends CheckController  {
     //评价结论
     public function evaluate() {
         $flg = session('flg');
+        $id = (int)session('login_id');
         if ( IS_POST  && empty($flg)) {
-            $id = (int)session('login_id');
+            \Think\Log::write('跳转msg_id:'.$_POST['msg_id'],'WARN');
             $user = $this->common_user_model->find($id);
             if ($user['type'] == 0){
                 $_POST['user_id'] = $id;
@@ -79,10 +80,17 @@ class MessagesController extends CheckController  {
                 $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
             }
             session('flg','redt');
-            R('Messages/evaluate');
+            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.open_id as open_id_u,u.name as uname,d.open_id as open_id_d,d.name as name')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id')->where(array('m.id' => $_POST['msg_id']))->find();
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
+            if ($user['type'] == 0){
+                $wechat->customSendImg($msg_info['open_id_d'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看');
+            }else{
+                $wechat->customSendImg($msg_info['open_id_u'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您的咨询已被'.$msg_info['name'].'关闭','点击这里查看并评价');
+            }
+            $this->redirect('Messages/evaluate', array('msg_id' => $_POST['msg_id']));
         }else{
             session('flg',null);
-            $id = (int)session('login_id');
             $msg_id = $_GET['msg_id'];
             $user = $this->common_user_model->find($id);
             $where = array();

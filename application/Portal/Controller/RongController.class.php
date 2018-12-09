@@ -138,7 +138,6 @@ class RongController extends CheckController {
             $wechat = new \Wechat_tq( $this );
             $patient_user = $this->common_user_model->find($_GET['userId']);
             $doctor_user = $this->common_user_model->find(session('login_id'));
-            $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您的咨询已被'.$doctor_user['name'].'关闭','点击这里进行评价');
             if ($doctor_user['status'] == 0){
                 $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
             }else{

@@ -38,11 +38,9 @@
 							<p>{$elte_info.uname}</p>
 							<p>
 								<if condition="$elte_info.sex eq 2">
-									<option value="1">男</option>
-									<option value="2" selected>女</option>
+									女
 									<else />
-									<option value="1" selected>男</option>
-									<option value="2">女</option>
+									男
 								</if>
 								－{$elte_info.age}</p>
 						</div>
@@ -63,32 +61,40 @@
 	</notempty>
 	<div class="mui-content" style="padding-top: 3rem !important;">
 		<form method="post" name="info" action="{:U('portal/messages/evaluate')}">
-			<input type="hidden" id="msg_id" name="msg_id" value="{$msg_id}"/>
-			<input type="hidden" id="id" name="id" value="{$elte_info.id}"/>
-			<if condition="$type eq 1">
-				<div class="mui-content-padded">
-					<div class="mui-inline">结论</div>
-				</div>
-				<div class="row mui-input-row">
-					<textarea id='content' name="content" class="mui-input-clear question" placeholder="请填写结论..."></textarea>
-				</div>
-				<else />
-				<div class="mui-content-padded">
-					<div class="mui-inline">咨询评分</div>
-					<div class="icons mui-inline" style="margin-left: 6px;">
-						<i data-index="2" class="mui-icon mui-icon-star"></i>
-						<i data-index="4" class="mui-icon mui-icon-star"></i>
-						<i data-index="6" class="mui-icon mui-icon-star"></i>
-						<i data-index="8" class="mui-icon mui-icon-star"></i>
-						<i data-index="10" class="mui-icon mui-icon-star"></i>
+			<input type="hidden" name="msg_id" value="{$msg_id}"/>
+			<input type="hidden" name="id" value="{$elte_info.id}"/>
+			<if condition="$type eq 0">
+				<empty name="elte_info.user_id">
+					<div class="mui-content-padded">
+						<div class="mui-inline">咨询评分</div>
+						<div class="icons mui-inline" style="margin-left: 6px;">
+							<i data-index="2" class="mui-icon mui-icon-star"></i>
+							<i data-index="4" class="mui-icon mui-icon-star"></i>
+							<i data-index="6" class="mui-icon mui-icon-star"></i>
+							<i data-index="8" class="mui-icon mui-icon-star"></i>
+							<i data-index="10" class="mui-icon mui-icon-star"></i>
+						</div>
+						<input type="hidden" id="elte" name="elte" value="">
 					</div>
-					<input type="hidden" id="elte" name="elte" value="">
-				</div>
+					<div class="mui-button-row">
+						<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
+						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+					</div>
+				</empty>
+				<else />
+				<empty name="elte_info.doctor_id">
+					<div class="mui-content-padded">
+						<div class="mui-inline">结论</div>
+					</div>
+					<div class="row mui-input-row">
+						<textarea id='content' name="content" class="mui-input-clear question" placeholder="请填写结论..."></textarea>
+					</div>
+					<div class="mui-button-row">
+						<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
+						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+					</div>
+				</empty>
 			</if>
-			<div class="mui-button-row">
-				<button type="submit" id="confirmBtns" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
-				<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-			</div>
 		</form>
 	</div>
 	<script src=" __TMPL__Public/js/feedback.js" type="text/javascript" charset="utf-8"></script>
