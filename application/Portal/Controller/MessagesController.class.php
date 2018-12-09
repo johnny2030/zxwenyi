@@ -188,6 +188,7 @@ class MessagesController extends CheckController  {
         $this->common_messages_model->where(array('id' => $id))->save($data);
         $where = array();
         $where['type'] = array('eq',1);
+        $where['check'] = array('eq',1);
         $where['del_flg'] = array('eq',0);
         $list = $this->common_user_model->where($where)->select();
         $msg_info = $this->common_messages_model->find($id);
