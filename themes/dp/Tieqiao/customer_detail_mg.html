@@ -47,7 +47,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="doctor-introduce">
+		<div class="doctor-introduce" id="show">
 			<div class="mui-card">
 				<div class="mui-card-header">
 					<span>咨询内容</span>
@@ -82,9 +82,9 @@
 			</div>
 		</div>
 		<div style="text-align: center;">
-			<a class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" onclick="forward('{$msg.id}')">群发</a>
-			<a class="mui-btn mui-btn-warning footer-btn" href="{:U('portal/messages/send_show',array('id'=>$msg['id']))}">转发</a>
-			<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')">立即回复</a>
+			<a id="forward" class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" style="line-height: 27px;">群发</a>
+			<a id="send_show" class="mui-btn mui-btn-warning footer-btn" href="javascript:void(0);" style="line-height: 27px;">转发</a>
+			<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')" style="line-height: 27px;">立即回复</a>
 		</div>
 		<div>
 			<rong-widget></rong-widget>
@@ -94,36 +94,38 @@
 <script type="text/javascript" src="__TMPL__Public/js/mui.zoom.js" ></script>
 <script type="text/javascript" src="__TMPL__Public/js/mui.previewimage.js" ></script>
 <!--图片点击放大预览主要js结束-->
-<script>
+<script type="text/javascript" charset="utf-8">
     mui.previewImage();//图片点击放大预览主要js
-</script>
-	<script type="text/javascript">
-        mui('body').on('tap','a',function(){document.location.href=this.href;});
-		function forward(id) {
-            var btnArray = ['确定', '取消'];
-            mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
-                if (e.index == 0) {
-                    $.ajax({
-                        async:false,
-                        type : "get",
-                        url : "index.php?g=portal&m=messages&a=forward_handle",
-                        data : {
-                            'id' : id
-                        },
-                        dataType : "json",
-                        success : function(data) {
-                            if(data == 0){
-                                mui.toast('转发成功！');
-                                window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                            }else{
-                                mui.toast("转发失败！");
-                            }
+    $("#show").css('display','block');
+    document.getElementById("forward").addEventListener('tap', function() {
+        var btnArray = ['确定', '取消'];
+        mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
+            var id = parseInt("{$msg['id']}");
+            if (e.index == 0) {
+                $.ajax({
+                    async:false,
+                    type : "get",
+                    url : "index.php?g=portal&m=messages&a=forward_handle",
+                    data : {
+                        'id' : id
+                    },
+                    dataType : "json",
+                    success : function(data) {
+                        if(data == 0){
+                            mui.toast('转发成功！');
+                            window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                        }else{
+                            mui.toast("转发失败！");
                         }
-                    });
-                } else {
-                    return;
-                }
-            })
-        }
-	</script>
+                    }
+                });
+            } else {
+                return;
+            }
+        })
+    });
+    document.getElementById("send_show").addEventListener('tap', function() {
+        window.location.href='{:U("portal/messages/send_show",array("id"=>$msg["id"]))}';
+    });
+</script>
 </html>

@@ -6,7 +6,7 @@
 <body>
 <header id="header" class="mui-bar mui-bar-nav">
 	<h1 class="mui-title">群发</h1>
-	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="send_many()">发送</button>
+	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" id="send_many">发送</button>
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 </header>
 <div id="tabbar-with-chat" class="mui-content main">
@@ -34,22 +34,22 @@
 		</div>
 	</form>
 </div>
-	<script type="text/javascript">
-        mui('body').on('tap','a',function(){document.location.href=this.href;});
-        function send_many() {
-            if ($("input[type='checkbox']").is(':checked')){
-                var btnArray = ['确定', '取消'];
-                mui.confirm('确定群发给选中的医生？', '铁樵健康提醒您', btnArray, function(e) {
-                    if (e.index == 0) {
+	<script type="text/javascript" charset="utf-8">
+        document.getElementById("send_many").addEventListener('tap', function() {
+            var btnArray = ['确定', '取消'];
+            mui.confirm('确定群发给选中的医生？', '铁樵健康提醒您', btnArray, function(e) {
+                if (e.index == 0) {
+                    if ($("input[type='checkbox']").is(':checked')){
                         $("form[name='info']").submit();
                     } else {
+                        alert("请至少选中一个医生！")
                         return;
-                    }
-                })
-			} else {
-                alert("请至少选中一个医生！")
-			}
-        }
+					}
+                } else {
+                    return;
+                }
+            })
+        });
 	</script>
 </body>
 </html>

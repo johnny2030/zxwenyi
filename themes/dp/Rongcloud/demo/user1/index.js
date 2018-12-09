@@ -36,7 +36,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
             }
         }).success(function (res) {
             if(res == 0){
-                $("#nv_br").css("display","none");
+                $("#show").css("display","none");
                 WebIMWidget.setConversation($scope.targetType, $scope.targetId, $scope.name);
             } else if (res == 1){
                 alert("聊天对接失败");

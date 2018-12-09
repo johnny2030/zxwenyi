@@ -393,22 +393,31 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             vic.style.display = 'block';
         };
         $scope.end_chat = function () {
-            $http({
-                method:'GET',
-                url:'/index.php',
-                params:{
-                    'g':'portal',
-                    'm':'rong',
-                    'a':'end_chat',
-                    'userId':$scope.currentConversation.targetId
+            mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
+                if (e.index == 0) {
+                    $http({
+                        method:'GET',
+                        url:'/index.php',
+                        params:{
+                            'g':'portal',
+                            'm':'rong',
+                            'a':'end_chat',
+                            'userId':$scope.currentConversation.targetId
+                        }
+                    }).success(function (res) {
+                        if (res == 1){
+                            mui.toast('咨询关闭成功！');
+                        }
+                        if (res == 2){
+                            alert("咨询已经关闭，无需再次关闭");
+                        }
+                    }).error(function (error) {
+                        alert("请求失败");
+                    })
+                }else{
+                    return;
                 }
-            }).success(function (res) {
-                if (res == 1){
-                    alert("咨询已关闭");
-                }
-            }).error(function (error) {
-                alert("请求失败");
-            })
+            });
         };
         $scope.$watch("currentConversation.messageContent", function (newVal, oldVal) {
             if (newVal === oldVal)

@@ -130,22 +130,25 @@ class RongController extends CheckController {
         $msgInfo = array();
         $msgInfo['status'] = 2;
         $msgInfo['end_time'] = date('Y-m-d H:i:s',time());
-        $this->common_messages_model->where(array('id' => $msg_info['id']))->save($msgInfo);
+        $result = $this->common_messages_model->where(array('id' => $msg_info['id']))->save($msgInfo);
+        if ($result){
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
+            $patient_user = $this->common_user_model->find($_GET['userId']);
+            $doctor_user = $this->common_user_model->find(session('login_id'));
 
-        require_once 'today/Wechat_tq.php';
-        $wechat = new \Wechat_tq( $this );
-        $patient_user = $this->common_user_model->find($_GET['userId']);
-        $doctor_user = $this->common_user_model->find(session('login_id'));
-
-        $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您的咨询已被'.$doctor_user['name'].'关闭','点击这里进行评价');
-        if ($doctor_user['status'] == 0){
-            $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
-        }else{
-            require_once 'today/Wechat_zj.php';
-            $wechat_zj = new \Wechat_zj( $this );
-            $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
+            $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您的咨询已被'.$doctor_user['name'].'关闭','点击这里进行评价');
+            if ($doctor_user['status'] == 0){
+                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
+            }else{
+                require_once 'today/Wechat_zj.php';
+                $wechat_zj = new \Wechat_zj( $this );
+                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
+            }
+            $this->ajaxReturn(1);
+        } else {
+            $this->ajaxReturn(2);
         }
-        $this->ajaxReturn(1);
     }
     public function checkUser() {
         $id = session('login_id');
