@@ -23,7 +23,12 @@
 				<span>医生介绍</span>
 			</div>
 			<div class="mui-card-content briefing">
-				<p>{$doctor.introduce}</p>
+				<notempty name="doctor.introduce">
+					<p style="text-indent:2em;">{$doctor.introduce}</p>
+				</notempty>
+				<notempty name="doctor.duty">
+					<p style="text-indent:2em;">{$doctor.duty}</p>
+				</notempty>
 			</div>
 		</div>
 	</div>

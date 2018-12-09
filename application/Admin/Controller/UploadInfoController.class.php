@@ -112,24 +112,22 @@ class UploadInfoController extends AdminbaseController {
             $realRowCount = 0;
             $importCount = 0;
             $doctor_info_add = array();
+            $time = date('Y-m-d H:i:s',time());
             for ( $i = 2; $i <= $rowCount; $i++ ) {
-                $practice_number = $sheet->getCell( 'A'.$i )->getValue();
-                $name = $sheet->getCell( 'B'.$i )->getValue();
-                $sex = $sheet->getCell( 'C'.$i )->getValue();
-                $age = $sheet->getCell( 'D'.$i )->getValue();
-                $money = $sheet->getCell( 'E'.$i )->getValue();
-                $hospital = $sheet->getCell( 'F'.$i )->getValue();
-                $office = $sheet->getCell( 'G'.$i )->getValue();
-                $tag = $sheet->getCell( 'H'.$i )->getValue();
-                $phone = $sheet->getCell( 'I'.$i )->getValue();
-                $area = $sheet->getCell( 'J'.$i )->getValue();
-                $proportion = $sheet->getCell( 'K'.$i )->getValue();
-                $speciality = $sheet->getCell( 'L'.$i )->getValue();
+                $name = $sheet->getCell( 'A'.$i )->getValue();
+                $photo = $sheet->getCell( 'B'.$i )->getValue();
+                $hospital = $sheet->getCell( 'C'.$i )->getValue();
+                $office = $sheet->getCell( 'D'.$i )->getValue();
+                $tag = $sheet->getCell( 'E'.$i )->getValue();
+                $position = $sheet->getCell( 'F'.$i )->getValue();
+                $phone = $sheet->getCell( 'G'.$i )->getValue();
+                $introduce = $sheet->getCell( 'H'.$i )->getValue();
+                $duty = $sheet->getCell( 'I'.$i )->getValue();
                 $realRowCount++;
                 $importCount++;
                 $doctor_info_add[] = array(
-                    "practice_number" => $practice_number, "name" => $name, "sex" => $sex, "age" => $age, "money" => $money, "hospital" => $hospital, "office" => $office,
-                    "tag" => $tag, "area" => $area, "speciality" => $speciality, "phone" => $phone, "proportion" => $proportion
+                    "name" => $name, "photo" => $photo, "hospital" => $hospital, "office" => $office, "tag" => $tag, "position" => $position, "phone" => $phone,
+                    "introduce" => $introduce, "duty" => $duty, "type" => 1, "create_time" => $time
                 );
             }
             foreach ($doctor_info_add as $table_doctor) {

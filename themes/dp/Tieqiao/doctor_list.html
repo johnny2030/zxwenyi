@@ -14,7 +14,7 @@
 				<foreach name="list" item="l">
 					<li class="mui-table-view-cell mui-media">
 						<a href="{:U('portal/user/doctor_detail',array('user_id'=>$l['id']))}">
-							<img class="mui-media-object mui-pull-left" src="{$l.photo}">
+							<img class="mui-media-object mui-pull-left" src="{$l.photo}" style="width: 5rem;height: 5rem;">
 							<div class="mui-media-body">
 								<span class="mui-pull-right red-color strong"></span>{$l.name}
 								<span class="blue-color">{$l.position_n}</span>
