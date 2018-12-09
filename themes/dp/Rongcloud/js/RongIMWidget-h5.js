@@ -393,7 +393,8 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             vic.style.display = 'block';
         };
         $scope.end_chat = function () {
-            mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
+            var btnArray = ['确定', '取消'];
+            mui.confirm('您确定关闭此次咨询？', '温馨提醒', btnArray, function(e) {
                 if (e.index == 0) {
                     $http({
                         method:'GET',
