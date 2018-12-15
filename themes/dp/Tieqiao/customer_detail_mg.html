@@ -99,7 +99,7 @@
     $("#show").css('display','block');
     document.getElementById("forward").addEventListener('tap', function() {
         var btnArray = ['确定', '取消'];
-        mui.confirm('确定转发给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
+        mui.confirm('确定发送给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
             var id = parseInt("{$msg['id']}");
             if (e.index == 0) {
                 $.ajax({
@@ -112,10 +112,10 @@
                     dataType : "json",
                     success : function(data) {
                         if(data == 0){
-                            mui.toast('转发成功！');
+                            mui.toast('发送成功！');
                             window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
                         }else{
-                            mui.toast("转发失败！");
+                            mui.toast("发送失败！");
                         }
                     }
                 });

@@ -10,6 +10,8 @@ class RongController extends CheckController {
     private $rong_token_model;
     private $common_chattime_model;
     private $common_messages_model;
+    private $common_evaluate_model;
+    private $common_record_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -17,6 +19,8 @@ class RongController extends CheckController {
         $this->rong_token_model = D( 'Rong_token' );
         $this->common_chattime_model = D( 'Common_chattime' );
         $this->common_messages_model = D( 'Common_messages' );
+        $this->common_evaluate_model = D( 'Common_evaluate' );
+        $this->common_record_model = D( 'Common_record' );
     }
     /**
      * 获取token
@@ -42,29 +46,37 @@ class RongController extends CheckController {
         $this->display('../Rongcloud/demo/user1/index');
     }
     public function get_data(){
-        $id=session('login_id');
-        $lgUser = $this->common_user_model->find($id);
         $sendid= session('send_id');
         $sendUser = $this->common_user_model->find($sendid);
+        if (!empty($sendUser['type'])){
+            $sendUser['name'] = '铁樵专家';
+        }
         $token = $this->get_token();
         $data = array();
         $data['appkey'] = RY_KEY;
         $data['token'] = $token;
-        $data['lgUser'] = $lgUser;
         $data['sendUser'] = $sendUser;
         $this->ajaxReturn($data);
     }
     public function getdata_kefu(){
         $where = array();
         $where['flg'] = array('eq',1);
-        $where['type'] = array('eq',2);
+        $where['type'] = array('eq',3);
+        $where['types'] = array('eq',1);
         $where['del_flg'] = array('eq',0);
         $user = $this->common_user_model->where($where)->find();
+        if (!empty($user['type'])){
+            $user['name'] = '铁樵专家';
+        }
         $this->ajaxReturn($user);
     }
     public function get_user() {
         $id = $_GET['userId'];
         $patient = $this->common_user_model->find($id);
+        if (!empty($patient['type'])){
+            $patient['name'] = '铁樵专家';
+            $patient['photo'] = '../upload_img/head_tq/doctor.png';
+        }
         $this->ajaxReturn($patient);
     }
     public function check_chat() {
@@ -72,23 +84,32 @@ class RongController extends CheckController {
         //发送人
         $id = session('login_id');
         $user = $this->common_user_model->find($id);
-        //接收人
-        $sendId = $_GET['userId'];
-        $sendUser = $this->common_user_model->find($sendId);
         if ($user['type'] == 0){
-            $where['d_id'] = array('eq',$_GET['userId']);
-            $where['p_id'] = array('eq',session('login_id'));
+            $where['doctor_id'] = array('eq',$_GET['userId']);
+            $where['user_id'] = array('eq',$id);
         }else{
-            $where['p_id'] = array('eq',$_GET['userId']);
-            $where['d_id'] = array('eq',session('login_id'));
+            $where['user_id'] = array('eq',$_GET['userId']);
+            $where['doctor_id'] = array('eq',$id);
         }
-        $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
-        $t = $chat['chat_time'];
-        $chat_time = strtotime("$t+2hour");//有效时间24小时
-        $time = strtotime(date('Y-m-d H:i:s',time()));
-        if ($time > $chat_time){
+        $where['status'] = array('eq',1);
+        $where['del_flg'] = array('eq',0);
+        $msg_info = $this->common_messages_model->where($where)->find();
+        if (empty($msg_info['id'])){
             $this->ajaxReturn(0);
-        }else{
+        } else {
+            $where = array();
+            //接收人
+            $sendId = $_GET['userId'];
+            $sendUser = $this->common_user_model->find($sendId);
+            if ($user['type'] == 0){
+                $where['d_id'] = array('eq',$_GET['userId']);
+                $where['p_id'] = array('eq',session('login_id'));
+            }else{
+                $where['p_id'] = array('eq',$_GET['userId']);
+                $where['d_id'] = array('eq',session('login_id'));
+            }
+            $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
+            $time = strtotime(date('Y-m-d H:i:s',time()));
             if (empty($chat['chat_end_time'])){
                 $data = array();
                 $data['chat_end_time'] = date('Y-m-d H:i:s',time());
@@ -111,39 +132,42 @@ class RongController extends CheckController {
         }
     }
     public function end_chat() {
+        $id = (int)session('login_id');
+
         $where = array();
-        $where['p_id'] = array('eq',$_GET['userId']);
-        $where['d_id'] = array('eq',session('login_id'));
-        $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
-
-        $data = array();
-        $t = date('Y-m-d H:i:s',time());
-        $data['chat_time'] = date('Y-m-d H:i:s',strtotime("$t-1day"));
-        $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
-
-        $where_msg = array();
-        $where_msg['user_id'] = array('eq',$_GET['userId']);
-        $where_msg['doctor_id'] = array('eq',session('login_id'));
-        $where_msg['status'] = array('eq',1);
-        $where_msg['del_flg'] = array('eq',0);
-        $msg_info = $this->common_messages_model->where($where_msg)->find();
+        $where['user_id'] = array('eq',$_GET['userId']);
+        $where['doctor_id'] = array('eq',$id);
+        $where['status'] = array('eq',1);
+        $where['del_flg'] = array('eq',0);
+        $msg_info = $this->common_messages_model->where($where)->find();
         if (empty($msg_info['id'])){
             $this->ajaxReturn(2);
         } else {
+            //关闭咨询
             $msgInfo = array();
             $msgInfo['status'] = 2;
             $msgInfo['end_time'] = date('Y-m-d H:i:s',time());
             $this->common_messages_model->where(array('id' => $msg_info['id']))->save($msgInfo);
+
+            //添加总结
+            $data = array();
+            $data['msg_id'] = $msg_info['id'];
+            $data['doctor_id'] = $id;
+            $data['content'] = $_GET['msg'];
+            $data['doctor_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_evaluate_model->add($data);
+
             require_once 'today/Wechat_tq.php';
             $wechat = new \Wechat_tq( $this );
             $patient_user = $this->common_user_model->find($_GET['userId']);
-            $doctor_user = $this->common_user_model->find(session('login_id'));
+            $doctor_user = $this->common_user_model->find($id);
             if ($doctor_user['status'] == 0){
-                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
+                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+                $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
             }else{
                 require_once 'today/Wechat_zj.php';
                 $wechat_zj = new \Wechat_zj( $this );
-                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],$patient_user['name'].'发起的咨询已被您关闭','点击这里进行总结');
+                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
             }
             $this->ajaxReturn(1);
         }
@@ -279,7 +303,34 @@ class RongController extends CheckController {
             $this->ajaxReturn('2');
         }
     }
-    /**
+    //点击用户头像查看详情
+    public function show_msg(){
+        $id=session('login_id');
+        $user = $this->common_user_model->find($id);
+        $where = array();
+        if ($user['type'] == 0){
+            $where['m.user_id'] = array('eq',$id);
+            $where['m.doctor_id'] = array('eq',$_GET['userId']);
+            $where['m.status'] = array('eq',1);
+            $where['m.del_flg'] = array('eq',0);
+        }else{
+            $where['m.user_id'] = array('eq',$_GET['userId']);
+            $where['m.doctor_id'] = array('eq',$id);
+            $where['m.status'] = array('eq',1);
+            $where['m.del_flg'] = array('eq',0);
+        }
+        $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
+
+        $where_r = array();
+        $where_r['message_id'] = array('eq',$msg_Info['id']);
+        $where_r['user_id'] = array('eq',$msg_Info['user_id']);
+        $list = $this->common_record_model->where($where_r)->select();
+        session('send_id',$msg_Info['user_id']);
+        $this->assign( 'list', $list );
+        $this->assign( 'msg', $msg_Info );
+        $this->display('../Tieqiao/customer_detail');
+    }
+        /**
      * 生成毫秒级时间戳
      */
     public function msectime(){

@@ -1,26 +1,34 @@
 <!doctype html>
 <html ng-app="demo">
 <head>
-	<meta charset="utf-8">
-	<title></title>
-	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<link rel="stylesheet" href="__TMPL__Portal/css/mui.min.css" />
-	<link rel="stylesheet" href="__TMPL__Portal/css/master.css" />
+	<tc_include file="Public/TQHead"/>
 </head>
 <body>
 <div class="mui-content doctor-confirm">
 	<if condition="$check eq 1">
 		<div class="pay-fail">
 			<span class="mui-icon mui-icon-closeempty"></span>
-			<p>登记失败</p>
-			<p style="text-indent: 2em; margin-top: 30px;">系统将在 <span id="time" style="font-size: 20px;">5</span> 秒钟后自动跳转，如果未能跳转，<a href="{$url}" title="点击访问">请点击</a>。</p>
+			<p>注册失败</p>
+			<p style="text-indent: 2em; margin-top: 2rem;">
+				系统将在
+				<span id="time" style="font-size: 20px;">5</span>
+				秒钟后自动跳转，如果未能跳转，<a href="{$url}" title="点击访问">请点击</a>。
+			</p>
 		</div>
 	</if>
 	<if condition="$check eq 0">
 		<div class="pay-ok">
 			<span class="mui-icon mui-icon-checkmarkempty"></span>
-			<p>登记成功</p>
-			<p style="text-indent: 2em; margin-top: 30px;">系统将在 <span id="time" style="font-size: 20px;">5</span> 秒钟后自动跳转，如果未能跳转，<a href="{$url}" title="点击访问">请点击</a>。</p>
+			<p>注册成功</p>
+			<p style="text-indent: 2em; margin-top: 2rem;">{$msg}</p>
+			<p style="margin-top: 1rem;text-align: center;">
+				<a href="{$url_q}" class="mui-btn mui-btn-success" style="width: 30%;">
+					{$btn}
+				</a>
+				<a href="{$url_u}" class="mui-btn mui-btn-success" style="width: 30%;margin-left: 5%;">
+					个人中心
+				</a>
+			</p>
 		</div>
 	</if>
 </div>
@@ -34,11 +42,7 @@
             document.getElementById("time").innerHTML = delay;
         } else {
             clearTimeout(t);
-            if ({$check} == 1){
-                window.location.href = "{$url}";
-			} else {
-                window.location.href = "{$url}";
-			}
+            window.location.href = "{$url}";
         }
     }
 </script>

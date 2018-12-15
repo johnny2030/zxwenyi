@@ -22,11 +22,13 @@ class ManagerController extends AdminbaseController {
         $name=I('name');
         $this->assign( 'name', $name );
         if ( $name ) $where['name'] = array('like',"%$name%");
-        $where['type'] = array(['eq',2],['eq',3],'or');
+        $where['type'] = array('neq',0);
+        $where['open_id'] = array('neq','');
+        $where['check'] = array('eq',1);
         $where['del_flg'] = array('eq',0);
         $count = $this->common_user_model->where($where)->count();
         $page = $this->page($count, 20);
-        $list = $this->common_user_model->where($where)->select();
+        $list = $this->common_user_model->where($where)->order('type desc,create_time desc')->select();
         $this->assign("page", $page->show('Admin'));
         $this->assign( 'list', $list );
         $this->display();
@@ -95,24 +97,36 @@ class ManagerController extends AdminbaseController {
 			$this->display();
 		}
 	}
-    //设置为管理员（pc端）
+    //设置为管理员
     function set_manager() {
         $id = intval( I( 'get.id' ) );
-        $type = $_GET['type'];
-        $flg = $_GET['flg'];
-        if($type == 2){
+        $ck = (int)$_GET['ck'];
+        $flg = (int)$_GET['flg'];
+        $data = array();
+        if ($ck == 1){
             if ($flg == 1){
                 $where = array();
-                $where['flg'] = array('eq',1);
+                $where['types'] = array('eq',1);
                 $where['del_flg'] = array('eq',0);
                 $manager = $this->common_user_model->where($where)->find();
-                if(!empty($manager)){
-                    $this->error('已有管理员启用，请先停用！');
-                }
+                if(!empty($manager)) $this->error('已有PC管理员启用，请先停用！');
+                $data['flg'] = 1;
+                $data['type'] = 3;
+                $data['types'] = 1;
+            }else{
+                $data['flg'] = 0;
+                $data['type'] = 1;
+                $data['types'] = 0;
+            }
+        }else{
+            if ($flg == 1){
+                $data['flg'] = 1;
+                $data['type'] = 3;
+            }else{
+                $data['flg'] = 0;
+                $data['type'] = 1;
             }
         }
-        $data = array();
-        $data['flg'] = $flg;
         $data['update_time'] = date('Y-m-d H:i:s',time());
         $result = $this->common_user_model->where(array('id' => $id))->save($data);
         if ($result) {

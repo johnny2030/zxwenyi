@@ -22,11 +22,12 @@ class DoctorController extends AdminbaseController {
 		$name=I('name');
 		$this->assign( 'name', $name );
 		if ( $name ) $where['u.name'] = array('like',"%$name%");
-        $where['u.type'] = array('eq',1);
+        $where['u.type'] = array('neq',0);
+        $where['u.open_id'] = array('neq','');
         $where['u.del_flg'] = array('eq',0);
 		$count = $this->common_user_model->alias('u')->where($where)->count();
 		$page = $this->page($count, 20);
-		$list = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where($where)->order('u.create_time desc')->select();
+		$list = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n,p.name as position_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->join('__COMMON_POSITION__ p ON u.position=p.id','left')->where($where)->order('u.create_time desc')->select();
 		$this->assign("page", $page->show('Admin'));
 		$this->assign( 'list', $list );
 		$this->display();
@@ -108,15 +109,22 @@ class DoctorController extends AdminbaseController {
             $reason = $_GET['reason'];
             $check = $_GET['check'];
             $data = array();
-            if (empty($reason)){
-                $data['reason'] = $reason;
-            }
             $data['check'] = $check;
-            $result = $this->common_user_model->where(array('id' => $id))->save($data);
-            if ($result){
-                $this->ajaxReturn(0);
+            if (!empty($reason)){
+                $data['reason'] = $reason;
+                $result = $this->common_user_model->where(array('id' => $id))->save($data);
+                if ($result){
+                    $this->ajaxReturn(0);
+                }else{
+                    $this->ajaxReturn(1);
+                }
             }else{
-                $this->ajaxReturn(1);
+                $result = $this->common_user_model->where(array('id' => $id))->save($data);
+                if ($result) {
+                    $this->success('医生审核成功！');
+                } else {
+                    $this->error('医生审核失败！');
+                }
             }
         }
     }

@@ -31,11 +31,16 @@ class IndexController extends HomebaseController {
             $_POST['type'] = 1;
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
-                session('flg','redt');
-                R('User/info_doctor');
+                $this->assign( 'check', 0 );
+                $this->assign( 'msg', '欢迎您入驻健康微达人，来看下有没有咨询需要处理吧！');
+                $this->assign( 'btn', '立即查看');
+                $this->assign( 'url_q', "{:U('portal/user/question')}");
+                $this->assign( 'url_u', "{:U('portal/user/info_doctor')}");
             } else {
-                $this->error('登记失败！');
+                $this->assign( 'check', 1 );
+                $this->assign( 'url', "{:U('portal/index/register_doctor')}");
             }
+            $this->display('../Public/return');
         }else{
             $user = $this->common_user_model->find($id);
             if (empty($user['hospital']) && empty($user['office']) && empty($user['tag']) && empty($user['position'])) {
@@ -65,12 +70,17 @@ class IndexController extends HomebaseController {
             $data['status'] = 1;
             $data['use_time'] = date('Y-m-d H:i:s',time());
             $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
-            if ($result&&$results) {
-                session('flg','redt');
-                R('User/info_patient');
+            if ($result && $results) {
+                $this->assign( 'check', 0 );
+                $this->assign( 'msg', '您可以进入我的咨询界面对您的健康问题进行咨询了，愿我们能为您的身心健康保驾护航！');
+                $this->assign( 'btn', '立即咨询');
+                $this->assign( 'url_q', "{:U('portal/user/question')}");
+                $this->assign( 'url_u', "{:U('portal/user/info_patient')}");
             } else {
-                $this->error('登记失败！');
+                $this->assign( 'check', 1 );
+                $this->assign( 'url', "{:U('portal/index/register_patient')}");
             }
+            $this->display('../Public/return');
         }else{
             $user = $this->common_user_model->find($id);
             if (empty($user['i_card'])){

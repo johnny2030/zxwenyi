@@ -66,9 +66,13 @@ class ChatController extends AdminbaseController {
     public function get_data(){
         $where = array();
         $where['flg'] = array('eq',1);
-        $where['type'] = array('eq',2);
+        $where['type'] = array('eq',3);
+        $where['types'] = array('eq',1);
         $where['del_flg'] = array('eq',0);
         $user = $this->common_user_model->where($where)->find();
+        if (!empty($user['type'])){
+            $user['name'] = '铁樵专家';
+        }
         $token = $this->get_token($user['id']);
         $data = array();
         $data['appkey'] = RY_KEY;
@@ -82,6 +86,10 @@ class ChatController extends AdminbaseController {
     public function get_user() {
         $id = $_GET['userId'];
         $patient = $this->common_user_model->find($id);
+        if (!empty($patient['type'])){
+            $patient['name'] = '铁樵专家';
+            $patient['photo'] = '../upload_img/head_tq/doctor.png';
+        }
         $this->ajaxReturn($patient);
     }
 

@@ -13,12 +13,8 @@
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<div class="mui-card">
-					<div class="mui-card-header mui-card-media">
-						<img src="{$elte_info.dphoto}" style="width: 55px;height: 55px;"/>
-						<div class="mui-media-body">
-							<p>{$elte_info.dname}</p>
-							<p>{$elte_info.hospital}－{$elte_info.office_n}</p>
-						</div>
+					<div class="mui-card-header">
+						<span>专家总结</span>
 					</div>
 					<div class="mui-card-content">
 						<p>{$elte_info.content}</p>
@@ -61,39 +57,23 @@
 	</notempty>
 	<div class="mui-content" style="padding-top: 3rem !important;">
 		<form method="post" name="info" action="{:U('portal/messages/evaluate')}">
-			<input type="hidden" name="msg_id" value="{$msg_id}"/>
-			<input type="hidden" name="id" value="{$elte_info.id}"/>
+			<input type="hidden" name="id" value="{$msg_id}"/>
 			<if condition="$type eq 0">
-				<empty name="elte_info.user_id">
-					<div class="mui-content-padded">
-						<div class="mui-inline">咨询评分</div>
-						<div class="icons mui-inline" style="margin-left: 6px;">
-							<i data-index="2" class="mui-icon mui-icon-star"></i>
-							<i data-index="4" class="mui-icon mui-icon-star"></i>
-							<i data-index="6" class="mui-icon mui-icon-star"></i>
-							<i data-index="8" class="mui-icon mui-icon-star"></i>
-							<i data-index="10" class="mui-icon mui-icon-star"></i>
-						</div>
-						<input type="hidden" id="elte" name="elte" value="">
+				<div class="mui-content-padded">
+					<div class="mui-inline">咨询评分</div>
+					<div class="icons mui-inline" style="margin-left: 6px;">
+						<i data-index="2" class="mui-icon mui-icon-star"></i>
+						<i data-index="4" class="mui-icon mui-icon-star"></i>
+						<i data-index="6" class="mui-icon mui-icon-star"></i>
+						<i data-index="8" class="mui-icon mui-icon-star"></i>
+						<i data-index="10" class="mui-icon mui-icon-star"></i>
 					</div>
-					<div class="mui-button-row">
-						<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
-						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-					</div>
-				</empty>
-				<else />
-				<empty name="elte_info.doctor_id">
-					<div class="mui-content-padded">
-						<div class="mui-inline">结论</div>
-					</div>
-					<div class="row mui-input-row">
-						<textarea id='content' name="content" class="mui-input-clear question" placeholder="请填写结论..."></textarea>
-					</div>
-					<div class="mui-button-row">
-						<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
-						<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-					</div>
-				</empty>
+					<input type="hidden" id="elte" name="elte" value="">
+				</div>
+				<div class="mui-button-row">
+					<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+				</div>
 			</if>
 		</form>
 	</div>

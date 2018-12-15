@@ -4,7 +4,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     $scope.targetType = 1; //1：私聊 更多会话类型查看http://www.rongcloud.cn/docs/api/js/global.html#ConversationType
     $http({
         method:'GET',
-        url:'/index.php',
+        url:'/zxwenyi/index.php',
         params:{
             'g':'portal',
             'm':'rong',
@@ -27,7 +27,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     $scope.setconversation = function(id) {
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -50,7 +50,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     $scope.setconversation_kefu= function() {
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -63,12 +63,13 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
         });
     };
     $scope.show = function () {
+        $("#qus").css("display","none");
         WebIMWidget.show();
     };
     WebIMWidget.setUserInfoProvider(function(targetId,obj){
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',

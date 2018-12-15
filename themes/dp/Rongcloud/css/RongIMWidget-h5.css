@@ -37,13 +37,13 @@ body{
 /* header */
 .rongcloud-header{
     width: 100%;
-    height: 1.8rem;
-    line-height:1.8rem;
+    height: 1.5rem;
+    line-height:1.5rem;
     font-size:16px;
     background: #0099ff;
     position: fixed;
     top: 0;
-    z-index: 999;
+    z-index: 99;
     text-align:center;
     display: -webkit-box;
     -webkit-box-sizing: border-box;
@@ -85,7 +85,7 @@ body{
 
 /* chatBox */
 .rongcloud-chatBox{
-    margin-top: 1.8rem;
+    margin-top: 1.5rem;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -335,8 +335,8 @@ body{
 #wrapper {
     position: absolute;
     z-index: 1;
-    top: 1.8rem;
-    bottom: 1.8rem;
+    top: 1.5rem;
+    bottom: 1.5rem;
     left: 0;
     width: 100%;
     overflow: hidden;
@@ -802,9 +802,6 @@ body{
 }
 .rongcloud-Message-wrapper .rongcloud-sys-tips{ text-align: center; margin: 0.3rem 0}
 .rongcloud-Message-wrapper .rongcloud-sys-tips span{display: inline-block;color: #8e969f;padding: 0.2rem; background-color: #e7ecf2;border-radius: 5px;}
-
-
-
 .rongcloud-footer{
     position: fixed;
     left: 0;
@@ -812,7 +809,7 @@ body{
     width: 100%;
     /*display: -webkit-box;*/
     text-align: center;
-    z-index: 999;
+    z-index: 99;
     /*display: -webkit-flex;*/
     background-color: #f8f8f8;
 }
@@ -907,7 +904,7 @@ body{
 .rongcloud-footer .rongcloud-message_wrap textarea{
     padding: 0px 0.2rem;
     /*line-height: 2.2rem;*/
-    height: 44px;
+    /*height: 44px;*/
     width: 100%;
     background-color: #f8f8f8;
     resize: none;

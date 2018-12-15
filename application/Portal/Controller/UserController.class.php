@@ -48,8 +48,8 @@ class UserController extends CheckController {
     //患者个人中心
     public function info_patient() {
 	    $flg = session('flg');
+        $id = (int)session('login_id');
         if ( IS_POST && empty($flg)) {
-            $id = (int)session('login_id');
             $healthy = $_POST['healthy'];
             if (empty($healthy)){
                 $_POST['healthy'] = 0;
@@ -64,7 +64,6 @@ class UserController extends CheckController {
             }
         }else{
             session('flg',null);
-            $id = (int)session('login_id');
             $patient = $this->common_user_model->find($id);
 
             $where_h = array();
@@ -86,8 +85,8 @@ class UserController extends CheckController {
     //医生个人中心
     public function info_doctor() {
         $flg = session('flg');
+        $id = (int)session('login_id');
         if ( IS_POST && empty($flg)) {
-            $id = (int)session('login_id');
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result){
@@ -98,7 +97,6 @@ class UserController extends CheckController {
             }
         }else{
             session('flg',null);
-            $id = (int)session('login_id');
             $doctor = $this->common_user_model->where(array('id' => $id))->find();
             $where = array();
             $where['del_flg'] = array('eq',0);
@@ -318,5 +316,18 @@ class UserController extends CheckController {
             'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
         );
         $wechat->templateForward($sendUser['open_id'],$url,$data);
+    }
+    public function result(){
+        $ck = $_GET['ck'];
+        if ($ck == 1){
+            $this->assign( 'url', 'index.php?g=portal&m=user&a=question' );
+            $this->display('../Public/return');
+        }else{
+            $this->assign( 'url', 'index.php?g=portal&m=user&a=question' );
+            $this->display('../Public/return');
+        }
+    }
+    public function about(){
+        $this->display('../Tieqiao/about');
     }
 }

@@ -65,39 +65,25 @@ class MessagesController extends CheckController  {
         $flg = session('flg');
         $id = (int)session('login_id');
         if ( IS_POST  && empty($flg)) {
-            \Think\Log::write('跳转msg_id:'.$_POST['msg_id'],'WARN');
-            $user = $this->common_user_model->find($id);
-            if ($user['type'] == 0){
-                $_POST['user_id'] = $id;
-                $_POST['user_time'] = date('Y-m-d H:i:s',time());
-            }else{
-                $_POST['doctor_id'] = $id;
-                $_POST['doctor_time'] = date('Y-m-d H:i:s',time());
-            }
-            if (empty($_POST['id'])){
-                $this->common_evaluate_model->add($_POST);
-            }else{
-                $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
-            }
             session('flg','redt');
-            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.open_id as open_id_u,u.name as uname,d.open_id as open_id_d,d.name as name')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id')->where(array('m.id' => $_POST['msg_id']))->find();
-            require_once 'today/Wechat_tq.php';
-            $wechat = new \Wechat_tq( $this );
-            if ($user['type'] == 0){
-                $wechat->customSendImg($msg_info['open_id_d'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看');
+            $_POST['user_id'] = $id;
+            $_POST['user_time'] = date('Y-m-d H:i:s',time());
+            $this->common_evaluate_model->where(array('id' => $_POST['id']))->save($_POST);
+            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,d.open_id as open_id,d.status as status')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id')->where(array('m.id' => $_POST['msg_id']))->find();
+            if ($msg_info['status'] == 0){
+                require_once 'today/Wechat_tq.php';
+                $wechat = new \Wechat_tq( $this );
             }else{
-                $wechat->customSendImg($msg_info['open_id_u'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$msg_info['id'],'您的咨询已被'.$msg_info['name'].'关闭','点击这里查看并评价');
+                require_once 'today/Wechat_zj.php';
+                $wechat = new \Wechat_zj( $this );
             }
-            $this->redirect('Messages/evaluate', array('msg_id' => $_POST['msg_id']));
+            $wechat->customSendImg($msg_info['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$_POST['id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看');
+            $this->redirect('Messages/evaluate', array('msg_id' => $_POST['id']));
         }else{
             session('flg',null);
             $msg_id = $_GET['msg_id'];
             $user = $this->common_user_model->find($id);
-            $where = array();
-            $where['e.status'] = array('eq',0);
-            $where['e.del_flg'] = array('eq',0);
-            $where['e.msg_id'] = array('eq',$msg_id);
-            $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.age as age,u.sex as sex,u.photo as uphoto,d.name as dname,o.name as office_n,d.hospital as hospital,d.photo as dphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->join('__COMMON_USER__ d ON e.doctor_id=d.id','left')->join('__COMMON_OFFICE__ o ON d.office=o.id','left')->where($where)->find();
+            $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.age as age,u.sex as sex,u.photo as uphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->where(array('e.id' => $msg_id))->find();
             $this->assign( 'type', $user['type'] );
             $this->assign( 'msg_id', $msg_id );
             $this->assign( 'elte_info', $elte_info );

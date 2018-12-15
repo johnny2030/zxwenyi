@@ -332,7 +332,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -340,8 +340,9 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }
         }).success(function (res) {
             if(res.type != 0){
-                var subsp = document.getElementById("subsp");
-                var compileFn=$compile('<ul class="rongcloud-clearfix rongcloud-voices"><a href="#" ng-click="showMore()"><li class="rongcloud-sprite-voice"></li></a></ul>');
+                document.getElementById("title").style.marginLeft = '2rem';
+                var subsp = document.getElementById("endChat");
+                var compileFn=$compile('<span>关闭咨询</span>');
                 var $dom=compileFn($scope);
                 $dom.appendTo(subsp);
             }
@@ -350,7 +351,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -365,10 +366,6 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             if (newVal === oldVal)
                 return;
             if (newVal) {
-                var emj = document.getElementById("emj");
-                var vic = document.getElementById("voice");
-                emj.style.display = 'block';
-                vic.style.display = 'none';
                 $scope.wrapperbottom = {
                     bottom: "8rem"
                 };
@@ -382,44 +379,60 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $scope.showEmj = function () {
             var emj = document.getElementById("emj");
-            var vic = document.getElementById("voice");
             emj.style.display = 'block';
-            vic.style.display = 'none';
         };
-        $scope.showMore = function () {
-            var emj = document.getElementById("emj");
-            var vic = document.getElementById("voice");
-            emj.style.display = 'none';
-            vic.style.display = 'block';
-        };
-        $scope.end_chat = function () {
-            var btnArray = ['确定', '取消'];
-            mui.confirm('您确定关闭此次咨询？', '温馨提醒', btnArray, function(e) {
-                if (e.index == 0) {
-                    $http({
-                        method:'GET',
-                        url:'/index.php',
-                        params:{
-                            'g':'portal',
-                            'm':'rong',
-                            'a':'end_chat',
-                            'userId':$scope.currentConversation.targetId
-                        }
-                    }).success(function (res) {
-                        if (res == 1){
-                            mui.toast('咨询关闭成功！');
-                        }
-                        if (res == 2){
-                            alert("咨询已经关闭，无需再次关闭");
-                        }
-                    }).error(function (error) {
-                        alert("请求失败");
-                    })
-                }else{
-                    return;
+        $scope.show_msg = function () {
+            $http({
+                method:'GET',
+                url:'/zxwenyi/index.php',
+                params:{
+                    'g':'portal',
+                    'm':'rong',
+                    'a':'checkUser'
                 }
+            }).success(function (res) {
+                if(res.type != 0){
+                    window.location.href = "index.php?g=portal&m=rong&a=show_msg&userId="+$scope.currentConversation.targetId;
+                }
+            }).error(function (error) {
+                alert("请求失败");
             });
         };
+        document.getElementById("endChat").addEventListener('tap', function (e) {
+            e.detail.gesture.preventDefault();
+            var btnArray = ['取消', '确定'];
+            mui.prompt('您确定关闭此次咨询？', '', '温馨提醒', btnArray, function (e) {
+                if (e.index == 1) {
+                    var msg = $('.mui-popup-input textarea').val();
+                    if (msg == ""){
+                        alert('请先输入总结！');
+                    }else{
+                        $http({
+                            method:'GET',
+                            url:'/zxwenyi/index.php',
+                            params:{
+                                'g':'portal',
+                                'm':'rong',
+                                'a':'end_chat',
+                                'userId':$scope.currentConversation.targetId,
+                                'msg':msg
+                            }
+                        }).success(function (res) {
+                            if (res == 1){
+                                mui.toast('咨询关闭成功！');
+                            }
+                            if (res == 2){
+                                alert("咨询已经关闭，无需再次关闭");
+                            }
+                        }).error(function (error) {
+                            alert("请求失败");
+                        })
+                    }
+                }
+            }, 'div');
+            $('.mui-popup-input').html('');
+            $('.mui-popup-input').append('<textarea placeholder="请先输入总结"></textarea>');
+        });
         $scope.$watch("currentConversation.messageContent", function (newVal, oldVal) {
             if (newVal === oldVal)
                 return;
@@ -813,7 +826,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }
             $http({
                 method:'GET',
-                url:'/index.php',
+                url:'/zxwenyi/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -911,7 +924,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/index.php',
+                            url:'/zxwenyi/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -2439,7 +2452,7 @@ angular.module('RongWebIMWidget').run(['$templateCache', function($templateCache
   'use strict';
 
   $templateCache.put('./ts/conversation/conversation.tpl.html',
-    "<div id=rong-conversation class=\"rongcloud-main rongcloud-kefuList\" ng-show=showSelf><evaluatedir type=evaluate.type display=evaluate.showevaluate confirm=evaluate.onConfirm(data) cancle=evaluate.onCancle()></evaluatedir><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\" ng-click=close()></a><div class=rongcloud-title><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>{{currentConversation.title}}</a></div><a href=\"javascript:void 0\"></a></header><div id=wrapper ng-iscroll ng-style=wrapperbottom><div id=scroller><div id=Messages><div class=\"rongcloud-MessagesInner rongcloud-message-scroll\"><div class=rongcloud-Message-wrapper><div ng-repeat=\"item in messageList\" ng-switch=item.panelType><div class=rongcloud-Messages-date ng-switch-when=104><b>{{item.sentTime|historyTime}}</b></div><div class=rongcloud-Messages-date ng-switch-when=105><b my-tap=getHistory()>查看历史消息</b></div><div class=rongcloud-Messages-date ng-switch-when=106><b my-tap=getMoreMessage()>获取更多消息</b></div><div class=rongcloud-sys-tips ng-switch-when=2><span>{{item.content.content}}</span></div><div class=\"rongcloud-Message rongcloud-status1\" ng-switch-when=1 ng-class=\"{'rongcloud-youMsg':item.messageDirection==2,'rongcloud-myMsg':item.messageDirection==1}\"><div class=rongcloud-Messages-unreadLine></div><div><div class=rongcloud-Message-header><a href=\"index.php?g=portal&m=doctor&a=details_s&id={{item.content.userInfo.userId}}\" ><img class=\"rongcloud-img rongcloud-u-isActionable rongcloud-Message-avatar rongcloud-avatar\" ng-src=\"{{item.content.userInfo.portraitUri||'../themes/dp/Rongcloud/images/webBg.png'}}\" src=../themes/dp/Rongcloud/images/barBg.png alt=\"\"></a></div></div><div class=rongcloud-Message-body ng-switch=item.messageType><textmessage ng-switch-when=TextMessage msg=item.content></textmessage><imagemessage ng-switch-when=ImageMessage msg=item.content></imagemessage><voicemessage ng-switch-when=VoiceMessage msg=item.content></voicemessage><locationmessage ng-switch-when=LocationMessage msg=item.content></locationmessage><richcontentmessage ng-switch-when=RichContentMessage msg=item.content></richcontentmessage></div></div></div></div></div></div></div></div><footer class=\"rongcloud-footer rongcloud-clearfix\"><div id=funcPanel style=\"display: flex;display: -webkit-flex\"><a id=uploadfile href=# class=\"rongcloud-pull-left rongcloud-message_type_btn\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-icon_message_type1\"></i></a><a href=# class=\"rongcloud-pull-left rongcloud-message_type2_btn\" ng-click=switchPerson() ng-show=\"_inputPanelState==2\"><span>转人工服务</span></a><div class=rongcloud-message_wrap><textarea id=inputMsg ng-focus=\"showemoji=false\" ctrl-enter-keys fun=send() ctrlenter=false ondrop=\"return false\" ng-model=currentConversation.messageContent placeholder=请输入文字...></textarea></div><a href=# class=\"rongcloud-pull-right rongcloud-message_type_btn rongcloud-message_type_btn2\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-message_emoji_btn\" ng-click=\"showemoji=!showemoji\"></i></a><a href=\"\" class=rongcloud-send_btn  ng-click=send()>发送</a></div><div class=rongcloud-pub-faces ng-show=showemoji id=emj><swipe-emoji content=currentConversation></swipe-emoji></div><div class=rongcloud-pub-faces ng-show=showemoji id=voice><ul><li class=voice_pressure><a href=\"\" ng-click=end_chat()><img src=../themes/dp/Rongcloud/images/close_chat.png ><span>结束咨询</span></a></li></ul></div><div class=\"rongcloud-footerBtn rongcloud-clearfix\" ng-show=showemoji id=subsp><ul class=\"rongcloud-clearfix rongcloud-emojiWrap\"><a href=#  ng-click=showEmj()><li class=rongcloud-sprite2></li></a></ul></div></footer></div></div>"
+    "<div id=rong-conversation class=\"rongcloud-main rongcloud-kefuList\" ng-show=showSelf><evaluatedir type=evaluate.type display=evaluate.showevaluate confirm=evaluate.onConfirm(data) cancle=evaluate.onCancle()></evaluatedir><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\" ng-click=close()></a><div class=rongcloud-title><a class=\"rongcloud-title_name rongcloud-online\" id=title><i class=rongcloud-Presence></i>{{currentConversation.title}}</a></div><a href=\"javascript:void 0\" style=\"color: #fff;font-size: 0.5rem;\" id=endChat></a></header><div id=wrapper ng-iscroll ng-style=wrapperbottom><div id=scroller><div id=Messages><div class=\"rongcloud-MessagesInner rongcloud-message-scroll\" style=\"bottom: 4rem;\"><div class=rongcloud-Message-wrapper><div ng-repeat=\"item in messageList\" ng-switch=item.panelType><div class=rongcloud-Messages-date ng-switch-when=104><b>{{item.sentTime|historyTime}}</b></div><div class=rongcloud-Messages-date ng-switch-when=105><b my-tap=getHistory()>查看历史消息</b></div><div class=rongcloud-Messages-date ng-switch-when=106><b my-tap=getMoreMessage()>获取更多消息</b></div><div class=rongcloud-sys-tips ng-switch-when=2><span>{{item.content.content}}</span></div><div class=\"rongcloud-Message rongcloud-status1\" ng-switch-when=1 ng-class=\"{'rongcloud-youMsg':item.messageDirection==2,'rongcloud-myMsg':item.messageDirection==1}\"><div class=rongcloud-Messages-unreadLine></div><div><div class=rongcloud-Message-header><a href=\"javascript:void 0\" ng-click=show_msg() ><img class=\"rongcloud-img rongcloud-u-isActionable rongcloud-Message-avatar rongcloud-avatar\" ng-src=\"{{item.content.userInfo.portraitUri||'../themes/dp/Rongcloud/images/webBg.png'}}\" src=../themes/dp/Rongcloud/images/barBg.png alt=\"\"></a></div></div><div class=rongcloud-Message-body ng-switch=item.messageType><textmessage ng-switch-when=TextMessage msg=item.content></textmessage><imagemessage ng-switch-when=ImageMessage msg=item.content></imagemessage><voicemessage ng-switch-when=VoiceMessage msg=item.content></voicemessage><locationmessage ng-switch-when=LocationMessage msg=item.content></locationmessage><richcontentmessage ng-switch-when=RichContentMessage msg=item.content></richcontentmessage></div></div></div></div></div></div></div></div><footer class=\"rongcloud-footer rongcloud-clearfix\"><div id=funcPanel style=\"display: flex;display: -webkit-flex\"><a id=uploadfile href=# class=\"rongcloud-pull-left rongcloud-message_type_btn\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-icon_message_type1\"></i></a><a href=# class=\"rongcloud-pull-left rongcloud-message_type2_btn\" ng-click=switchPerson() ng-show=\"_inputPanelState==2\"><span>转人工服务</span></a><div class=rongcloud-message_wrap><textarea id=inputMsg ng-focus=\"showemoji=false\" ctrl-enter-keys fun=send() ctrlenter=false ondrop=\"return false\" ng-model=currentConversation.messageContent placeholder=请输入文字...></textarea></div><a href=# class=\"rongcloud-pull-right rongcloud-message_type_btn rongcloud-message_type_btn2\" ng-show=\"_inputPanelState==0\"><i class=\"rongcloud-sprite2 rongcloud-message_emoji_btn\" ng-click=\"showemoji=!showemoji\"></i></a><a href=\"\" class=rongcloud-send_btn  ng-click=send() style=\"color: #fff;\">发送</a></div><div class=rongcloud-pub-faces ng-show=showemoji id=emj><swipe-emoji content=currentConversation></swipe-emoji></div><div class=\"rongcloud-footerBtn rongcloud-clearfix\" ng-show=showemoji id=subsp><ul class=\"rongcloud-clearfix rongcloud-emojiWrap\"><a href=#  ng-click=showEmj()><li class=rongcloud-sprite2></li></a></ul></div></footer></div></div>"
   );
 
 

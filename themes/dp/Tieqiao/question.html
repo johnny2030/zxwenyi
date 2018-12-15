@@ -27,13 +27,33 @@
 		text-decoration:none;
 		color:#333;
 	}
+	.mui-popup-input {
+		height: 150px;
+	}
+	.mui-popup-input input {
+		font-size: 14px;
+		width: 100%;
+		height: 30px;
+		margin: 10px 0 0;
+		padding: 0 5px;
+		border: 1px solid rgba(0,0,0,.3);
+		border-radius: 0;
+		background: #fff;
+	}
+	.mui-popup-input textarea {
+		height: 145px;
+		color: #666666;
+		font-size: 15px;
+		padding: 4px 8px;
+		margin-top: 10px;
+	}
 </style>
 <body ng-controller="main" style="background-color:#efeff4 !important;">
 	<header id="header" class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">咨询问诊</h1>
 	</header>
 	<form method="post" action="{:U('portal/user/question')}" id="info_form">
-		<div class="mui-content all-pic">
+		<div class="mui-content all-pic" id="qus">
 			<div class="mui-card" style="margin-top: 2rem;">
 				<tc_include file="Public:form_result" />
 				<div class="mui-card-content" style="padding: 10px !important;">
@@ -175,7 +195,9 @@
             mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
                 if (e.index == 0) {
                     var form = document.getElementById('info_form');
-                    form.submit();
+                    mui.alert('您的咨询已提交，请耐心等待医生回复', '温馨提醒', function() {
+                        form.submit();
+                    });
                 }
             });
         }

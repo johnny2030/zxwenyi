@@ -6,16 +6,17 @@
 <body>
 <div>
     <p style="font-size: 20px;margin: 20px;">铁樵健康</p>
-    <p><a href="{:U('portal/user/register_patient')}" >患者信息登记</a></p>
+    <p><a href="{:U('portal/index/register_patient')}" >患者信息登记</a></p>
     <p><a href="{:U('portal/user/info_patient')}" >患者个人中心</a></p>
-    <p><a href="{:U('portal/user/register_doctor')}" >医生信息登记</a></p>
+    <p><a href="{:U('portal/index/register_doctor')}" >医生信息登记</a></p>
     <p><a href="{:U('portal/user/info_doctor')}" >医生个人中心</a></p>
     <p><a href="{:U('portal/user/office_preview')}" >科室查看</a></p>
     <p><a href="{:U('portal/user/doctor_list')}" >医生信息列表</a></p>
     <p><a href="{:U('portal/user/doctor_detail')}" >医生信息详情</a></p>
-
+    <p><a href="{:U('portal/user/result',array('ck'=>1))}" >患者</a></p>
+    <p><a href="{:U('portal/user/result',array('ck'=>2))}" >医生</a></p>
+    <p><a href="{:U('portal/user/about')}" >关于我们</a></p>
     <p><a href="{:U('portal/user/self_test')}" >体质自测</a></p>
-
     <p><a href="{:U('portal/messages/evaluate')}" >评价结论</a></p>
     <p><a href="{:U('portal/user/question')}" >咨询问诊</a></p>
     <p><a href="{:U('portal/messages/index')}" >转发</a></p>
