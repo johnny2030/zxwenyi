@@ -332,7 +332,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -351,7 +351,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -384,7 +384,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         $scope.show_msg = function () {
             $http({
                 method:'GET',
-                url:'/zxwenyi/index.php',
+                url:'/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -409,7 +409,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                     }else{
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -826,7 +826,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }
             $http({
                 method:'GET',
-                url:'/zxwenyi/index.php',
+                url:'/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -924,7 +924,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',

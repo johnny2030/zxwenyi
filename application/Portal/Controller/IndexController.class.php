@@ -32,13 +32,13 @@ class IndexController extends HomebaseController {
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
                 $this->assign( 'check', 0 );
-                $this->assign( 'msg', '欢迎您入驻健康微达人，来看下有没有咨询需要处理吧！');
+                $this->assign( 'msg', '欢迎您入驻健康微达人，请耐心等待管理员审核，先查看一下您的登记信息吧。');
                 $this->assign( 'btn', '立即查看');
-                $this->assign( 'url_q', "{:U('portal/user/question')}");
-                $this->assign( 'url_u', "{:U('portal/user/info_doctor')}");
+                $this->assign( 'url_q', "");
+                $this->assign( 'url_u', "index.php?g=portal&m=user&a=info_doctor");
             } else {
                 $this->assign( 'check', 1 );
-                $this->assign( 'url', "{:U('portal/index/register_doctor')}");
+                $this->assign( 'url', "index.php?g=portal&m=user&a=register_doctor");
             }
             $this->display('../Public/return');
         }else{
@@ -74,11 +74,11 @@ class IndexController extends HomebaseController {
                 $this->assign( 'check', 0 );
                 $this->assign( 'msg', '您可以进入我的咨询界面对您的健康问题进行咨询了，愿我们能为您的身心健康保驾护航！');
                 $this->assign( 'btn', '立即咨询');
-                $this->assign( 'url_q', "{:U('portal/user/question')}");
-                $this->assign( 'url_u', "{:U('portal/user/info_patient')}");
+                $this->assign( 'url_q', "index.php?g=portal&m=user&a=question");
+                $this->assign( 'url_u', "index.php?g=portal&m=user&a=info_patient");
             } else {
                 $this->assign( 'check', 1 );
-                $this->assign( 'url', "{:U('portal/index/register_patient')}");
+                $this->assign( 'url', "index.php?g=portal&m=user&a=register_patient");
             }
             $this->display('../Public/return');
         }else{

@@ -22,9 +22,11 @@
 			<p>注册成功</p>
 			<p style="text-indent: 2em; margin-top: 2rem;">{$msg}</p>
 			<p style="margin-top: 1rem;text-align: center;">
-				<a href="{$url_q}" class="mui-btn mui-btn-success" style="width: 30%;">
-					{$btn}
-				</a>
+                <notempty name="url_q">
+                    <a href="{$url_q}" class="mui-btn mui-btn-success" style="width: 30%;">
+                        {$btn}
+                    </a>
+                </notempty>
 				<a href="{$url_u}" class="mui-btn mui-btn-success" style="width: 30%;margin-left: 5%;">
 					个人中心
 				</a>
