@@ -18,6 +18,7 @@ class UserController extends CheckController {
     private $common_determine_model;
     private $common_result_model;
     private $common_result_rel_model;
+    private $common_operation_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -34,6 +35,7 @@ class UserController extends CheckController {
         $this->common_determine_model = D( 'Common_determine' );
         $this->common_result_model = D( 'Common_result' );
         $this->common_result_rel_model = D( 'Common_result_rel' );
+        $this->common_operation_model = D( 'Common_operation' );
 	}
     //用户身份判断
     public function user_info() {
@@ -140,6 +142,32 @@ class UserController extends CheckController {
     }
     //咨询问诊
     public function question() {
+        $id = (int)session('login_id');
+        $user = $this->common_user_model->find($id);
+        if ($user['type'] == 0){
+            R('User/question_p');
+        }else{
+            R('User/question_d');
+        }
+    }
+    function question_d(){
+        $id = (int)session('login_id');
+        $where = array();
+        $where['m.type'] = array('eq',2);
+        $where['m.status'] = array('neq',2);
+        $where['m.del_flg'] = array('eq',0);
+        $where['p.doctor_id'] = array('eq',$id);
+        $forward = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_OPERATION__ p ON m.id=p.msg_id')->where($where)->order("m.status asc,m.operation_time desc")->select();
+        $where = array();
+        $where['m.type'] = array('eq',1);
+        $where['m.status'] = array('neq',2);
+        $where['m.del_flg'] = array('eq',0);
+        $messages = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.operation_time desc")->select();
+        $this->assign( 'forward', $forward );
+        $this->assign( 'messages', $messages );
+        $this->display('../Tieqiao/question_d');
+    }
+    function question_p(){
         if ( IS_POST ) {
             $id = (int)session('login_id');
             $_POST['user_id'] = $id;

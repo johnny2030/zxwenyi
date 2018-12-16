@@ -345,6 +345,12 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 var compileFn=$compile('<span>关闭咨询</span>');
                 var $dom=compileFn($scope);
                 $dom.appendTo(subsp);
+                if (res.type == 1){
+                    var subsps = document.getElementById("kefu_btn");
+                    var compileFns=$compile("<i class='chat'>咨询</i>");
+                    var $doms=compileFns($scope);
+                    $doms.appendTo(subsps);
+                }
             }
         }).error(function (error) {
             alert("请求失败");
@@ -823,48 +829,49 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }
             if ($scope.currentConversation.messageContent.trim() == "") {
                 return;
-            }
-            $http({
-                method:'GET',
-                url:'/index.php',
-                params:{
-                    'g':'portal',
-                    'm':'rong',
-                    'a':'check_chat',
-                    'userId': $scope.currentConversation.targetId
-                }
-            }).success(function (res) {
-                if (res == 0){
-                    alert("咨询已失效，请重新咨询");
-                } else {
-                    var con = RongIMLib.RongIMEmoji.symbolToEmoji($scope.currentConversation.messageContent);
-                    var msg = RongIMLib.TextMessage.obtain(con);
-                    var userinfo = new RongIMLib.UserInfo(conversationServer.loginUser.id, conversationServer.loginUser.name, conversationServer.loginUser.portraitUri);
-                    msg.user = userinfo;
-                    RongIMLib.RongIMClient.getInstance().sendMessage(+$scope.currentConversation.targetType, $scope.currentConversation.targetId, msg, {
-                        onSuccess: function (retMessage) {
-                            conversationListServer.updateConversations().then(function () {
-                            });
-                        },
-                        onError: function (error) {
-                            console.log(error);
-                        }
-                    });
-                    var content = packDisplaySendMessage(msg, WidgetModule.MessageType.TextMessage);
-                    var cmsg = WidgetModule.Message.convert(content);
-                    conversationServer._addHistoryMessages(cmsg);
-                    // $scope.messageList.push();
-                    // adjustScrollbars();
-                    $scope.refreshiScroll();
-                    $scope.currentConversation.messageContent = "";
-                    if (!$scope.showemoji) {
-                        var obj = document.getElementById("inputMsg");
-                        WidgetModule.Helper.getFocus(obj);
+            }else {
+                $http({
+                    method:'GET',
+                    url:'/index.php',
+                    params:{
+                        'g':'portal',
+                        'm':'rong',
+                        'a':'check_chat',
+                        'userId': $scope.currentConversation.targetId
                     }
-                }
-            }).error(function (error) {
-                alert("请求失败");
-            })
+                }).success(function (res) {
+                    if (res == 0){
+                        alert("咨询已失效，请重新咨询");
+                    } else {
+                        var con = RongIMLib.RongIMEmoji.symbolToEmoji($scope.currentConversation.messageContent);
+                        var msg = RongIMLib.TextMessage.obtain(con);
+                        var userinfo = new RongIMLib.UserInfo(conversationServer.loginUser.id, conversationServer.loginUser.name, conversationServer.loginUser.portraitUri);
+                        msg.user = userinfo;
+                        RongIMLib.RongIMClient.getInstance().sendMessage(+$scope.currentConversation.targetType, $scope.currentConversation.targetId, msg, {
+                            onSuccess: function (retMessage) {
+                                conversationListServer.updateConversations().then(function () {
+                                });
+                            },
+                            onError: function (error) {
+                                console.log(error);
+                            }
+                        });
+                        var content = packDisplaySendMessage(msg, WidgetModule.MessageType.TextMessage);
+                        var cmsg = WidgetModule.Message.convert(content);
+                        conversationServer._addHistoryMessages(cmsg);
+                        // $scope.messageList.push();
+                        // adjustScrollbars();
+                        $scope.refreshiScroll();
+                        $scope.currentConversation.messageContent = "";
+                        if (!$scope.showemoji) {
+                            var obj = document.getElementById("inputMsg");
+                            WidgetModule.Helper.getFocus(obj);
+                        }
+                    }
+                }).error(function (error) {
+                    alert("请求失败");
+                })
+            }
         };
         $scope.minimize = function () {
             WebIMWidget.display = false;
@@ -2462,7 +2469,7 @@ angular.module('RongWebIMWidget').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('./ts/conversationlist/conversationList.tpl.html',
-    "<div id=rong-conversation-list class=\"rongcloud-main rongcloud-kefuList\" ng-show=conversationListServer.showSelf><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\"></a><div class=\"rongcloud-title rongcloud-title-f\"><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>最近联系人</a></div><a href=\"javascript:void 0\" ng-click=setconversation_kefu()><i class='chat'>咨询</i></a></header><div class=rongcloud-chatBox id=chatBox><div class=rongcloud-chatArea><div class=rongcloud-chatList><conversation-item ng-repeat=\"item in conversationListServer.conversationList\" item=item></conversation-item></div></div></div></div></div>"
+    "<div id=rong-conversation-list class=\"rongcloud-main rongcloud-kefuList\" ng-show=conversationListServer.showSelf><div class=\"rongcloud-main_inner rongcloud-clearfix\"><header class=rongcloud-header><a class=rongcloud-icon_return href=\"javascript:void 0\"></a><div class=\"rongcloud-title rongcloud-title-f\"><a class=\"rongcloud-title_name rongcloud-online\"><i class=rongcloud-Presence></i>最近联系人</a></div><a href=\"javascript:void 0\" ng-click=setconversation_kefu() id=kefu_btn></a></header><div class=rongcloud-chatBox id=chatBox><div class=rongcloud-chatArea><div class=rongcloud-chatList><conversation-item ng-repeat=\"item in conversationListServer.conversationList\" item=item></conversation-item></div></div></div></div></div>"
   );
 
 

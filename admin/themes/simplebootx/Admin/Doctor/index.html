@@ -76,7 +76,7 @@
 						<td>
 							<if condition="$vo.check eq 0">
 								<a style="margin-top: 5px;" href="{:U('doctor/check',array('id'=>$vo['id'],'check'=>1))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定通过？">通过</a>
-								<button style="margin-top: 5px;" class="btn btn-warning btn-small" data-toggle="modal" data-target="#myModal">驳回</button>
+								<button style="margin-top: 5px;" class="btn btn-warning btn-small" data-toggle="modal" data-target="#myModal" onclick="set_bk('{$vo.id}')">驳回</button>
 								<!--<a style="margin-top: 5px;" href="{:U('doctor/check',array('id'=>$vo['id'],'check'=>2))}" class="btn btn-warning btn-small js-ajax-delete" data-toggle="modal" data-target="#myModal" data-msg="确定驳回？">驳回</a>-->
 							</if>
 							<a style="margin-top: 5px;" href="{:U('doctor/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
@@ -85,6 +85,7 @@
 					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
+								<input type="hidden" id="bk_id" value="">
 								<div class="modal-header">
 									<h4 class="modal-title" id="myModalLabel">
 										驳回原因
@@ -141,7 +142,12 @@
 				$("#cid-form").submit();
 			});
 		});
-		function check_confirm(id) {
+		function set_bk(id) {
+		    var bk = document.getElementById("bk_id");
+		    bk.value = id;
+        }
+		function check_confirm() {
+		    var id = $("#bk_id").val();
             var reason = $("#reason").val();
             $.ajax({
                 async:false,

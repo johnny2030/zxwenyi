@@ -45,7 +45,7 @@
 						<div class="mui-input-row">
 							<div class="mui-content-padded">
 								<div class="mui-inline">咨询评分</div>
-								<div class="icons mui-inline" style="margin-left: 6px;" id="star">
+								<div class="mui-inline" style="margin-left: 6px;" id="star">
 								</div>
 							</div>
 						</div>
@@ -55,28 +55,31 @@
 			</div>
 		</div>
 	</notempty>
-	<div class="mui-content" style="padding-top: 3rem !important;">
-		<form method="post" name="info" action="{:U('portal/messages/evaluate')}">
-			<input type="hidden" name="id" value="{$msg_id}"/>
-			<if condition="$type eq 0">
-				<div class="mui-content-padded">
-					<div class="mui-inline">咨询评分</div>
-					<div class="icons mui-inline" style="margin-left: 6px;">
-						<i data-index="2" class="mui-icon mui-icon-star"></i>
-						<i data-index="4" class="mui-icon mui-icon-star"></i>
-						<i data-index="6" class="mui-icon mui-icon-star"></i>
-						<i data-index="8" class="mui-icon mui-icon-star"></i>
-						<i data-index="10" class="mui-icon mui-icon-star"></i>
-					</div>
-					<input type="hidden" id="elte" name="elte" value="">
-				</div>
-				<div class="mui-button-row">
-					<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
-				</div>
-			</if>
-		</form>
-	</div>
+    <if condition="$type eq 0">
+        <empty name="elte_info.user_id">
+            <div class="mui-content" style="padding-top: 3rem !important;">
+                <form method="post" name="info" action="{:U('portal/messages/evaluate')}">
+                    <input type="hidden" name="msg_id" value="{$msg_id}"/>
+					<input type="hidden" name="id" value="{$elte_info.id}"/>
+                    <div class="mui-content-padded">
+                        <div class="mui-inline">咨询评分</div>
+                        <div class="icons mui-inline" style="margin-left: 6px;">
+                            <i data-index="2" class="mui-icon mui-icon-star"></i>
+                            <i data-index="4" class="mui-icon mui-icon-star"></i>
+                            <i data-index="6" class="mui-icon mui-icon-star"></i>
+                            <i data-index="8" class="mui-icon mui-icon-star"></i>
+                            <i data-index="10" class="mui-icon mui-icon-star"></i>
+                        </div>
+                        <input type="hidden" id="elte" name="elte" value="">
+                    </div>
+                    <div class="mui-button-row">
+                        <button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>&nbsp;&nbsp;
+                        <button type="button" class="mui-btn mui-btn-danger footer-btn" onclick="return false;">取消</button>
+                    </div>
+                </form>
+            </div>
+        </empty>
+    </if>
 	<script src=" __TMPL__Public/js/feedback.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
         mui('.mui-scroll-wrapper').scroll();

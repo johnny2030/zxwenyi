@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<h1 class="mui-title">咨询列表</h1>
+</header>
+<div class="mui-content">
+	<ul class="mui-table-view mui-table-view-chevron" style="margin-top: 0px !important;">
+		<foreach name="forward" item="fd">
+			<li class="mui-table-view-cell mui-media">
+				<a class="mui-navigate-right" href="{:U('portal/messages/detail',array('id'=>$fd['id']))}">
+					<img class="mui-media-object mui-pull-left" src="{$fd.photo}" style="width: 60px;height: 60px;">
+					<div class="mui-media-body">
+						{$fd.name}
+						<p class="mui-ellipsis">
+							<if condition="$fd.status eq 0"> 未处理
+								<elseif condition="$fd.status eq 1"/>处理中
+								<else />处理完毕
+							</if>
+						</p>
+						<p class="mui-ellipsis">
+							咨询时间：{$fd.create_time}
+						</p>
+					</div>
+					<div class="mui-pull-right" style="margin-top:-40px;font-size: 14px;color: #CD3333;margin-right:-20px;">
+						查看详情
+					</div>
+				</a>
+			</li>
+		</foreach>
+		<foreach name="messages" item="msg">
+			<li class="mui-table-view-cell mui-media">
+				<a class="mui-navigate-right" href="{:U('portal/messages/detail',array('id'=>$msg['id']))}">
+					<img class="mui-media-object mui-pull-left" src="{$msg.photo}" style="width: 60px;height: 60px;">
+					<div class="mui-media-body">
+						{$msg.name}
+						<p class="mui-ellipsis">
+							<if condition="$msg.status eq 0"> 未处理
+								<elseif condition="$msg.status eq 1"/>处理中
+								<else />处理完毕
+							</if>
+						</p>
+						<p class="mui-ellipsis">
+							咨询时间：{$msg.create_time}
+						</p>
+					</div>
+					<div class="mui-pull-right" style="margin-top:-40px;font-size: 14px;color: #CD3333;margin-right:-20px;">
+						查看详情
+					</div>
+				</a>
+			</li>
+		</foreach>
+	</ul>
+</div>
+</body>
+</html>

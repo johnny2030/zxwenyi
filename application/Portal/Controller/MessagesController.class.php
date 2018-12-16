@@ -85,7 +85,7 @@ class MessagesController extends CheckController  {
             $user = $this->common_user_model->find($id);
             $elte_info = $this->common_evaluate_model->alias('e')->field('e.*,u.name as uname,u.age as age,u.sex as sex,u.photo as uphoto')->join('__COMMON_USER__ u ON e.user_id=u.id','left')->where(array('e.id' => $msg_id))->find();
             $this->assign( 'type', $user['type'] );
-            $this->assign( 'msg_id', $msg_id );
+            $this->assign( 'msg_id', $elte_info['msg_id'] );
             $this->assign( 'elte_info', $elte_info );
             $this->display('../Tieqiao/evaluate');
         }

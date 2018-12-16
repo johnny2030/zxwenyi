@@ -106,6 +106,14 @@ class DoctorController extends AdminbaseController {
 
         }else{
 	        $id = $_GET['id'];
+            $user = $this->common_user_model->find($id);
+            if ($user['status'] == 0){
+                require_once 'today/Wechat_tq.php';
+                $wechat = new \Wechat_tq( $this );
+            }else{
+                require_once 'today/Wechat_zj.php';
+                $wechat = new \Wechat_zj( $this );
+            }
             $reason = $_GET['reason'];
             $check = $_GET['check'];
             $data = array();
@@ -114,6 +122,7 @@ class DoctorController extends AdminbaseController {
                 $data['reason'] = $reason;
                 $result = $this->common_user_model->where(array('id' => $id))->save($data);
                 if ($result){
+                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=info_doctor','您的审核被驳回','驳回原因：'.$reason);
                     $this->ajaxReturn(0);
                 }else{
                     $this->ajaxReturn(1);
@@ -121,6 +130,7 @@ class DoctorController extends AdminbaseController {
             }else{
                 $result = $this->common_user_model->where(array('id' => $id))->save($data);
                 if ($result) {
+                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question','您的审核已通过，快来看下当前有没有未处理的咨询吧','点击这里立即查看');
                     $this->success('医生审核成功！');
                 } else {
                     $this->error('医生审核失败！');
