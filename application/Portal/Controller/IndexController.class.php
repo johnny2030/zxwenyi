@@ -32,7 +32,7 @@ class IndexController extends HomebaseController {
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
                 $this->assign( 'check', 0 );
-                $this->assign( 'msg', '欢迎您入驻健康微达人，请耐心等待管理员审核，先查看一下您的登记信息吧。');
+                $this->assign( 'msg', '欢迎您入驻铁樵健康，请耐心等待管理员审核，先查看一下您的登记信息吧。');
                 $this->assign( 'btn', '立即查看');
                 $this->assign( 'url_q', "");
                 $this->assign( 'url_u', "index.php?g=portal&m=user&a=info_doctor");

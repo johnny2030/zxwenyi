@@ -191,15 +191,14 @@
         if(!check_content()){
             return false;
         }else {
-            var btnArray = ['确认', '取消'];
-            mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
-                if (e.index == 0) {
-                    var form = document.getElementById('info_form');
-                    mui.alert('您的咨询已提交，请耐心等待医生回复', '温馨提醒', function() {
-                        form.submit();
-                    });
-                }
+            var form = document.getElementById('info_form');
+            mui.alert('您的咨询已提交，请耐心等待医生回复', '温馨提醒', function() {
+                form.submit();
             });
+            /*var btnArray = ['确认', '取消'];
+            mui.confirm('您确认提交此咨询吗？', '温馨提醒', btnArray, function(e) {
+                if (e.index == 0) {}
+            });*/
         }
     }
     function check_content(){
