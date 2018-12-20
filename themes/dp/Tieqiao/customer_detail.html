@@ -1,8 +1,9 @@
 <!doctype html>
-<html ng-app="demo">
+<html ng-app="demo" lang="en" class="feedback">
 <head>
 	<tc_include file="Public/TQHead"/>
 	<tc_include file="Public/RCHead"/>
+	<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/feedback.css" />
 </head>
 	<body ng-controller="main">
 	<div id="show">
@@ -76,8 +77,36 @@
 					</notempty>
 				</ul>
 			</div>
+			<!--<div class="mui-card">
+				<div class="mui-card-header">
+					<span>专家总结</span>
+				</div>
+				<div class="mui-card-content">
+					<div class="mui-input-row">
+						<div class="mui-content-padded">
+							<div class="mui-inline">多喝水，注意休息。</div>
+						</div>
+					</div>
+				</div>
+				<div class="mui-card-footer">提交时间：2018-12-18 22:36:42</div>
+			</div>
+			<div class="mui-card" style="margin-bottom: 1.5rem;">
+				<div class="mui-card-header">
+					<span>用户评分</span>
+				</div>
+				<div class="mui-card-content">
+					<div class="mui-input-row">
+						<div class="mui-content-padded">
+							<div class="mui-inline">咨询评分</div>
+							<div class="mui-inline" style="margin-left: 6px;" id="star">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mui-card-footer">提交时间：2018-12-18 22:37:13</div>
+			</div>-->
 		</div>
-		<nav class="mui-bar mui-bar-tab" id="nv_br">
+		<nav class="mui-bar mui-bar-tab" id="nv_br" style="display: block;">
 			<div class="zixun-nav">
 				<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即回复</button>
 			</div>
@@ -93,5 +122,30 @@
 <!--图片点击放大预览主要js结束-->
 <script>
     mui.previewImage();//图片点击放大预览主要js
+</script>
+<script src=" __TMPL__Public/js/feedback.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    mui('.mui-scroll-wrapper').scroll();
+</script>
+<script type="text/javascript">
+    $(function(){
+        var index = 8;
+        if ("{$elte_info['elte']}" != ""){
+            index = parseInt("{$elte_info['elte']}");
+        }
+        var star = $("#star");
+        var q = index/2;
+        var w = index%2;
+        for (i = 1;i<6;i++) {
+            if (i<=q){
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-star-filled'></i>");
+            } else if (w > 0) {
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-starhalf mui-icon-star-filled'></i>");
+                w = 0;
+            } else {
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-star'></i>");
+            }
+        }
+    });
 </script>
 </html>

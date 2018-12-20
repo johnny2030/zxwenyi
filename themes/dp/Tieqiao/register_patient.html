@@ -20,6 +20,18 @@
 						<input type="text" id="age" name="age" class="u-inpt u-age mui-input-clear" placeholder="请输入年龄" value="">
 					</div>
 					<div class="mui-input-row">
+						<input type="text" id="nation" name="nation" class="u-inpt u-nation mui-input-clear" placeholder="请输入民族" value="{$patient.nation}">
+						<select id="sex" name="sex" class="u-inpt u-sex sel_info">
+							<option value="" selected>请选择性别</option>
+							<option value="1">男</option>
+							<option value="2">女</option>
+						</select>
+					</div>
+					<div class="mui-input-row">
+						<input type="text" id="height" name="height" class="u-inpt u-height mui-input-clear" placeholder="身高（cm）" value="{$patient.height}">
+						<input type="text" id="weight" name="weight" class="u-inpt u-weight mui-input-clear" placeholder="体重（kg）" value="{$patient.weight}">
+					</div>
+					<div class="mui-input-row">
 						<input type="text" id="m_card" name="m_card" class="u-inpt m-card mui-input-clear" placeholder="请输入会员卡号" value="" onchange="check_card()">
 					</div>
 					<div class="mui-input-row">
@@ -32,6 +44,81 @@
 					<div class="mui-input-row">
 						<input type="text" id="phone" name="phone" class="u-inpt u-phone mui-input-clear" placeholder="请输入手机号码" value="" onchange="vailPhone()">
 					</div>
+					<div class="mui-input-row user_list" style="margin-top: 0px !important;">
+						<label class="label_info">过敏史</label>
+						<span class="span_info">|</span>
+						<select id="allergic" name="allergic" class="input_info">
+							<option value="" selected>请选择过敏史</option>
+							<option value="有">有</option>
+							<option value="无">无</option>
+						</select>
+					</div>
+					<div class="mui-input-row user_list">
+						<label class="label_info">健康状况</label>
+						<span class="span_info">|</span>
+						<select id="health" name="health" class="input_info" onchange="getHealthy()">
+							<notempty name="patient.health">
+								<option value="">请选择健康状况</option>
+								<foreach name="list" item="h">
+									<if condition="$h.id eq $patient['health']">
+										<option value="{$h.id}" selected>{$h.name}</option>
+										<else />
+										<option value="{$h.id}">{$h.name}</option>
+									</if>
+								</foreach>
+								<else />
+								<option value="" selected>请选择健康状况</option>
+								<foreach name="list" item="h">
+									<option value="{$h.id}">{$h.name}</option>
+								</foreach>
+							</notempty>
+						</select>
+					</div>
+					<div class="mui-input-row user_list" id="hys" style="display: none;">
+						<label class="label_info">具体疾病</label>
+						<span class="span_info">|</span>
+						<select id="healthy" name="healthy" class="input_info">
+							<notempty name="patient.healthy">
+								<foreach name="lists" item="s">
+									<if condition="$s.id eq $patient['healthy']">
+										<option value="{$s.id}" selected>{$s.name}</option>
+										<else />
+										<option value="{$s.id}">{$s.name}</option>
+									</if>
+								</foreach>
+							</notempty>
+						</select>
+					</div>
+					<div class="mui-input-row user_list" style="margin-bottom: 10px;">
+						<label class="label_info">运动情况</label>
+						<span class="span_info">|</span>
+						<select name="motion" class="input_info">
+							<notempty name="patient.motion">
+								<if condition="$patient.motion eq '经常'">
+									<option value="经常" selected>经常</option>
+									<option value="有时">有时</option>
+									<option value="几乎不">几乎不</option>
+								</if>
+								<if condition="$patient.motion eq '有时'">
+									<option value="经常">经常</option>
+									<option value="有时" selected>有时</option>
+									<option value="几乎不">几乎不</option>
+								</if>
+								<if condition="$patient.motion eq '几乎不'">
+									<option value="经常">经常</option>
+									<option value="有时">有时</option>
+									<option value="几乎不" selected>几乎不</option>
+								</if>
+								<else />
+								<option value="" selected>请选择运动情况</option>
+								<option value="经常">经常</option>
+								<option value="有时">有时</option>
+								<option value="几乎不">几乎不</option>
+							</notempty>
+						</select>
+					</div>
+					<input type="hidden" id="hy" name="hy" value="{$patient.healthy}">
+					<input type="hidden" id="birthday" name="birthday" value="">
                     <div class="mui-input-row mui-checkbox">
 						<input type="checkbox" id="check" name="check" style="position: unset;" checked>
                         <a href="#" id="cka" style="color: red;font-size: 0.8rem;" onclick="show_box();">我已阅读《益年健》使用须知，并同意以上的各项条款</a>
@@ -91,6 +178,14 @@
                 return false;
             }else if(!check_age()){
                 return false;
+            }else if(!check_nation()){
+                return false;
+            }else if(!check_sex()){
+                return false;
+            }else if(!check_height()){
+                return false;
+            }else if(!check_weight()){
+                return false;
             }else if(!check_m_card()){
                 return false;
             }else if(!check_p_card()){
@@ -98,6 +193,12 @@
             }else if(!check_t_card()){
                 return false;
             }else if(!vailPhone()){
+                return false;
+            }else if(!check_allergic()){
+                return false;
+            }else if(!check_health()){
+                return false;
+            }else if(!check_motion()){
                 return false;
             }else if(!check_box()){
                 return false;
@@ -138,6 +239,8 @@
                         years = years - 1;
 					}
 				}
+				var birthday = year+'-'+yue+'-'+date;
+                $("#birthday").val(birthday);
                 $("#age").val(years);
 			}else {
                 $("#age").val('');
@@ -163,6 +266,50 @@
                 return false;
             } else{
                 $("#age").css("border-color","");
+                return true;
+            }
+        }
+        function check_nation(){
+            var nation = $("#nation").val();
+            if (nation.length==0){
+                $("#nation").css("border-color","red");
+                mui.alert('民族不能为空！', '温馨提醒');
+                return false;
+            } else{
+                $("#nation").css("border-color","");
+                return true;
+            }
+        }
+        function check_sex(){
+            var sex = $('#sex option:selected').val();
+            if (sex.length==0){
+                alert("请选择性别！");
+                $("#sex").css("border-color","red");
+                return false;
+            } else{
+                $("#sex").css("border-color","");
+                return true;
+            }
+        }
+        function check_height(){
+            var height = $("#height").val();
+            if (height.length==0){
+                $("#height").css("border-color","red");
+                mui.alert('请填写身高！', '温馨提醒');
+                return false;
+            } else{
+                $("#height").css("border-color","");
+                return true;
+            }
+        }
+        function check_weight(){
+            var weight = $("#weight").val();
+            if (weight.length==0){
+                $("#weight").css("border-color","red");
+                mui.alert('请填写体重！', '温馨提醒');
+                return false;
+            } else{
+                $("#weight").css("border-color","");
                 return true;
             }
         }
@@ -226,6 +373,39 @@
             }
             return flag;
         }
+        function check_allergic(){
+            var allergic = $('#allergic option:selected').val();
+            if (allergic.length==0){
+                alert("请选择过敏史！");
+                $("#allergic").css("border-color","red");
+                return false;
+            } else{
+                $("#allergic").css("border-color","");
+                return true;
+            }
+        }
+        function check_health(){
+            var health = $('#health option:selected').val();
+            if (health.length==0){
+                alert("请选择健康状况！");
+                $("#health").css("border-color","red");
+                return false;
+            } else{
+                $("#health").css("border-color","");
+                return true;
+            }
+        }
+        function check_motion(){
+            var motion = $('#motion option:selected').val();
+            if (motion.length==0){
+                alert("请选择运动情况！");
+                $("#motion").css("border-color","red");
+                return false;
+            } else{
+                $("#motion").css("border-color","");
+                return true;
+            }
+        }
         function check_phone() {
             var phone = $("#phone").val();
             $.ajax({
@@ -286,6 +466,35 @@
                     }
                 });
 			}
+        }
+        function getHealthy() {
+            var up_id = $('#health option:selected').val();
+            $.ajax({
+                async:false,
+                type : "get",
+                url : "index.php?g=portal&m=commonMethod&a=get_healthy_info",
+                data : {
+                    'up_id' : up_id
+                },
+                dataType : "json",
+                success : function(data) {
+                    var show = $("#hys");
+                    var selct = $("#healthy");
+                    selct.empty();
+                    if(data.list.length > 0){
+                        var list = data.list;
+                        selct.append("<option value=''>请选择具体疾病</option>");
+                        for (i=0;i<list.length;i++){
+                            var county = list[i];
+                            selct.append("<option value='"+county.id+"'>"+county.name+"</option>");
+                        }
+                        show.css("display","block");
+                    }else{
+                        $("#hy").val("");
+                        show.css("display","none");
+                    }
+                }
+            });
         }
         function check_box() {
             if ($("#check").prop("checked")){

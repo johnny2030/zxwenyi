@@ -347,7 +347,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 $dom.appendTo(subsp);
                 if (res.type == 1){
                     var subsps = document.getElementById("kefu_btn");
-                    var compileFns=$compile("<i class='chat'>咨询</i>");
+                    var compileFns=$compile("<i class='chat'>返回管理员</i>");
                     var $doms=compileFns($scope);
                     $doms.appendTo(subsps);
                 }
@@ -437,7 +437,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 }
             }, 'div');
             $('.mui-popup-input').html('');
-            $('.mui-popup-input').append('<textarea placeholder="请先输入总结"></textarea>');
+            $('.mui-popup-input').append('<textarea placeholder="请先输入总结" style="height: 3rem;"></textarea>');
         });
         $scope.$watch("currentConversation.messageContent", function (newVal, oldVal) {
             if (newVal === oldVal)
