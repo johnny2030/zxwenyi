@@ -266,8 +266,8 @@ hr{ height:1px;border:none;border-top:1px solid #f6f6f6; margin: 10px 0;}
 .zhifu-btn button{ width: 94%; height: 50px; margin: 0 auto; font-size: 20px; font-weight: bold;}
 
 .pay-ok{ width: 100%; margin: 0 auto; text-align: center; margin-top: 50px;}
-.pay-ok span{ color: white; padding: 0px; background-color: #4cd964; border-radius: 50%; font-size: 60px;}
-.pay-ok p{ color: #4cd964; font-size: 18px; padding-top: 14px;}
+.pay-ok span{ color: white; padding: 0px; background-color: #4682B4; border-radius: 50%; font-size: 60px;}
+.pay-ok p{ color: #4682B4; font-size: 18px; padding-top: 14px;}
 .people-container{ width: 100%; background-color: white;}
 .people{ margin: 0 auto;width: 94%;}
 .people  span{ color: #999999}

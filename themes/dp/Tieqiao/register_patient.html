@@ -57,64 +57,27 @@
 						<label class="label_info">健康状况</label>
 						<span class="span_info">|</span>
 						<select id="health" name="health" class="input_info" onchange="getHealthy()">
-							<notempty name="patient.health">
-								<option value="">请选择健康状况</option>
-								<foreach name="list" item="h">
-									<if condition="$h.id eq $patient['health']">
-										<option value="{$h.id}" selected>{$h.name}</option>
-										<else />
-										<option value="{$h.id}">{$h.name}</option>
-									</if>
-								</foreach>
-								<else />
-								<option value="" selected>请选择健康状况</option>
-								<foreach name="list" item="h">
-									<option value="{$h.id}">{$h.name}</option>
-								</foreach>
-							</notempty>
+							<option value="" selected>请选择健康状况</option>
+							<foreach name="list" item="h">
+								<option value="{$h.id}">{$h.name}</option>
+							</foreach>
 						</select>
 					</div>
 					<div class="mui-input-row user_list" id="hys" style="display: none;">
 						<label class="label_info">具体疾病</label>
 						<span class="span_info">|</span>
 						<select id="healthy" name="healthy" class="input_info">
-							<notempty name="patient.healthy">
-								<foreach name="lists" item="s">
-									<if condition="$s.id eq $patient['healthy']">
-										<option value="{$s.id}" selected>{$s.name}</option>
-										<else />
-										<option value="{$s.id}">{$s.name}</option>
-									</if>
-								</foreach>
-							</notempty>
+							<option value="" selected>请选择具体疾病</option>
 						</select>
 					</div>
 					<div class="mui-input-row user_list" style="margin-bottom: 10px;">
 						<label class="label_info">运动情况</label>
 						<span class="span_info">|</span>
 						<select name="motion" class="input_info">
-							<notempty name="patient.motion">
-								<if condition="$patient.motion eq '经常'">
-									<option value="经常" selected>经常</option>
-									<option value="有时">有时</option>
-									<option value="几乎不">几乎不</option>
-								</if>
-								<if condition="$patient.motion eq '有时'">
-									<option value="经常">经常</option>
-									<option value="有时" selected>有时</option>
-									<option value="几乎不">几乎不</option>
-								</if>
-								<if condition="$patient.motion eq '几乎不'">
-									<option value="经常">经常</option>
-									<option value="有时">有时</option>
-									<option value="几乎不" selected>几乎不</option>
-								</if>
-								<else />
-								<option value="" selected>请选择运动情况</option>
-								<option value="经常">经常</option>
-								<option value="有时">有时</option>
-								<option value="几乎不">几乎不</option>
-							</notempty>
+							<option value="" selected>请选择运动情况</option>
+							<option value="经常">经常</option>
+							<option value="有时">有时</option>
+							<option value="几乎不">几乎不</option>
 						</select>
 					</div>
 					<input type="hidden" id="hy" name="hy" value="{$patient.healthy}">

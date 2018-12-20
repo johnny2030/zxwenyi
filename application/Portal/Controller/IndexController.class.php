@@ -9,6 +9,7 @@ class IndexController extends HomebaseController {
     private $common_office_model;
     private $common_hospital_model;
     private $common_card_model;
+    private $common_health_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -18,6 +19,7 @@ class IndexController extends HomebaseController {
         $this->common_position_model = D( 'Common_position' );
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_card_model = D( 'Common_card' );
+        $this->common_health_model = D( 'Common_health' );
     }
 
     //首页
@@ -83,6 +85,11 @@ class IndexController extends HomebaseController {
             $this->display('../Public/return');
         }else{
             $user = $this->common_user_model->find($id);
+            $where_h = array();
+            $where_h['up_id'] = array('eq',0);
+            $where_h['del_flg'] = array('eq',0);
+            $list = $this->common_health_model->where($where_h)->select();
+            $this->assign( 'list', $list );
             if (empty($user['i_card'])){
                 $this->display('../Tieqiao/register_patient');
             }else{
