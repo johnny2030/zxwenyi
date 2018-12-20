@@ -200,6 +200,15 @@ class UserController extends CheckController {
             $this->display('../Tieqiao/question');
         }
     }
+    function chat(){
+        $id = (int)session('login_id');
+        $where = array();
+        $where['user_id'] = array('eq',$id);
+        $where['del_flg'] = array('eq',0);
+        $msg_list = $this->common_messages_model->where($where)->order("status asc,create_time desc")->select();
+        $this->assign( 'msg_list', $msg_list );
+        $this->display('../Tieqiao/chat');
+    }
     function self_test(){
 	    if ( IS_POST ){
             $type = $_POST['type'];
