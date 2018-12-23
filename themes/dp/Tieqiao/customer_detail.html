@@ -77,40 +77,76 @@
 					</notempty>
 				</ul>
 			</div>
-			<!--<div class="mui-card">
-				<div class="mui-card-header">
-					<span>专家总结</span>
-				</div>
-				<div class="mui-card-content">
-					<div class="mui-input-row">
-						<div class="mui-content-padded">
-							<div class="mui-inline">多喝水，注意休息。</div>
-						</div>
+		</div>
+		<if condition="$msg.status eq 2">
+			<div>
+				<div class="mui-card">
+					<div class="mui-card-header">
+						<span>聊天记录</span>
 					</div>
-				</div>
-				<div class="mui-card-footer">提交时间：2018-12-18 22:36:42</div>
-			</div>
-			<div class="mui-card" style="margin-bottom: 1.5rem;">
-				<div class="mui-card-header">
-					<span>用户评分</span>
-				</div>
-				<div class="mui-card-content">
-					<div class="mui-input-row">
-						<div class="mui-content-padded">
-							<div class="mui-inline">咨询评分</div>
-							<div class="mui-inline" style="margin-left: 6px;" id="star">
+					<div class="mui-card-content briefing">
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
+							<div class="chat-bubble-left">
+								这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
+							<div class="chat-bubble-left">
+								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
+							<div class="chat-bubble-right">
+								这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
+							<div class="chat-bubble-right">
+								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="mui-card-footer">提交时间：2018-12-18 22:37:13</div>
-			</div>-->
-		</div>
-		<nav class="mui-bar mui-bar-tab" id="nv_br" style="display: block;">
-			<div class="zixun-nav">
-				<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即回复</button>
+				<div class="mui-card">
+					<div class="mui-card-header">
+						<span>专家总结</span>
+					</div>
+					<div class="mui-card-content">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">多喝水，注意休息。</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-card-footer">提交时间：2018-12-18 22:36:42</div>
+				</div>
+				<div class="mui-card" style="margin-bottom: 1.5rem;">
+					<div class="mui-card-header">
+						<span>用户评分</span>
+					</div>
+					<div class="mui-card-content">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">咨询评分</div>
+								<div class="mui-inline" style="margin-left: 6px;" id="star">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-card-footer">提交时间：2018-12-18 22:37:13</div>
+				</div>
 			</div>
-		</nav>
+			<else />
+			<nav class="mui-bar mui-bar-tab" id="nv_br" style="display: block;">
+				<div class="zixun-nav">
+					<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即回复</button>
+				</div>
+			</nav>
+		</if>
 	</div>
 	<div>
 		<rong-widget></rong-widget>
@@ -123,7 +159,7 @@
 <script>
     mui.previewImage();//图片点击放大预览主要js
 </script>
-<script src=" __TMPL__Public/js/feedback.js" type="text/javascript" charset="utf-8"></script>
+<script src="__TMPL__Public/js/feedback.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     mui('.mui-scroll-wrapper').scroll();
 </script>

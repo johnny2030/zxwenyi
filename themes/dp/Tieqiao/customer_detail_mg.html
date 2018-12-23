@@ -1,10 +1,12 @@
 <!doctype html>
-<html ng-app="demo">
+<html ng-app="demo" lang="en" class="feedback">
 <head>
 	<tc_include file="Public/TQHead"/>
 	<tc_include file="Public/RCHead"/>
+	<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/feedback.css" />
 </head>
 	<body ng-controller="main">
+	<div id="show">
 		<div class="detail">
 			<div class="top-bg"></div>
 			<div class="top-card">
@@ -47,7 +49,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="doctor-introduce" id="show">
+		<div class="doctor-introduce">
 			<div class="mui-card">
 				<div class="mui-card-header">
 					<span>咨询内容</span>
@@ -81,18 +83,87 @@
 				</ul>
 			</div>
 		</div>
-		<div style="text-align: center;">
-			<a id="forward" class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" style="line-height: 27px;">群发</a>
-			<a id="send_show" class="mui-btn mui-btn-warning footer-btn" href="javascript:void(0);" style="line-height: 27px;">转发</a>
-			<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')" style="line-height: 27px;">立即回复</a>
-		</div>
-		<div>
-			<rong-widget></rong-widget>
-		</div>
+		<if condition="$msg.status eq 2">
+			<div>
+				<div class="mui-card">
+					<div class="mui-card-header">
+						<span>聊天记录</span>
+					</div>
+					<div class="mui-card-content briefing">
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
+							<div class="chat-bubble-left">
+								这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
+							<div class="chat-bubble-left">
+								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
+							<div class="chat-bubble-right">
+								这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡
+							</div>
+						</div>
+						<div class="rows">
+							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
+							<div class="chat-bubble-right">
+								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mui-card">
+					<div class="mui-card-header">
+						<span>专家总结</span>
+					</div>
+					<div class="mui-card-content">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">多喝水，注意休息。</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-card-footer">提交时间：2018-12-18 22:36:42</div>
+				</div>
+				<div class="mui-card" style="margin-bottom: 1.5rem;">
+					<div class="mui-card-header">
+						<span>用户评分</span>
+					</div>
+					<div class="mui-card-content">
+						<div class="mui-input-row">
+							<div class="mui-content-padded">
+								<div class="mui-inline">咨询评分</div>
+								<div class="mui-inline" style="margin-left: 6px;" id="star">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mui-card-footer">提交时间：2018-12-18 22:37:13</div>
+				</div>
+			</div>
+			<else />
+			<div style="text-align: center;">
+				<a id="forward" class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" style="line-height: 27px;">群发</a>
+				<a id="send_show" class="mui-btn mui-btn-warning footer-btn" href="javascript:void(0);" style="line-height: 27px;">转发</a>
+				<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')" style="line-height: 27px;">立即回复</a>
+			</div>
+		</if>
+	</div>
+	<div>
+		<rong-widget></rong-widget>
+	</div>
 	</body>
 <!--图片点击放大预览主要js开始-->
 <script type="text/javascript" src="__TMPL__Public/js/mui.zoom.js" ></script>
 <script type="text/javascript" src="__TMPL__Public/js/mui.previewimage.js" ></script>
+<script type="text/javascript" src="__TMPL__Public/js/feedback.js" charset="utf-8"></script>
+<script type="text/javascript">
+    mui('.mui-scroll-wrapper').scroll();
+</script>
 <!--图片点击放大预览主要js结束-->
 <script type="text/javascript" charset="utf-8">
     mui.previewImage();//图片点击放大预览主要js
@@ -126,6 +197,25 @@
     });
     document.getElementById("send_show").addEventListener('tap', function() {
         window.location.href='{:U("portal/messages/send_show",array("id"=>$msg["id"]))}';
+    });
+    $(function(){
+        var index = 8;
+        if ("{$elte_info['elte']}" != ""){
+            index = parseInt("{$elte_info['elte']}");
+        }
+        var star = $("#star");
+        var q = index/2;
+        var w = index%2;
+        for (i = 1;i<6;i++) {
+            if (i<=q){
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-star-filled'></i>");
+            } else if (w > 0) {
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-starhalf mui-icon-star-filled'></i>");
+                w = 0;
+            } else {
+                star.append("<i data-index='"+i+"' class='mui-icon mui-icon-star'></i>");
+            }
+        }
     });
 </script>
 </html>

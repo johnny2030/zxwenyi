@@ -90,7 +90,7 @@ class IndexController extends HomebaseController {
             $where_h['del_flg'] = array('eq',0);
             $list = $this->common_health_model->where($where_h)->select();
             $this->assign( 'list', $list );
-            if (empty($user['i_card'])){
+            if (empty($user['m_card_id'])){
                 $this->display('../Tieqiao/register_patient');
             }else{
                 session('flg','redt');

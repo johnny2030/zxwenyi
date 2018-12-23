@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="demo">
+<html>
 <?php
 	require_once "today/wxjssdk.php";
 	$jssdk = new \wxjssdk();
@@ -7,7 +7,6 @@
 ?>
 <head>
 	<tc_include file="Public/TQHead"/>
-	<tc_include file="Public/RCHead"/>
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <style>
@@ -27,9 +26,6 @@
 		text-decoration:none;
 		color:#333;
 	}
-	.mui-popup-input {
-		height: 150px;
-	}
 	.mui-popup-input input {
 		font-size: 14px;
 		width: 100%;
@@ -47,17 +43,25 @@
 		padding: 4px 8px;
 		margin-top: 10px;
 	}
+	.content{
+		height: 5rem;
+		border: 0;
+		padding: 0;
+		margin: 0;
+		font: inherit;
+		width: 100%;
+	}
 </style>
-<body ng-controller="main" style="background-color:#efeff4 !important;">
+<body style="background-color:#efeff4 !important;">
 	<header id="header" class="mui-bar mui-bar-nav">
 		<h1 class="mui-title">咨询问诊</h1>
 	</header>
 	<form method="post" action="{:U('portal/user/question')}" id="info_form">
-		<div class="mui-content all-pic" id="qus">
-			<div class="mui-card" style="margin-top: 2rem;">
+		<div class="mui-content all-pic" id="qus" style="margin-top: 4rem;">
+			<div class="mui-card">
 				<tc_include file="Public:form_result" />
 				<div class="mui-card-content" style="padding: 10px !important;">
-					<textarea id="content" name="content" style="height: 3rem;" placeholder="请您提出咨询要求"></textarea>
+					<textarea id="content" name="content" class="content" placeholder="请您提出咨询要求"></textarea>
 				</div>
 				<!--页脚，放置补充信息或支持的操作-->
 				<div class="mui-card-footer" style="color: red;">*请如实填写您的症状，以便医生能够给您准确的指导</div>
@@ -75,10 +79,7 @@
 			</div>
 		</div>
 	</form>
-	<div class="kefubtn" ng-click="show()">查看历史咨询>></div>
-	<div>
-		<rong-widget></rong-widget>
-	</div>
+	<a href="{:U('portal/user/chat')}"><div class="kefubtn">查看历史咨询>></div></a>
 </body>
 <!--底部结束-->
 <!--图片点击放大预览主要js开始-->

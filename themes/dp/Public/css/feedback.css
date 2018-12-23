@@ -9,7 +9,7 @@
 .feedback body {
 	background-color: #EFEFF4;
 }
-.feedback input,
+/*.feedback input,
 .feedback textarea {
 	border: none !important;
 }
@@ -21,10 +21,10 @@
 .feedback .row {
 	width: 100%;
 	background-color: #fff;
-}
-.feedback p {
+}*/
+/*.feedback p {
 	padding: 10px 15px 0;
-}
+}*/
 /*.feedback button#submit { 
 	width: 90%;
 	height: 46px;

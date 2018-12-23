@@ -152,19 +152,45 @@ class UserController extends CheckController {
     }
     function question_d(){
         $id = (int)session('login_id');
+        //转发
         $where = array();
         $where['m.type'] = array('eq',2);
-        $where['m.status'] = array('neq',2);
         $where['m.del_flg'] = array('eq',0);
         $where['p.doctor_id'] = array('eq',$id);
-        $forward = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_OPERATION__ p ON m.id=p.msg_id')->where($where)->order("m.status asc,m.operation_time desc")->select();
+        $where['m.doctor_id'] = array(array('exp','is null'),array('eq',$id), 'or');
+        $forward = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_OPERATION__ p ON m.id=p.msg_id')->where($where)->order("m.status asc,m.create_time desc")->select();
+        //群发
         $where = array();
         $where['m.type'] = array('eq',1);
-        $where['m.status'] = array('neq',2);
+        $where['m.doctor_id'] = array(array('exp','is null'),array('eq',$id), 'or');
         $where['m.del_flg'] = array('eq',0);
-        $messages = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.operation_time desc")->select();
-        $this->assign( 'forward', $forward );
-        $this->assign( 'messages', $messages );
+        $messages = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
+        $tmp = array_merge($forward, $messages);
+        $sort = [];
+        foreach($tmp as $key => $val) {
+            $sort[] = $val['status'];
+        }
+        //冒泡排序
+        for($i = 0; $i < count($sort) - 1; $i++) {
+            for($j = 0; $j < count($sort) - $i - 1; $j++) {
+                if($sort[$j] > $sort[$j+1]) {
+                    $t = $sort[$j];
+                    $sort[$j] = $sort[$j+1];
+                    $sort[$j+1] = $t;
+                }
+            }
+        }
+        $new = [];
+        foreach($sort as $key => $val) {
+            foreach($tmp as $k => $v) {
+                if($val == $v['status']) {
+                    $new[$key] = $v;
+                    unset($tmp[$k]);
+                    break;
+                }
+            }
+        }
+        $this->assign( 'messages', $new );
         $this->display('../Tieqiao/question_d');
     }
     function question_p(){
