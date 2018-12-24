@@ -12,6 +12,7 @@ class RongController extends CheckController {
     private $common_messages_model;
     private $common_evaluate_model;
     private $common_record_model;
+    private $common_chat_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -21,6 +22,7 @@ class RongController extends CheckController {
         $this->common_messages_model = D( 'Common_messages' );
         $this->common_evaluate_model = D( 'Common_evaluate' );
         $this->common_record_model = D( 'Common_record' );
+        $this->common_chat_model = D( 'Common_chat' );
     }
     /**
      * 获取token
@@ -67,6 +69,7 @@ class RongController extends CheckController {
         $user = $this->common_user_model->where($where)->find();
         if (!empty($user['type'])){
             $user['name'] = '铁樵专家';
+            $user['photo'] = '../upload_img/head_tq/doctor.png';
         }
         $this->ajaxReturn($user);
     }
@@ -80,11 +83,19 @@ class RongController extends CheckController {
         $this->ajaxReturn($patient);
     }
     public function check_chat() {
-        $where = array();
-        //发送人
-        $id = session('login_id');
-        $user = $this->common_user_model->find($id);
-        if ($user['type'] == 0){
+        $msg_id = session('msg_id');
+        $type = session('type');
+        if ($type == 3){
+            $this->ajaxReturn(1);
+        }else{
+            $msg_info = $this->common_messages_model->find($msg_id);
+            if ($msg_info['status'] != 2){
+                $this->ajaxReturn(1);
+            }else{
+                $this->ajaxReturn(0);
+            }
+        }
+        /*if ($user['type'] == 0){
             $where['doctor_id'] = array('eq',$_GET['userId']);
             $where['user_id'] = array('eq',$id);
         }else{
@@ -129,12 +140,43 @@ class RongController extends CheckController {
                 $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
             }
             $this->ajaxReturn(1);
-        }
+        }*/
     }
     public function end_chat() {
         $id = (int)session('login_id');
-
-        $where = array();
+        $msg_id = session('msg_id');
+        $msg_info = $this->common_messages_model->find($msg_id);
+        if ($msg_info['status'] == 2){
+            $this->ajaxReturn(2);
+        }else{
+            //关闭咨询
+            $msgInfo = array();
+            $msgInfo['status'] = 2;
+            $msgInfo['end_time'] = date('Y-m-d H:i:s',time());
+            $this->common_messages_model->where(array('id' => $msg_id))->save($msgInfo);
+            //添加总结
+            $data = array();
+            $data['msg_id'] = $msg_id;
+            $data['doctor_id'] = $id;
+            $data['content'] = $_GET['msg'];
+            $data['doctor_time'] = date('Y-m-d H:i:s',time());
+            $result = $this->common_evaluate_model->add($data);
+            //推送通知
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
+            $patient_user = $this->common_user_model->find($_GET['userId']);
+            $doctor_user = $this->common_user_model->find($id);
+            if ($doctor_user['status'] == 0){
+                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+                $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
+            }else{
+                require_once 'today/Wechat_zj.php';
+                $wechat_zj = new \Wechat_zj( $this );
+                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+            }
+            $this->ajaxReturn(1);
+        }
+       /* $where = array();
         $where['user_id'] = array('eq',$_GET['userId']);
         $where['doctor_id'] = array('eq',$id);
         $where['status'] = array('eq',1);
@@ -170,7 +212,7 @@ class RongController extends CheckController {
                 $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
             }
             $this->ajaxReturn(1);
-        }
+        }*/
     }
     public function checkUser() {
         $id = session('login_id');
@@ -280,27 +322,63 @@ class RongController extends CheckController {
         $msg_id = $_GET['msgId'];
         $msg_info = $this->common_messages_model->find($msg_id);
         if ($msg_info['status'] == 0){
-            //记录聊天时间
+            /*//记录聊天时间
             $data = array();
             $data['chat_time'] = date('Y-m-d H:i:s',time());
             $data['d_id'] = session('login_id');
             $data['p_id'] = session('send_id');
-            $result = $this->common_chattime_model->add($data);
+            $result = $this->common_chattime_model->add($data);*/
             //修改咨询状态
             $data_msg = array();
             $data_msg['doctor_id'] = session('login_id');
             $data_msg['status'] = 1;
             $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-            $result_msg = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
-            if ($result&&$result_msg){
+            $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+            if ($result){
+                session('msg_id',$msg_id);
                 $this->ajaxReturn('0');
             }else{
                 $this->ajaxReturn('1');
             }
         }elseif ($msg_info['doctor_id'] == $id){
+            session('msg_id',$msg_id);
+            $this->ajaxReturn('0');
+        }elseif ($msg_info['user_id'] == $id){
+            session('msg_id',$msg_id);
             $this->ajaxReturn('0');
         }else{
             $this->ajaxReturn('2');
+        }
+    }
+    public function chat_history(){
+        $login_id = session('login_id');
+        $msg_id = session('msg_id');
+        $type = session('type');
+        $userId = $_GET['userId'];
+        $msg = $_GET['msg'];
+        $photo = $_GET['photo'];
+        $data = array();
+        $data['msg_id'] = $msg_id;
+        if (empty($type)){
+            $data['user_id'] = $login_id;
+            $data['doctor_id'] = $userId;
+            $data['status'] = 1;
+        }else{
+            $data['user_id'] = $userId;
+            $data['doctor_id'] = $login_id;
+            $data['status'] = 2;
+        }
+        if (empty($msg)){
+            $data['photo'] = $photo;
+        }else{
+            $data['content'] = $msg;
+        }
+        $data['create_time'] = date('Y-m-d H:i:s',time());
+        $result = $this->common_chat_model->add($data);
+        if ($result){
+            $this->ajaxReturn('0');
+        }else{
+            $this->ajaxReturn('1');
         }
     }
     //点击用户头像查看详情

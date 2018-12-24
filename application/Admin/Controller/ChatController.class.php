@@ -72,6 +72,7 @@ class ChatController extends AdminbaseController {
         $user = $this->common_user_model->where($where)->find();
         if (!empty($user['type'])){
             $user['name'] = '铁樵专家';
+            $user['photo'] = '../upload_img/head_tq/doctor.png';
         }
         $token = $this->get_token($user['id']);
         $data = array();

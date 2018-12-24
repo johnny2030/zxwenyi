@@ -90,60 +90,113 @@
 						<span>聊天记录</span>
 					</div>
 					<div class="mui-card-content briefing">
-						<div class="rows">
-							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
-							<div class="chat-bubble-left">
-								这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡这是聊天左气泡
-							</div>
-						</div>
-						<div class="rows">
-							<img src="__TMPL__Tieqiao/images/doctor.jpg" class="img-left"/>
-							<div class="chat-bubble-left">
-								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
-							</div>
-						</div>
-						<div class="rows">
-							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
-							<div class="chat-bubble-right">
-								这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡这是聊天右气泡
-							</div>
-						</div>
-						<div class="rows">
-							<img src="__TMPL__Tieqiao/images/patient.jpg" class="img-right"/>
-							<div class="chat-bubble-right">
-								<img src="__TMPL__Public/images/welcome.jpg" class="img-chat"/>
-							</div>
-						</div>
+						<foreach name="chat_list" item="cl">
+							<if condition="$type eq 0">
+								<if condition="$cl.status neq 0">
+									<div class="rows">
+										<img src="{$msg.photo}" class="img-right"/>
+										<div class="chat-bubble-right">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+									<else />
+									<div class="rows">
+										<img src="../upload_img/head_tq/doctor.png" class="img-left"/>
+										<div class="chat-bubble-left">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+								</if>
+								<else />
+								<if condition="$cl.status neq 0">
+									<div class="rows">
+										<img src="{$msg.photo}" class="img-left"/>
+										<div class="chat-bubble-left">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+									<else />
+									<div class="rows">
+										<img src="../upload_img/head_tq/doctor.png" class="img-right"/>
+										<div class="chat-bubble-right">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+								</if>
+							</if>
+						</foreach>
 					</div>
 				</div>
-				<div class="mui-card">
-					<div class="mui-card-header">
-						<span>专家总结</span>
-					</div>
-					<div class="mui-card-content">
-						<div class="mui-input-row">
-							<div class="mui-content-padded">
-								<div class="mui-inline">多喝水，注意休息。</div>
-							</div>
+				<notempty name="elte_info.doctor_id">
+					<div class="mui-card">
+						<div class="mui-card-header">
+							<span>专家总结</span>
 						</div>
-					</div>
-					<div class="mui-card-footer">提交时间：2018-12-18 22:36:42</div>
-				</div>
-				<div class="mui-card" style="margin-bottom: 1.5rem;">
-					<div class="mui-card-header">
-						<span>用户评分</span>
-					</div>
-					<div class="mui-card-content">
-						<div class="mui-input-row">
-							<div class="mui-content-padded">
-								<div class="mui-inline">咨询评分</div>
-								<div class="mui-inline" style="margin-left: 6px;" id="star">
+						<div class="mui-card-content">
+							<div class="mui-input-row">
+								<div class="mui-content-padded">
+									<div class="mui-inline">{$elte_info.content}</div>
 								</div>
 							</div>
 						</div>
+						<div class="mui-card-footer">提交时间：{$elte_info.doctor_time}</div>
 					</div>
-					<div class="mui-card-footer">提交时间：2018-12-18 22:37:13</div>
-				</div>
+				</notempty>
+				<notempty name="elte_info.user_id">
+					<div class="mui-card" style="margin-bottom: 1.5rem;">
+						<div class="mui-card-header">
+							<span>用户评分</span>
+						</div>
+						<div class="mui-card-content">
+							<div class="mui-input-row">
+								<div class="mui-content-padded">
+									<div class="mui-inline">咨询评分</div>
+									<div class="mui-inline" style="margin-left: 6px;" id="star">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="mui-card-footer">提交时间：{$elte_info.user_time}</div>
+					</div>
+					<else />
+					<if condition="$type eq 0">
+						<div class="mui-content" style="padding-top: 3rem !important;">
+							<form method="post" name="info" action="{:U('portal/messages/evaluate')}">
+								<input type="hidden" name="msg_id" value="{$msg.id}"/>
+								<div class="mui-content-padded">
+									<div class="mui-inline">咨询评分</div>
+									<div class="icons mui-inline" style="margin-left: 6px;">
+										<i data-index="2" class="mui-icon mui-icon-star"></i>
+										<i data-index="4" class="mui-icon mui-icon-star"></i>
+										<i data-index="6" class="mui-icon mui-icon-star"></i>
+										<i data-index="8" class="mui-icon mui-icon-star"></i>
+										<i data-index="10" class="mui-icon mui-icon-star"></i>
+									</div>
+									<input type="hidden" id="elte" name="elte" value="">
+								</div>
+								<div class="mui-button-row">
+									<button type="submit" class="mui-btn mui-btn-primary footer-btn">提交</button>
+								</div>
+							</form>
+						</div>
+					</if>
+				</notempty>
 			</div>
 			<else />
 			<div style="text-align: center;">

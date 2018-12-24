@@ -39,7 +39,6 @@ class HomebaseController extends AppframeController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         $today = new \Today\Today($this);
-        session('open_id','oiizC04BxX-ieip24KiYScDKpWA8');//oiizC03r1Do-CFBKAqGqV1VyCyMU
         if (session('open_id') != ""){
             $wechat->getUserInfor( session('open_id') );
             if (session('login_id') == ""){
@@ -47,6 +46,7 @@ class HomebaseController extends AppframeController {
                 $where['open_id'] = array('eq',session('open_id'));
                 $user = D('Common_user')->where($where)->find();
                 session('login_id',$user['id']);
+                session('type',$user['type']);
             }
         }
 		if (session('open_id') == "" && !isset($_GET['code'])){

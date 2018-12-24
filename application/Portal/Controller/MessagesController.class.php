@@ -15,6 +15,7 @@ class MessagesController extends CheckController  {
     private $common_record_model;
     private $common_evaluate_model;
     private $common_operation_model;
+    private $common_chat_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -28,6 +29,7 @@ class MessagesController extends CheckController  {
         $this->common_record_model = D( 'Common_record' );
         $this->common_evaluate_model = D( 'Common_evaluate' );
         $this->common_operation_model = D( 'Common_operation' );
+        $this->common_chat_model = D( 'Common_chat' );
 	}
     //转发
     public function index() {
@@ -56,12 +58,29 @@ class MessagesController extends CheckController  {
         $where = array();
         $where['m.status'] = array('neq',2);
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.type asc,m.create_time desc")->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/advice');
     }
     //评价结论
     public function evaluate() {
+        if ( IS_POST ) {
+            $_POST['user_id'] = (int)session('login_id');
+            $_POST['user_time'] = date('Y-m-d H:i:s',time());
+            $this->common_evaluate_model->where(array('msg_id' => $_POST['msg_id']))->save($_POST);
+            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,d.open_id as open_id,d.status as status')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id')->where(array('m.id' => $_POST['msg_id']))->find();
+            if ($msg_info['status'] == 0){
+                require_once 'today/Wechat_tq.php';
+                $wechat = new \Wechat_tq( $this );
+            }else{
+                require_once 'today/Wechat_zj.php';
+                $wechat = new \Wechat_zj( $this );
+            }
+            $wechat->customSendImg($msg_info['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看');
+            $this->redirect('Messages/detail', array('id' => $_POST['msg_id']));
+        }
+    }
+    /*public function evaluate() {
         $flg = session('flg');
         $id = (int)session('login_id');
         if ( IS_POST  && empty($flg)) {
@@ -89,25 +108,41 @@ class MessagesController extends CheckController  {
             $this->assign( 'elte_info', $elte_info );
             $this->display('../Tieqiao/evaluate');
         }
-    }
-    //详情（医生）
+    }*/
+    //问题详情（医生）
     public function detail() {
+	    //咨询问题
 	    $id = $_GET['id'];
+	    $type = (int)session('type');
         $where = array();
         $where['m.id'] = array('eq',$id);
         $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
-
         $where_r = array();
         $where_r['message_id'] = array('eq',$msg_Info['id']);
         $where_r['user_id'] = array('eq',$msg_Info['user_id']);
         $list = $this->common_record_model->where($where_r)->select();
-        session('send_id',$msg_Info['user_id']);
+        //咨询记录
+        if ($msg_Info['status'] == 2){
+            $where = array();
+            $where['msg_id'] = array('eq',$id);
+            $chat_list = $this->common_chat_model->where($where)->select();
+            $elte_info = $this->common_evaluate_model->where(array('msg_id' => $id))->find();
+        }
+        if ($type == 0){
+            session('send_id',$msg_Info['doctor_id']);
+        }else{
+            session('send_id',$msg_Info['user_id']);
+        }
         $this->assign( 'list', $list );
         $this->assign( 'msg', $msg_Info );
+        $this->assign( 'chat_list', $chat_list );
+        $this->assign( 'elte_info', $elte_info );
+        $this->assign( 'type', session('type') );
         $this->display('../Tieqiao/customer_detail');
     }
-    //详情（管理员）
+    //问题详情（管理员）
     public function detail_mg() {
+        //咨询问题
         $id = $_GET['id'];
         $where = array();
         $where['m.id'] = array('eq',$id);
@@ -116,9 +151,19 @@ class MessagesController extends CheckController  {
         $where_r['message_id'] = array('eq',$msg_Info['id']);
         $where_r['user_id'] = array('eq',$msg_Info['user_id']);
         $list = $this->common_record_model->where($where_r)->select();
+        //咨询记录
+        if ($msg_Info['status'] == 2){
+            $where = array();
+            $where['msg_id'] = array('eq',$id);
+            $chat_list = $this->common_chat_model->where($where)->select();
+            $elte_info = $this->common_evaluate_model->where(array('msg_id' => $id))->find();
+        }
         session('send_id',$msg_Info['user_id']);
         $this->assign( 'list', $list );
         $this->assign( 'msg', $msg_Info );
+        $this->assign( 'chat_list', $chat_list );
+        $this->assign( 'elte_info', $elte_info );
+        $this->assign( 'type', session('type') );
         $this->display('../Tieqiao/customer_detail_mg');
     }
     //转发医生显示

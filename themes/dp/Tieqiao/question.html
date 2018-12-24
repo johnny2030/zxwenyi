@@ -10,7 +10,7 @@
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <style>
-	.kefubtn{
+	.detail_btn{
 		position: fixed;
 		left: 0px;
 		bottom: 0px;
@@ -79,7 +79,7 @@
 			</div>
 		</div>
 	</form>
-	<a href="{:U('portal/user/chat')}"><div class="kefubtn">查看历史咨询>></div></a>
+	<a href="{:U('portal/user/chat')}"><div class="detail_btn">查看历史咨询>></div></a>
 </body>
 <!--底部结束-->
 <!--图片点击放大预览主要js开始-->
@@ -90,6 +90,9 @@
 <script type="text/javascript" src="__TMPL__Public/js/main.js" ></script>
 <script>
     mui.previewImage();//图片点击放大预览主要js
+    mui('body').on('tap', 'a', function() {
+        document.location.href = this.href;
+    });
 </script>
 <script type="text/javascript">
     wx.config({

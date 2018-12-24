@@ -332,7 +332,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -356,7 +356,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -389,7 +389,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         $scope.show_msg = function () {
             $http({
                 method:'GET',
-                url:'/zxwenyi/index.php',
+                url:'/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -414,7 +414,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                     }else{
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -831,7 +831,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }else {
                 $http({
                     method:'GET',
-                    url:'/zxwenyi/index.php',
+                    url:'/index.php',
                     params:{
                         'g':'portal',
                         'm':'rong',
@@ -866,6 +866,23 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                             var obj = document.getElementById("inputMsg");
                             WidgetModule.Helper.getFocus(obj);
                         }
+                        $http({
+                            method:'GET',
+                            url:'/index.php',
+                            params:{
+                                'g':'portal',
+                                'm':'rong',
+                                'a':'chat_history',
+                                'userId':$scope.currentConversation.targetId,
+                                'msg':con
+                            }
+                        }).success(function (res) {
+                            if (res == 1){
+                                alert("聊天记录失败");
+                            }
+                        }).error(function (error) {
+                            alert("请求失败");
+                        })
                     }
                 }).error(function (error) {
                     alert("请求失败");
@@ -930,7 +947,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -958,6 +975,23 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                                     $scope.$apply();
                                     console.log(1);
                                     $scope.refreshiScroll();
+                                    $http({
+                                        method:'GET',
+                                        url:'/index.php',
+                                        params:{
+                                            'g':'portal',
+                                            'm':'rong',
+                                            'a':'chat_history',
+                                            'userId':$scope.currentConversation.targetId,
+                                            'photo':url
+                                        }
+                                    }).success(function (res) {
+                                        if (res == 1){
+                                            alert("聊天记录失败");
+                                        }
+                                    }).error(function (error) {
+                                        alert("请求失败");
+                                    })
                                 });
                             }
                         }).error(function (error) {
