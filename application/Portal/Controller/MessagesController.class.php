@@ -199,10 +199,10 @@ class MessagesController extends CheckController  {
                 $this->common_operation_model->add($datas);
             }
             if ($sendUser['status'] == 0){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
                 $this->template_send_tq($msg_info['content'],$user['name'],$sendUser['open_id'],$url);
             }else{
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
                 $this->template_send_zj($msg_info['content'],$sendUser['open_id'],$url);
             }
         }
@@ -226,10 +226,10 @@ class MessagesController extends CheckController  {
         $user = $this->common_user_model->find($msg_info['user_id']);
         foreach ($list as $sendUser) {
             if ($sendUser['status'] == 0){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
                 $this->template_send_tq($msg_info['content'],$user['name'],$sendUser['open_id'],$url);
             }else{
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=forward';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
                 $this->template_send_zj($msg_info['content'],$sendUser['open_id'],$url);
             }
         }

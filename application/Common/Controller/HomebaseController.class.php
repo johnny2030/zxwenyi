@@ -41,7 +41,7 @@ class HomebaseController extends AppframeController {
         $today = new \Today\Today($this);
         if (session('open_id') != ""){
             $wechat->getUserInfor( session('open_id') );
-            if (session('login_id') == ""){
+            if (empty(session('login_id'))){
                 $where = array();
                 $where['open_id'] = array('eq',session('open_id'));
                 $user = D('Common_user')->where($where)->find();
@@ -86,7 +86,6 @@ class HomebaseController extends AppframeController {
                 }
             }
             session('open_id',$open_id);
-            session('login_id',$user['id']);
         }
 		if(sp_is_user_login()){
 			$this->assign("user",sp_get_current_user());
