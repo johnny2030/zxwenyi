@@ -167,12 +167,12 @@ class RongController extends CheckController {
             $patient_user = $this->common_user_model->find($_GET['userId']);
             $doctor_user = $this->common_user_model->find($id);
             if ($doctor_user['status'] == 0){
-                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
-                $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
+                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&msg_id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+                $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&msg_id='.$msg_id,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
             }else{
                 require_once 'today/Wechat_zj.php';
                 $wechat_zj = new \Wechat_zj( $this );
-                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=evaluate&msg_id='.$result,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&msg_id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
             }
             $this->ajaxReturn(1);
         }
@@ -319,6 +319,7 @@ class RongController extends CheckController {
     }
     public function set_time(){
         $id=session('login_id');
+        $type=(int)session('type');
         $msg_id = $_GET['msgId'];
         $msg_info = $this->common_messages_model->find($msg_id);
         if ($msg_info['status'] == 0){
@@ -336,10 +337,16 @@ class RongController extends CheckController {
             $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
             if ($result){
                 session('msg_id',$msg_id);
+                $user = $this->common_user_model->find($msg_info['doctor_id']);
+                $sendUser = $this->common_user_model->find($msg_info['user_id']);
+                $this->template_send($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id);
                 $this->ajaxReturn('0');
             }else{
                 $this->ajaxReturn('1');
             }
+        }elseif ($type == 3){
+            session('msg_id',$msg_id);
+            $this->ajaxReturn('0');
         }elseif ($msg_info['doctor_id'] == $id){
             session('msg_id',$msg_id);
             $this->ajaxReturn('0');

@@ -142,10 +142,11 @@ class UserController extends CheckController {
     }
     //咨询问诊
     public function question() {
-        $id = (int)session('login_id');
-        $user = $this->common_user_model->find($id);
-        if ($user['type'] == 0){
+        $type = (int)session('type');
+        if ($type == 0){
             R('User/question_p');
+        }elseif ($type == 3){
+            R('User/question_m');
         }else{
             R('User/question_d');
         }
@@ -216,7 +217,7 @@ class UserController extends CheckController {
             $list = $this->common_user_model->field('open_id')->where($where)->select();
             $user = $this->common_user_model->field('name')->find($id);
             foreach($list as $value){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=advice';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
                 $this->template_send_tq($_POST['content'],$user['name'],$value['open_id'],$url);
             }
             $this->formError[] = '咨询成功，请耐心等待医生回复';
@@ -225,6 +226,13 @@ class UserController extends CheckController {
         } else {
             $this->display('../Tieqiao/question');
         }
+    }
+    function question_m(){
+        $where = array();
+        $where['m.del_flg'] = array('eq',0);
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
+        $this->assign( 'msg_list', $msg_list );
+        $this->display('../Tieqiao/advice');
     }
     function chat(){
         $id = (int)session('login_id');

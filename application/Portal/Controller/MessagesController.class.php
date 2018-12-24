@@ -53,7 +53,7 @@ class MessagesController extends CheckController  {
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/forward');
     }
-    //用户咨询
+/*    //用户咨询
     public function advice() {
         $where = array();
         $where['m.status'] = array('neq',2);
@@ -61,7 +61,7 @@ class MessagesController extends CheckController  {
         $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/advice');
-    }
+    }*/
     //评价结论
     public function evaluate() {
         if ( IS_POST ) {
@@ -137,7 +137,7 @@ class MessagesController extends CheckController  {
         $this->assign( 'msg', $msg_Info );
         $this->assign( 'chat_list', $chat_list );
         $this->assign( 'elte_info', $elte_info );
-        $this->assign( 'type', session('type') );
+        $this->assign( 'type', $type );
         $this->display('../Tieqiao/customer_detail');
     }
     //问题详情（管理员）
