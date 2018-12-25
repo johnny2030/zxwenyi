@@ -68,7 +68,9 @@
 			</div>
 			<div class="mui-card">
 				<div class="mui-card-header">
-					<span>图片文件</span><a class="mui-pull-right headdiv" href="javascript:void(0)" id="uploadImage">上传</a>
+					<span>图片文件</span>
+					<!--<button type="button" class="mui-btn mui-pull-right" id="uploadImagess">上传</button>-->
+					<a class="mui-pull-right" href="javascript:void(0)" id="uploadImages">上传</a>
 				</div>
 				<ul class="mui-table-view mui-grid-view" id="record">
 				</ul>
@@ -131,7 +133,7 @@
             localId: [],
             serverId: []
         };
-        $("#uploadImage").click(function () {
+        document.getElementById("uploadImages").addEventListener('tap', function() {
             wx.chooseImage({
                 count: 1, // 默认9
                 sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有

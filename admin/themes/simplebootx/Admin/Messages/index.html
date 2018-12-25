@@ -1,10 +1,14 @@
-<admintpl file="header" />
+<!doctype html>
+<html ng-app="demo">
+<admintpl file="head" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/simpleboot/rongCloud/vendor/jqueryrebox/jquery-rebox-0.1.0.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/simpleboot/rongCloud/css/RongIMWidget.css"/>
 </head>
-<body>
+<body ng-controller="main">
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('messages/index')}">咨询管理</a></li>
-			<li><a href="{:U('messages/add')}">添加咨询</a></li>
+			<!--<li><a href="{:U('messages/add')}">添加咨询</a></li>-->
 		</ul>
 		<form class="well form-search" method="post" id="cid-form" >
 			<input type="text" name="name" style="width: 200px;" value="{$name}" placeholder="请输入咨询人">
@@ -48,7 +52,6 @@
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 						<th width="50">咨询人</th>
-						<th width="100">咨询标题</th>
 						<th width="120">咨询内容</th>
 						<th width="80">咨询时间</th>
 						<th width="50">操作状态</th>
@@ -63,7 +66,6 @@
 					<tr>
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
 						<td>{$vo.name_u}</td>
-						<td>{$vo.title}</td>
 						<td>{$vo.content}</td>
 						<td>{$vo.create_time}</td>
 						<td>
@@ -94,7 +96,7 @@
 						<td>
 							<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定发送给所有的医生吗？">群发</a>
 							<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many',array('id'=>$vo['id']))}','转发')" class="btn btn-success btn-small">转发</a>
-							<a style="margin-top: 5px;" href="{:U('messages/edit',array('id'=>$vo['id']))}" class="btn btn-primary btn-small ">编辑</a>
+							<a style="margin-top: 5px;" ng-click="setconversation('{$vo.user_id}','{$vo.name_u}')" class="btn btn-primary btn-small ">立即处理</a>
 							<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
@@ -103,7 +105,6 @@
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
 						<th width="50">咨询人</th>
-						<th width="100">咨询标题</th>
 						<th width="120">咨询内容</th>
 						<th width="80">咨询时间</th>
 						<th width="50">操作状态</th>
@@ -120,10 +121,12 @@
 			</div>
 			<div class="pagination">{$page}</div>
 		</form>
+		<rong-widget></rong-widget>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>
 		setCookie('refersh_time', 0);
+        $("#rong-conversation-list").css('display','none');
 		function refersh_window() {
 			var refersh_time = getCookie('refersh_time');
 			if (refersh_time == 1) {
@@ -140,4 +143,24 @@
 		});
 	</script>
 </body>
+<script src="__PUBLIC__/simpleboot/rongCloud/vendor/jquery-2.2.2.js"></script>
+<script src="__PUBLIC__/simpleboot/rongCloud/vendor/angular-1.4.8.js"></script>
+
+<!-- 融云IMLib -->
+<script src="http://cdn.ronghub.com/RongIMLib-2.2.8.min.js"></script>
+<script src="http://cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
+<script src="http://cdn.ronghub.com/Libamr-2.2.5.min.js"></script>
+<script src="http://cdn.ronghub.com/RongIMVoice-2.2.5.min.js"></script>
+
+<!-- 上传插件 -->
+<script src="__PUBLIC__/simpleboot/rongCloud/vendor/plupload.full.min-2.1.1.js"></script>
+<script src="__PUBLIC__/simpleboot/rongCloud/vendor/qiniu-1.0.17.js"></script>
+
+<!-- 增强体验插件 -->
+<script src="__PUBLIC__/simpleboot/rongCloud/vendor/jqueryrebox/jquery-rebox-0.1.0.js"></script>
+
+<!-- IM插件 -->
+<script src="__PUBLIC__/simpleboot/rongCloud/js/RongIMWidget.js"></script>
+<script src="__PUBLIC__/simpleboot/rongCloud/demo/common.js"></script>
+<script src="__PUBLIC__/simpleboot/rongCloud/demo/index.js"></script>
 </html>

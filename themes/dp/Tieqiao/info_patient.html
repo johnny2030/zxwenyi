@@ -44,7 +44,14 @@
 			<div class="mui-input-row user_list">
 				<label class="label_info">过敏史</label>
 				<span class="span_info">|</span>
-				<input type="text" id="allergic" name="allergic" class="mui-input-clear input_info" placeholder="请输入过敏史" value="{$patient.allergic}">
+				<select id="allergic" name="allergic" class="input_info">
+					<if condition="$patient.allergic eq '有'">
+						<option value="有">有</option>
+						<else />
+						<option value="无">无</option>
+					</if>
+				</select>
+				<!--<input type="text" id="allergic" name="allergic" class="mui-input-clear input_info" placeholder="请输入过敏史" value="{$patient.allergic}">-->
 			</div>
 			<div class="mui-input-row user_list">
 				<label class="label_info">健康状况</label>
