@@ -140,6 +140,24 @@ class UserController extends CheckController {
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }
+    //用户列表
+    public function user_list() {
+        $where = array();
+        $where['del_flg'] = array('eq',0);
+        $where['m_card_id'] = array('neq','');
+        $where['type'] = array('eq',0);
+        $list = $this->common_user_model->where($where)->order("create_time desc")->select();
+        $this->assign( 'list', $list );
+        $this->display('../Tieqiao/user_list');
+    }
+    //用户详情
+    public function user_detail() {
+        $user_id = $_GET['user_id'];
+        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
+        session('send_id',$user_id);
+        $this->assign( 'patient', $user );
+        $this->display('../Tieqiao/user_detail');
+    }
     //咨询问诊
     public function question() {
         $type = (int)session('type');

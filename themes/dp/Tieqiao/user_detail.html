@@ -1,0 +1,66 @@
+<!doctype html>
+<html ng-app="demo" lang="en">
+<head>
+	<tc_include file="Public/TQHead"/>
+	<tc_include file="Public/RCHead"/>
+</head>
+<body ng-controller="main" style="background-color: #efeff4 !important;">
+	<div class="mui-content" id="show">
+		<div class="head">
+			<a href="javascript:void(0)" id="uploadImage"><img src="{$patient.photo}"/></a>
+			<h4>{$patient.name}</h4>
+		</div>
+		<div class="mui-content-padded">
+			<div class="mui-input-row">
+				<input type="text" id="birthday" name="birthday" class="u-inpt u-birthday" value="{$patient.birthday}" readonly="readonly">
+			</div>
+			<div class="mui-input-row">
+				<input type="text" id="nation" name="nation" class="u-inpt u-nation mui-input-clear" value="{$patient.nation}" readonly="readonly">
+				<if condition="$patient.sex eq 2">
+					<input type="text" name="sex" class="u-inpt u-sex mui-input-clear" value="女" readonly="readonly">
+					<else />
+					<input type="text" name="sex" class="u-inpt u-sex mui-input-clear" value="男" readonly="readonly">
+				</if>
+			</div>
+			<div class="mui-input-row">
+				<input type="text" id="height" name="height" class="u-inpt u-height mui-input-clear" value="{$patient.height}" readonly="readonly">
+				<input type="text" id="weight" name="weight" class="u-inpt u-weight mui-input-clear" value="{$patient.weight}" readonly="readonly">
+			</div>
+			<div class="mui-input-row user_list">
+				<label class="label_info" style="padding:11px 15px !important;font-size:0.5rem !important;font-weight:normal !important;">过敏史</label>
+				<span class="span_info">|</span>
+				<if condition="$patient.allergic eq '有'">
+					<input type="text" name="allergic" class="input_info" value="有" readonly="readonly">
+					<else />
+					<input type="text" name="allergic" class="input_info" value="无" readonly="readonly">
+				</if>
+			</div>
+			<div class="mui-input-row user_list">
+				<label class="label_info" style="padding:11px 15px !important;font-size:0.5rem !important;font-weight:normal !important;">健康状况</label>
+				<span class="span_info">|</span>
+				<input type="text" name="health" class="input_info" value="{$patient.name_h}" readonly="readonly">
+			</div>
+			<notempty name="patient.name_y">
+				<div class="mui-input-row user_list">
+					<label class="label_info" style="padding:11px 15px !important;font-size:0.5rem !important;font-weight:normal !important;">具体疾病</label>
+					<span class="span_info">|</span>
+					<input type="text" name="healthy" class="input_info" value="{$patient.name_y}" readonly="readonly">
+				</div>
+			</notempty>
+			<div class="mui-input-row user_list">
+				<label class="label_info" style="padding:11px 15px !important;font-size:0.5rem !important;font-weight:normal !important;">运动情况</label>
+				<span class="span_info">|</span>
+				<input type="text" name="motion" class="input_info" value="{$patient.motion}" readonly="readonly">
+			</div>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<div class="zixun-nav">
+				<button type="button" class="mui-pull-right" ng-click="setconversation('0')">立即回访</button>
+			</div>
+		</nav>
+	</div>
+	<div>
+		<rong-widget></rong-widget>
+	</div>
+	</body>
+</html>

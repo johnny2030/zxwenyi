@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+	<tc_include file="Public/TQHead"/>
+</head>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<h1 class="mui-title">用户回访</h1>
+</header>
+<div id="tabbar-with-chat" class="mui-content main">
+	<div class="mui-card-content">
+		<div class="">
+			<ul class="mui-table-view">
+				<foreach name="list" item="l">
+					<li class="mui-table-view-cell mui-media">
+						<a href="{:U('portal/user/user_detail',array('user_id'=>$l['id']))}">
+							<img class="mui-media-object mui-pull-left" src="{$l.photo}" style="width: 60px;height: 60px;">
+							<div class="mui-media-body">
+								{$l.name}
+								<p class="mui-ellipsis">
+									<if condition="$l.sex eq 1"> 男
+										<elseif condition="$l.sex eq 2"/>女
+										<else />保密
+									</if>-{$l.age}
+								</p>
+								<p class="mui-ellipsis">
+									使用时间：{$l.update_time}
+								</p>
+							</div>
+							<div class="mui-pull-right" style="margin-top:-40px;font-size: 14px;color: #CD3333;">
+								查看详情
+							</div>
+						</a>
+					</li>
+				</foreach>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>
