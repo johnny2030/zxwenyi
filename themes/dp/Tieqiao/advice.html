@@ -6,6 +6,11 @@
 <body>
 <header id="header" class="mui-bar mui-bar-nav">
 	<h1 class="mui-title">咨询列表</h1>
+	<p class="mui-pull-right" style="
+    line-height: 44px;
+    font-size: 16px;
+    color: #5CACEE;
+"><a href="{:U('portal/user/user_list')}">用户回访</a></p>
 </header>
 <div class="mui-content">
 	<ul class="mui-table-view mui-table-view-chevron" style="margin-top: 0px !important;">
@@ -39,4 +44,9 @@
 	</ul>
 </div>
 </body>
+<script type="text/javascript">
+    mui('body').on('tap', 'a', function() {
+        document.location.href = this.href;
+    });
+</script>
 </html>
