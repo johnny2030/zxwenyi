@@ -229,7 +229,7 @@ class UserController extends CheckController {
             $list = $this->common_user_model->field('open_id')->where($where)->select();
             $user = $this->common_user_model->field('name')->find($id);
             foreach($list as $value){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$result;
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$result;
                 $this->template_send_tq($_POST['content'],$user['name'],$value['open_id'],$url);
             }
             $this->redirect('Messages/detail', array('id' => $result));

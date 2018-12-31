@@ -98,11 +98,11 @@ class RongController extends CheckController {
             if ($type == 0){
                 $where['d_id'] = array('eq',$_GET['userId']);
                 $where['p_id'] = array('eq',session('login_id'));
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
             }else{
                 $where['p_id'] = array('eq',$_GET['userId']);
                 $where['d_id'] = array('eq',session('login_id'));
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
             }
             $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
             $time = strtotime(date('Y-m-d H:i:s',time()));
@@ -245,14 +245,6 @@ class RongController extends CheckController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         if ($user['type'] == 0){
-            $data=array(
-                'serviceInfo'=>array('value'=>urlencode("您发起的咨询已被接收，请耐心等待医生回复。"),'color'=>"#36648B"),
-                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
-                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
-                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
-            );
-            $wechat->templateSend($user['open_id'],$url,$data);
             if ($user['status'] == 0){
                 $data=array(
                     'serviceInfo'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#36648B"),
@@ -295,14 +287,6 @@ class RongController extends CheckController {
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
         if ($user['type'] == 0){
-            $data=array(
-                'serviceInfo'=>array('value'=>urlencode("欢迎使用铁樵健康，请耐心等待医生回复。"),'color'=>"#36648B"),
-                'serviceType'=>array('value'=>urlencode('客户回访'),'color'=>'#36648B'),
-                'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
-                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
-            );
-            $wechat->templateSend($user['open_id'],$url,$data);
             if ($user['status'] == 0){
                 $data=array(
                     'serviceInfo'=>array('value'=>urlencode("您好，有患者回复了回访消息，请及时应答。"),'color'=>"#36648B"),
@@ -392,9 +376,9 @@ class RongController extends CheckController {
                     $user = $this->common_user_model->find($msg_info['doctor_id']);
                     $sendUser = $this->common_user_model->find($msg_info['user_id']);
                     if ($type == 0){
-                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
-                    }else{
                         $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+                    }else{
+                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
                     }
                     $this->template_send($user,$sendUser,$url);
                     $this->ajaxReturn('0');

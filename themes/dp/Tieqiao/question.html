@@ -74,41 +74,11 @@
 			</div>
 			<div class="mui-card">
 				<div class="mui-card-header">
-					<span>上传图片文件<i style="font-size: 0.7rem;">（*检查报告、化验单等）</i></span>
+					<span>上传图片文件<p style="font-size: 0.7rem;">（*如有检查报告、化验单等）</p></span>
 					<button type="button" class="mui-btn mui-pull-right" id="uploadImages">添加</button>
 					<!--<a class="mui-pull-right" href="javascript:void(0)" id="uploadImages">上传</a>-->
 				</div>
 				<ul class="mui-table-view mui-grid-view" id="record">
-					<li class="mui-table-view-cell mui-media mui-col-xs-6" id="test">
-						<a href='javascript:void(0);'>
-							<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 80%; max-height: 7rem;" data-preview-src="" date-preview-group="1"/>
-						</a>
-						<div class="divX" onclick="del('test')">
-							<img src="http://www.iconpng.com/png/sm-reflection-r/button-cross.png" style="width: 2rem;height: 2rem;" />
-						</div>
-						<input type="hidden" name="img[]" value="" />
-					</li>
-					<li class="mui-table-view-cell mui-media mui-col-xs-6">
-						<a href='javascript:void(0);'>
-							<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 80%; max-height: 7rem;" data-preview-src="" date-preview-group="1"/>
-						</a>
-						<div class="divX" onclick="del()">
-							<img src="http://www.iconpng.com/png/sm-reflection-r/button-cross.png" style="width: 2rem;height: 2rem;" />
-						</div>
-						<input type="hidden" name="img[]" value="" />
-					</li>
-					<!--<div class="imgDiv">
-						<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 30%; max-height: 7rem;"/>
-						<a href="#">
-							<img src="http://www.iconpng.com/png/sm-reflection-r/button-cross.png" class="delete" />
-						</a>
-					</div>
-					<div class="imgDiv">
-						<img src="__TMPL__Tieqiao/images/doctor.jpg" style="width: 30%; max-height: 7rem;"/>
-						<a href="#">
-							<img src="http://www.iconpng.com/png/sm-reflection-r/button-cross.png" class="delete" />
-						</a>
-					</div>-->
 				</ul>
 			</div>
 			<div class="mui-button-row">
@@ -134,6 +104,7 @@
 </script>
 <script type="text/javascript">
     function del(id) {
+        alert("进来了"+id);
         $('#'+id).empty();
         $('#'+id).css('display','none');
     }
@@ -189,28 +160,43 @@
                             mui.alert('目前仅支持上传两张照片！', '温馨提醒');
                             images.localId = [];
                             return;
-                        }
-                        wx.uploadImage({
-                            localId: images.localId,
-                            isShowProgressTips: 0,
-                            success: function (res) {
-                                images.serverId = res.serverId;
-                                wx.downloadImage({
-                                    serverId: images.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
-                                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                        }else if (images.localId.length > 1) {
+                            for(var j = 0,len = images.localId.length; j < len; j++){
+                                wx.uploadImage({
+                                    localId: images.localId[j].toString(),
+                                    isShowProgressTips: 0,
                                     success: function (res) {
-                                        if (res.localId.length > 1) {
-                                            for(var j = 0,len = images.length; j < len; j++){
-                                                var localId = res.localId[j]; // 返回图片下载后的本地ID
+                                        images.serverId = res.serverId;
+                                        wx.downloadImage({
+                                            serverId: images.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+                                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                                            success: function (res) {
+                                                var localId = res.localId; // 返回图片下载后的本地ID
                                                 var num = randomString(5);
                                                 var html = "<li class='mui-table-view-cell mui-media mui-col-xs-6' id='"+num+"'>" +
                                                     "<a href='javascript:void(0);'>" +
                                                     "<img src='"+localId+"' style='width: 80%; max-height: 7rem;' data-preview-src='' date-preview-group='1'/></a>" +
-                                                    "<div class='divX' onclick='del('"+num+")'><img src='http://www.iconpng.com/png/sm-reflection-r/button-cross.png' style='width: 2rem;height: 2rem;' /></div>" +
+                                                    "<div class='divX' onclick='del("+num+")'><img src='http://www.iconpng.com/png/sm-reflection-r/button-cross.png' style='width: 2rem;height: 2rem;' /></div>" +
                                                     "<input type='hidden' name='img[]' value='"+images.serverId+"' /></li>";
                                                 $("#record").append(html);
                                             }
-                                        }else{
+                                        });
+                                    },
+                                    fail: function (res) {
+                                        alert(JSON.stringify(res));
+                                    }
+                                });
+                            }
+                        }else{
+                            wx.uploadImage({
+                                localId: images.localId.toString(),
+                                isShowProgressTips: 0,
+                                success: function (res) {
+                                    images.serverId = res.serverId;
+                                    wx.downloadImage({
+                                        serverId: images.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+                                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                                        success: function (res) {
                                             var localId = res.localId; // 返回图片下载后的本地ID
                                             var num = randomString(5);
                                             var html = "<li class='mui-table-view-cell mui-media mui-col-xs-6' id='"+num+"'>" +
@@ -219,14 +205,14 @@
                                                 "<div class='divX' onclick='del('"+num+")'><img src='http://www.iconpng.com/png/sm-reflection-r/button-cross.png' style='width: 2rem;height: 2rem;' /></div>" +
                                                 "<input type='hidden' name='img[]' value='"+images.serverId+"' /></li>";
                                             $("#record").append(html);
-										}
-                                    }
-                                });
-                            },
-                            fail: function (res) {
-                                alert(JSON.stringify(res));
-                            }
-                        });
+                                        }
+                                    });
+                                },
+                                fail: function (res) {
+                                    alert(JSON.stringify(res));
+                                }
+                            });
+						}
                     }
                 });
 			} else {
