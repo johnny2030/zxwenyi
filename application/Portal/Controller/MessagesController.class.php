@@ -109,6 +109,15 @@ class MessagesController extends CheckController  {
             $this->display('../Tieqiao/evaluate');
         }
     }*/
+    //问题详情（患者）
+    public function chat_p() {
+        //咨询问题
+        $id = $_GET['id'];
+        $msg_Info = $this->common_messages_model->find($id);
+        session('send_id',$msg_Info['doctor_id']);
+        $this->assign( 'msg', $msg_Info );
+        $this->display('../Tieqiao/chat_p');
+    }
     //问题详情（医生）
     public function detail() {
 	    //咨询问题
@@ -126,7 +135,13 @@ class MessagesController extends CheckController  {
             $where = array();
             $where['msg_id'] = array('eq',$id);
             $chat_list = $this->common_chat_model->where($where)->select();
-            $elte_info = $this->common_evaluate_model->where(array('msg_id' => $id))->find();
+            $elte_info = $this->common_evaluate_model->where($where)->find();
+        }
+        //问题返回记录
+        if ($type != 0 && !empty($msg_Info['operation_reason'])){
+            $where = array();
+            $where['msg_id'] = array('eq',$id);
+            $chat_list = $this->common_chat_model->where($where)->select();
         }
         if ($type == 0){
             session('send_id',$msg_Info['doctor_id']);
@@ -156,7 +171,13 @@ class MessagesController extends CheckController  {
             $where = array();
             $where['msg_id'] = array('eq',$id);
             $chat_list = $this->common_chat_model->where($where)->select();
-            $elte_info = $this->common_evaluate_model->where(array('msg_id' => $id))->find();
+            $elte_info = $this->common_evaluate_model->where($where)->find();
+        }
+        //问题返回记录
+        if (!empty($msg_Info['operation_reason'])){
+            $where = array();
+            $where['msg_id'] = array('eq',$id);
+            $chat_list = $this->common_chat_model->where($where)->select();
         }
         session('send_id',$msg_Info['user_id']);
         $this->assign( 'list', $list );
@@ -166,15 +187,45 @@ class MessagesController extends CheckController  {
         $this->assign( 'type', session('type') );
         $this->display('../Tieqiao/customer_detail_mg');
     }
+    //接受咨询
+    function handle(){
+        $msg_id = $_GET['msg_id'];
+        $id = (int)session('login_id');
+        $msg_info = $this->common_messages_model->find($msg_id);
+        if (empty($msg_info['manager_id'])){
+            $data = array();
+            $data['manager_id'] = $id;
+            $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data);
+            if ($result){
+                $this->ajaxReturn('0');
+            }else{
+                $this->ajaxReturn('2');
+            }
+        }else{
+            $this->ajaxReturn('1');
+        }
+    }
+    //判断处理次数
+    function check_fq(){
+        $id = intval( I( 'get.id' ) );
+        $msg_info = $this->common_messages_model->find($id);
+        if ($msg_info == "" || $msg_info == null){
+            $this->ajaxReturn('2');
+        }else if ($msg_info['operation_fq'] < 2){
+            $this->ajaxReturn('0');
+        }else{
+            $this->ajaxReturn('1');
+        }
+    }
     //转发医生显示
     function send_show(){
         $id = intval( I( 'get.id' ) );
-        $this->assign( 'msg_id', $id );
         $where = array();
         $where['u.type'] = array('eq',1);
         $where['u.check'] = array('eq',1);
         $where['u.del_flg'] = array('eq',0);
         $list = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where($where)->order('u.create_time desc')->select();
+        $this->assign( 'msg_id', $id );
         $this->assign( 'list', $list );
         $this->display('../Tieqiao/send_show');
     }
@@ -182,12 +233,15 @@ class MessagesController extends CheckController  {
     function send_handle(){
         $ids = $_POST['ids'];
         $msg_id = $_POST['msg_id'];
+        $msg_info = $this->common_messages_model->find($msg_id);
+
         $data = array();
         $data['type'] = 2;
         $data['status'] = 0;
+        $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $msg_id))->save($data);
-        $msg_info = $this->common_messages_model->find($msg_id);
+
         $user = $this->common_user_model->find($msg_info['user_id']);
         foreach ($ids as $id) {
             $sendUser = $this->common_user_model->find($id);
@@ -199,10 +253,10 @@ class MessagesController extends CheckController  {
                 $this->common_operation_model->add($datas);
             }
             if ($sendUser['status'] == 0){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
                 $this->template_send_tq($msg_info['content'],$user['name'],$sendUser['open_id'],$url);
             }else{
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
                 $this->template_send_zj($msg_info['content'],$sendUser['open_id'],$url);
             }
         }
@@ -212,9 +266,11 @@ class MessagesController extends CheckController  {
     //群发医生
     function forward_handle(){
         $id = intval( I( 'get.id' ) );
+        $msg_info = $this->common_messages_model->find($id);
         $data = array();
         $data['type'] = 1;
         $data['status'] = 0;
+        $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $id))->save($data);
         $where = array();
@@ -222,14 +278,14 @@ class MessagesController extends CheckController  {
         $where['check'] = array('eq',1);
         $where['del_flg'] = array('eq',0);
         $list = $this->common_user_model->where($where)->select();
-        $msg_info = $this->common_messages_model->find($id);
+
         $user = $this->common_user_model->find($msg_info['user_id']);
         foreach ($list as $sendUser) {
             if ($sendUser['status'] == 0){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$id;
                 $this->template_send_tq($msg_info['content'],$user['name'],$sendUser['open_id'],$url);
             }else{
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$id;
                 $this->template_send_zj($msg_info['content'],$sendUser['open_id'],$url);
             }
         }

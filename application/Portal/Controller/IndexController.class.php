@@ -34,10 +34,8 @@ class IndexController extends HomebaseController {
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             if ($result) {
                 $this->assign( 'check', 0 );
-                $this->assign( 'msg', '欢迎您入驻铁樵健康，请耐心等待管理员审核，先查看一下您的登记信息吧。');
-                $this->assign( 'btn', '立即查看');
-                $this->assign( 'url_q', "");
-                $this->assign( 'url_u', "index.php?g=portal&m=user&a=info_doctor");
+                $this->assign( 'msg_d', '欢迎您加入上海市中西医结合学会医生联盟专家委员会，审核通过后您将成为我们的咨询专家，');
+                $this->assign( 'url', "index.php?g=portal&m=user&a=info_doctor");
             } else {
                 $this->assign( 'check', 1 );
                 $this->assign( 'url', "index.php?g=portal&m=user&a=register_doctor");
@@ -74,10 +72,8 @@ class IndexController extends HomebaseController {
             $results = $this->common_card_model->where(array('id' => $_POST['m_card_id']))->save($data);
             if ($result && $results) {
                 $this->assign( 'check', 0 );
-                $this->assign( 'msg', '您可以进入我的咨询界面对您的健康问题进行咨询了，愿我们能为您的身心健康保驾护航！');
-                $this->assign( 'btn', '立即咨询');
-                $this->assign( 'url_q', "index.php?g=portal&m=user&a=question");
-                $this->assign( 'url_u', "index.php?g=portal&m=user&a=info_patient");
+                $this->assign( 'msg_p', '您也可以通过点击公众号菜单“会员中心”→“我的咨询”对您的健康问题进行咨询，愿我们能为您的身心健康保驾护航！');
+                $this->assign( 'url', "index.php?g=portal&m=user&a=question");
             } else {
                 $this->assign( 'check', 1 );
                 $this->assign( 'url', "index.php?g=portal&m=user&a=register_patient");

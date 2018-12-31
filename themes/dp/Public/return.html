@@ -20,16 +20,18 @@
 		<div class="pay-ok">
 			<span class="mui-icon mui-icon-checkmarkempty"></span>
 			<p>注册成功</p>
-			<p style="text-indent: 2em; margin-top: 2rem;">{$msg}</p>
-			<p style="margin-top: 1rem;text-align: center;">
-                <notempty name="url_q">
-                    <a href="{$url_q}" class="mui-btn mui-btn-primary" style="width: 30%;">
-                        {$btn}
-                    </a>
-                </notempty>
-				<a href="{$url_u}" class="mui-btn mui-btn-primary" style="width: 30%;margin-left: 5%;">
-					个人中心
-				</a>
+			<p style="text-indent: 2em; margin-top: 2rem;">
+				<notempty name="msg_p">
+					系统将在
+					<span id="time" style="font-size: 20px;">5</span>
+					秒钟后自动跳转至咨询界面，如果未能跳转，<a href="{$url}" title="点击访问">请点击这里</a>。
+					{$msg_p}
+				</notempty>
+				<notempty name="msg_d">
+					{$msg_d}系统将在
+					<span id="time" style="font-size: 20px;">5</span>
+					秒钟后自动跳转至个人信息界面，如果未能跳转，<a href="{$url}" title="点击访问">请点击这里</a>。
+				</notempty>
 			</p>
 		</div>
 	</if>

@@ -218,14 +218,8 @@ class UserController extends CheckController {
             $_POST['user_id'] = $id;
             $_POST['create_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_messages_model->add($_POST);
-            if (!$result){
-                $this->formError[] = '咨询失败';
-            }
             if ($_POST['img'] != null && $_POST['img'] != ''){
-                $st = $this->uploadImg($_POST['img'],$result);
-                if (!$st){
-                    $this->formError[] = '上传病例图片失败';
-                }
+                $this->uploadImg($_POST['img'],$result);
             }
             $where = array();
             $where['del_flg'] = array('eq',0);
@@ -235,20 +229,20 @@ class UserController extends CheckController {
             $list = $this->common_user_model->field('open_id')->where($where)->select();
             $user = $this->common_user_model->field('name')->find($id);
             foreach($list as $value){
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question';
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$result;
                 $this->template_send_tq($_POST['content'],$user['name'],$value['open_id'],$url);
             }
-            $this->formError[] = '咨询成功，请耐心等待医生回复';
-            $this->assign( 'formError', $this->formError );
-            $this->display('../Tieqiao/question');
+            $this->redirect('Messages/detail', array('id' => $result));
         } else {
             $this->display('../Tieqiao/question');
         }
     }
     function question_m(){
+        $id = (int)session('login_id');
         $where = array();
+        $where['m.manager_id'] = array(array('exp','is null'),array('eq',$id), 'or');
         $where['m.del_flg'] = array('eq',0);
-        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.create_time desc")->select();
+        $msg_list = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->order("m.status asc,m.manager_id asc,m.create_time desc")->select();
         $this->assign( 'msg_list', $msg_list );
         $this->display('../Tieqiao/advice');
     }

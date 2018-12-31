@@ -141,7 +141,7 @@
 				<notempty name="elte_info.doctor_id">
 					<div class="mui-card">
 						<div class="mui-card-header">
-							<span>专家总结</span>
+							<span>咨询小结</span>
 						</div>
 						<div class="mui-card-content">
 							<div class="mui-input-row">
@@ -156,7 +156,11 @@
 				<notempty name="elte_info.user_id">
 					<div class="mui-card" style="margin-bottom: 1.5rem;">
 						<div class="mui-card-header">
-							<span>用户评价</span>
+							<if condition="$type eq 0">
+								<span>我的评价</span>
+								<else />
+								<span>用户评价</span>
+							</if>
 						</div>
 						<div class="mui-card-content">
 							<div class="mui-input-row">
@@ -199,16 +203,65 @@
 				</notempty>
 			</div>
 			<else />
+			<if condition="$type neq 0">
+				<notempty name="msg.operation_reason">
+					<div class="mui-card">
+						<div class="mui-card-header">
+							<span>聊天记录</span>
+						</div>
+						<div class="mui-card-content briefing">
+							<foreach name="chat_list" item="cl">
+								<if condition="$cl.status eq 1">
+									<div class="rows">
+										<img src="{$msg.photo}" class="img-right"/>
+										<div class="chat-bubble-right">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+									<else />
+									<div class="rows">
+										<img src="../upload_img/head_tq/doctor.png" class="img-left"/>
+										<div class="chat-bubble-left">
+											<notempty name="cl.photo">
+												<img src="{$cl.photo}" class="img-chat"/>
+												<else/>
+												{$cl.content}
+											</notempty>
+										</div>
+									</div>
+								</if>
+							</foreach>
+						</div>
+					</div>
+					<div class="mui-card">
+						<div class="mui-card-header">
+							<span>返回原因</span>
+						</div>
+						<div class="mui-card-content">
+							<div class="mui-input-row">
+								<div class="mui-content-padded">
+									<div class="mui-inline">{$msg.operation_reason}</div>
+								</div>
+							</div>
+						</div>
+						<div class="mui-card-footer">提交时间：{$msg.operation_time}</div>
+					</div>
+				</notempty>
+			</if>
 			<if condition="$type eq 0 && $msg.status eq 1">
 				<nav class="mui-bar mui-bar-tab">
 					<div class="zixun-nav">
-						<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即回复</button>
+						<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即查看</button>
 					</div>
 				</nav>
 				<elseif condition="$type neq 0"/>
 				<nav class="mui-bar mui-bar-tab">
 					<div class="zixun-nav">
-						<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即回复</button>
+						<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即查看</button>
 					</div>
 				</nav>
 			</if>

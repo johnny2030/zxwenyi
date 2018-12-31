@@ -1,0 +1,22 @@
+<!doctype html>
+<html ng-app="demo">
+<head>
+	<tc_include file="Public/TQHead"/>
+	<tc_include file="Public/RCHead"/>
+</head>
+	<body ng-controller="main">
+	<div id="show">
+		<button type="button" ng-click="setconversation('{$msg.id}')" id="chat"></button>
+	</div>
+	<div>
+		<rong-widget></rong-widget>
+	</div>
+	</body>
+<script type="text/javascript">
+    $(function(){
+        setTimeout(function(){
+            $("#chat").click();
+        },1000);
+    });
+</script>
+</html>

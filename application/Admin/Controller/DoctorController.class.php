@@ -130,7 +130,7 @@ class DoctorController extends AdminbaseController {
             }else{
                 $result = $this->common_user_model->where(array('id' => $id))->save($data);
                 if ($result) {
-                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question','您的审核已通过，快来看下当前有没有未处理的咨询吧','点击这里立即查看');
+                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question','您已成为中西医结合学会医生联盟咨询专家，欢迎您参与咨询活动','点击这里立即查看');
                     $this->success('医生审核成功！');
                 } else {
                     $this->error('医生审核失败！');

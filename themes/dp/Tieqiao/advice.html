@@ -21,10 +21,16 @@
 					<div class="mui-media-body">
 						{$msg.name}
 						<p class="mui-ellipsis">
-							<if condition="$msg.type eq 0"> 咨询中
-								<elseif condition="$msg.type eq 1"/>已群发
-								<else />已转发
-							</if>
+							<notempty name="msg.manager_id">
+								<if condition="$msg.type eq 0">已受理
+									<elseif condition="$msg.type eq 1"/>已群发
+									<elseif condition="$msg.type eq 2"/>已转发
+									<elseif condition="$msg.type eq 3"/>问题返回
+									<else />受理完毕
+								</if>
+								<else />
+								未受理
+							</notempty>
 							－
 							<if condition="$msg.status eq 0"> 未处理
 								<elseif condition="$msg.status eq 1"/>处理中

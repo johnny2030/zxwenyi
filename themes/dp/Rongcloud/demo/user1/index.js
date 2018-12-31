@@ -47,21 +47,6 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
             alert("请求失败");
         });
     };
-    $scope.setconversation_kefu= function() {
-        $http({
-            method:'GET',
-            url:'/index.php',
-            params:{
-                'g':'portal',
-                'm':'rong',
-                'a':'getdata_kefu'
-            }
-        }).success(function (res) {
-            WebIMWidget.setConversation($scope.targetType, res.id, res.name);
-        }).error(function (error) {
-            alert("请求失败");
-        });
-    };
     $scope.show = function () {
         $("#qus").css("display","none");
         WebIMWidget.show();
