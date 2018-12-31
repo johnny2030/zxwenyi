@@ -374,6 +374,9 @@ class RongController extends CheckController {
                     $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
                 }else{
                     $data_msg = array();
+                    if ($msg_info['type'] == 3){
+                        $data_msg['type'] = 0;
+                    }
                     $data_msg['status'] = 1;
                     $data_msg['start_time'] = date('Y-m-d H:i:s',time());
                     $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
