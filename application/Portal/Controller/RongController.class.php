@@ -358,7 +358,7 @@ class RongController extends CheckController {
             }
         }else{//用户咨询
             $msg_info = $this->common_messages_model->find($msg_id);
-            if ($msg_info['status'] == 0){
+            if ($msg_info['status'] == 0 || empty($msg_info['doctor_id'])){
                 //记录聊天时间
                 $data = array();
                 $data['chat_time'] = date('Y-m-d H:i:s',time());
@@ -366,11 +366,18 @@ class RongController extends CheckController {
                 $data['p_id'] = session('send_id');
                 $this->common_chattime_model->add($data);
                 //修改咨询状态
-                $data_msg = array();
-                $data_msg['doctor_id'] = session('login_id');
-                $data_msg['status'] = 1;
-                $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-                $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+                if ($type != 3){
+                    $data_msg = array();
+                    $data_msg['doctor_id'] = session('login_id');
+                    $data_msg['status'] = 1;
+                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+                }else{
+                    $data_msg = array();
+                    $data_msg['status'] = 1;
+                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+                }
                 if ($result){
                     session('msg_id',$msg_id);
                     $user = $this->common_user_model->find($msg_info['doctor_id']);

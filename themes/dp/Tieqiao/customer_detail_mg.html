@@ -98,7 +98,7 @@
 					<div class="mui-card-content briefing">
 						<foreach name="chat_list" item="cl">
 							<if condition="$type eq 0">
-								<if condition="$cl.status neq 0">
+                                <if condition="$cl.status eq 1">
 									<div class="rows">
 										<img src="{$msg.photo}" class="img-right"/>
 										<div class="chat-bubble-right">
@@ -122,7 +122,7 @@
 									</div>
 								</if>
 								<else />
-								<if condition="$cl.status neq 0">
+                                <if condition="$cl.status eq 1">
 									<div class="rows">
 										<img src="{$msg.photo}" class="img-left"/>
 										<div class="chat-bubble-left">
