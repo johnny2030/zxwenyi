@@ -40,11 +40,16 @@
 				<span class="span_info">|</span>
 				<input type="text" name="health" class="input_info" value="{$patient.name_h}" readonly="readonly">
 			</div>
-			<notempty name="patient.name_y">
-				<div class="mui-input-row user_list">
-					<label class="label_info" style="padding:11px 15px !important;font-size:0.5rem !important;font-weight:normal !important;">具体疾病</label>
-					<span class="span_info">|</span>
-					<input type="text" name="healthy" class="input_info" value="{$patient.name_y}" readonly="readonly">
+			<notempty name="lists">
+				<div class="mui-card" style="margin-left: 0px !important;margin-right: 0px !important;margin-top: 15px !important;">
+					<div class="mui-card-header">
+						<span>具体疾病</span>
+					</div>
+					<div class="mui-card-content briefing">
+						<foreach name="lists" item="s">
+							<span class="check_hy">{$s.name}</span>
+						</foreach>
+					</div>
 				</div>
 			</notempty>
 			<div class="mui-input-row user_list">

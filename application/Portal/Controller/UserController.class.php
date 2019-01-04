@@ -11,6 +11,7 @@ class UserController extends CheckController {
     private $common_office_model;
     private $common_hospital_model;
     private $common_health_model;
+    private $common_healthy_model;
     private $common_card_model;
     private $common_messages_model;
     private $common_position_model;
@@ -28,6 +29,7 @@ class UserController extends CheckController {
         $this->common_office_model = D( 'Common_office' );
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_health_model = D( 'Common_health' );
+        $this->common_healthy_model = D( 'Common_healthy' );
         $this->common_card_model = D( 'Common_card' );
         $this->common_messages_model = D( 'Common_messages' );
         $this->common_position_model = D( 'Common_position' );
@@ -53,8 +55,16 @@ class UserController extends CheckController {
         $id = (int)session('login_id');
         if ( IS_POST && empty($flg)) {
             $healthy = $_POST['healthy'];
-            if (empty($healthy)){
-                $_POST['healthy'] = 0;
+            $where = array();
+            $where['user_id'] = array('eq',$id);
+            $this->common_healthy_model->where($where)->delete();
+            if (!empty($healthy)){
+                $data = array();
+                foreach ($healthy as $h){
+                    $data['user_id'] = $id;
+                    $data['healthy'] = $h;
+                    $this->common_healthy_model->add($data);
+                }
             }
             $_POST['update_time'] = date('Y-m-d H:i:s',time());
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
@@ -67,19 +77,32 @@ class UserController extends CheckController {
         }else{
             session('flg',null);
             $patient = $this->common_user_model->find($id);
-
+            //健康状况
             $where_h = array();
             $where_h['up_id'] = array('eq',0);
             $where_h['del_flg'] = array('eq',0);
             $list = $this->common_health_model->where($where_h)->select();
 
+            //我的疾病
+            $where_y = array();
+            $where_y['y.user_id'] = array('eq',$id);
+            $listy = $this->common_healthy_model->alias('y')->field('h.*')->join('__COMMON_HEALTH__ h ON h.id=y.healthy')->where($where_y)->select();
+            $ys = array();
+            foreach ($listy as $y){
+                $ys[] = $y['id'];
+            }
+            $ids = implode(',',$ys);
+
+            //剩余疾病
             $where_s = array();
-            $where_s['up_id'] = array('eq',$patient['health']);
+            $where_s['up_id'] = array('eq',2);
+            $where_s['id'] = array('not in',$ids);
             $where_s['del_flg'] = array('eq',0);
             $lists = $this->common_health_model->where($where_s)->select();
 
             $this->assign( 'list', $list );
             $this->assign( 'lists', $lists );
+            $this->assign( 'listy', $listy );
             $this->assign( 'patient', $patient );
             $this->display('../Tieqiao/info_patient');
         }
@@ -153,9 +176,15 @@ class UserController extends CheckController {
     //用户详情
     public function user_detail() {
         $user_id = $_GET['user_id'];
-        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
+        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->where(array('u.id' => $user_id))->find();
+        //我的疾病
+        $where = array();
+        $where['y.user_id'] = array('eq',$user_id);
+        $lists = $this->common_healthy_model->alias('y')->field('h.*')->join('__COMMON_HEALTH__ h ON h.id=y.healthy')->where($where)->select();
+
         session('send_id',$user_id);
         $this->assign( 'msg_id', 0 );
+        $this->assign( 'lists', $lists );
         $this->assign( 'patient', $user );
         $this->display('../Tieqiao/user_detail');
     }

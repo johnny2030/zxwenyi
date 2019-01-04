@@ -63,12 +63,15 @@
 							</foreach>
 						</select>
 					</div>
-					<div class="mui-input-row user_list" id="hys" style="display: none;">
-						<label class="label_info">具体疾病</label>
-						<span class="span_info">|</span>
-						<select id="healthy" name="healthy" class="input_info">
-							<option value="" selected>请选择具体疾病</option>
-						</select>
+					<div class="mui-card" id="hys" style="margin-left: 0px !important;margin-right: 0px !important;margin-top: 15px !important;display: none;">
+						<div class="mui-card-header">
+							<span>具体疾病</span>
+						</div>
+						<div class="mui-card-content briefing">
+							<foreach name="lists" item="s">
+								<input name="healthy[]" value="{$s.id}" class="check_hy" type="checkbox">{$s.name}
+							</foreach>
+						</div>
 					</div>
 					<div class="mui-input-row user_list" style="margin-bottom: 10px;">
 						<label class="label_info">运动情况</label>
@@ -245,7 +248,7 @@
         }
         function check_sex(){
             var sex = $('#sex option:selected').val();
-            if (sex.length==0){
+            if (sex.length==0 || sex == "undefined"){
                 alert("请选择性别！");
                 $("#sex").css("border-color","red");
                 return false;
@@ -338,7 +341,7 @@
         }
         function check_allergic(){
             var allergic = $('#allergic option:selected').val();
-            if (allergic.length==0){
+            if (allergic.length==0 || allergic == "undefined"){
                 alert("请选择过敏史！");
                 $("#allergic").css("border-color","red");
                 return false;
@@ -349,29 +352,37 @@
         }
         function check_health(){
             var health = $('#health option:selected').val();
-            if (health.length==0){
+            if (health.length==0 || health == "undefined"){
                 alert("请选择健康状况！");
                 $("#health").css("border-color","red");
                 return false;
             } else{
                 if (health == 2){
-                    var healthy = $('#healthy option:selected').val();
-                    if (healthy.length==0){
+                    var mychk = document.getElementsByName("healthy[]");
+                    var num = 0;
+                    if(mychk.length){
+                        for(var i=0;i<mychk.length;i++){
+                            if (mychk[i].checked){
+                                num++
+							}
+                        }
+                    }
+                    if (num==0){
                         alert("请选择具体疾病，如病名未在栏目中，请选择“其他疾病”");
-                        $("#healthy").css("border-color","red");
+                        $("#hys").css("border","1px solid red");
                         return false;
                     }else{
-                        $("#healthy").css("border-color","");
+                        $("#hys").css("border","0");
                         return true;
 					}
 				}
-                $("#health").css("border-color","");
+                $("#health").css("border","0");
                 return true;
             }
         }
         function check_motion(){
             var motion = $('#motion option:selected').val();
-            if (motion.length==0){
+            if (motion.length==0 || motion == "undefined"){
                 alert("请选择运动情况！");
                 $("#motion").css("border-color","red");
                 return false;
@@ -443,7 +454,18 @@
         }
         function getHealthy() {
             var up_id = $('#health option:selected').val();
-            $.ajax({
+            if (up_id == 1){
+                var mychk = document.getElementsByName("healthy[]");
+                if(mychk.length){
+                    for(var i=0;i<mychk.length;i++){
+                        mychk[i].checked = false;
+                    }
+                }
+                $("#hys").css("display","none");
+            }else{
+                $("#hys").css("display","block");
+            }
+            /*$.ajax({
                 async:false,
                 type : "get",
                 url : "index.php?g=portal&m=commonMethod&a=get_healthy_info",
@@ -468,7 +490,7 @@
                         show.css("display","none");
                     }
                 }
-            });
+            });*/
         }
         function check_box() {
             if ($("#check").prop("checked")){

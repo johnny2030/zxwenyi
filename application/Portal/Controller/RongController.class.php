@@ -13,6 +13,8 @@ class RongController extends CheckController {
     private $common_evaluate_model;
     private $common_record_model;
     private $common_chat_model;
+    private $common_health_model;
+    private $common_healthy_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -23,6 +25,8 @@ class RongController extends CheckController {
         $this->common_evaluate_model = D( 'Common_evaluate' );
         $this->common_record_model = D( 'Common_record' );
         $this->common_chat_model = D( 'Common_chat' );
+        $this->common_health_model = D( 'Common_health' );
+        $this->common_healthy_model = D( 'Common_healthy' );
     }
     /**
      * 获取token
@@ -465,9 +469,14 @@ class RongController extends CheckController {
     //点击用户头像查看详情
     public function show_msg(){
         $user_id = $_GET['userId'];
-        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
-        session('send_id',$user_id);
+        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->where(array('u.id' => $user_id))->find();
+        //我的疾病
+        $where = array();
+        $where['y.user_id'] = array('eq',$user_id);
+        $lists = $this->common_healthy_model->alias('y')->field('h.*')->join('__COMMON_HEALTH__ h ON h.id=y.healthy')->where($where)->select();
+
         $this->assign( 'msg_id', session('msg_id') );
+        $this->assign( 'lists', $lists );
         $this->assign( 'patient', $user );
         $this->display('../Tieqiao/user_detail');
     }

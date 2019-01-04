@@ -74,20 +74,37 @@
 					</notempty>
 				</select>
 			</div>
-			<div class="mui-input-row user_list" id="hys" style="display: none;">
-				<label class="label_info">具体疾病</label>
-				<span class="span_info">|</span>
-				<select id="healthy" name="healthy" class="input_info">
-					<notempty name="patient.healthy">
-						<foreach name="lists" item="s">
-							<if condition="$s.id eq $patient['healthy']">
-								<option value="{$s.id}" selected>{$s.name}</option>
-								<else />
-								<option value="{$s.id}">{$s.name}</option>
-							</if>
+			<!--<div id="healy">
+				<div class="mui-input-row user_list" id="hys" style="display: none;">
+					<label class="label_info">具体疾病</label>
+					<span class="span_info">|</span>
+					<select id="healthy" name="healthy" class="input_info">
+						<notempty name="patient.healthy">
+							<foreach name="lists" item="s">
+								<if condition="$s.id eq $patient['healthy']">
+									<option value="{$s.id}" selected>{$s.name}</option>
+									<else />
+									<option value="{$s.id}">{$s.name}</option>
+								</if>
+							</foreach>
+						</notempty>
+					</select>
+				</div>
+			</div>-->
+			<div class="mui-card" id="hys" style="margin-left: 0px !important;margin-right: 0px !important;margin-top: 15px !important;display: none;">
+				<div class="mui-card-header">
+					<span>具体疾病</span>
+				</div>
+				<div class="mui-card-content briefing">
+					<notempty name="listy">
+						<foreach name="listy" item="y">
+							<input name="healthy[]" value="{$y.id}" class="check_hy" type="checkbox" checked>{$y.name}
 						</foreach>
 					</notempty>
-				</select>
+					<foreach name="lists" item="s">
+						<input name="healthy[]" value="{$s.id}" class="check_hy" type="checkbox">{$s.name}
+					</foreach>
+				</div>
 			</div>
 			<div class="mui-input-row user_list">
 				<label class="label_info">运动情况</label>
@@ -117,7 +134,6 @@
 					</notempty>
 				</select>
 			</div>
-			<input type="hidden" id="hy" name="hy" value="{$patient.healthy}">
 			<div class="mui-button-row">
 				<button id="confirmBtn" type="button" class="mui-btn mui-btn-primary footer-btn" style="width:35%;border-radius:10px;">保存</button>
 				<button id="cancelBtn" type="button" class="mui-btn mui-btn-danger footer-btn" style="width:35%;border-radius:10px;margin-left: 5%;">取消</button>
@@ -128,10 +144,10 @@
 </body>
 <script>
     $(function(){
-        var str=$("#hy").val();
-        if (str!=null&&str!=undefined&&str!=""&&str!="0"){
-            var sel = $("#hys");
-            sel.css("display","block");
+        if ("{$patient['health']}" == "1"){
+            $("#hys").css("display","none");
+        }else{
+            $("#hys").css("display","block");
         }
     });
     (function($) {
@@ -211,7 +227,18 @@
     });
     function getHealthy() {
         var up_id = $('#health option:selected').val();
-        $.ajax({
+        if (up_id == 1){
+            var mychk = document.getElementsByName("healthy[]");
+            if(mychk.length){
+                for(var i=0;i<mychk.length;i++){
+                    mychk[i].checked = false;
+                }
+            }
+            $("#hys").css("display","none");
+		}else{
+            $("#hys").css("display","block");
+		}
+        /*$.ajax({
             async:false,
             type : "get",
             url : "index.php?g=portal&m=commonMethod&a=get_healthy_info",
@@ -236,7 +263,7 @@
                     show.css("display","none");
                 }
             }
-        });
+        });*/
     }
     wx.config({
         appId: '<?php echo $signPackage["appId"];?>',

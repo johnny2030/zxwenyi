@@ -10,6 +10,7 @@ class IndexController extends HomebaseController {
     private $common_hospital_model;
     private $common_card_model;
     private $common_health_model;
+    private $common_healthy_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -20,6 +21,7 @@ class IndexController extends HomebaseController {
         $this->common_hospital_model = D( 'Common_hospital' );
         $this->common_card_model = D( 'Common_card' );
         $this->common_health_model = D( 'Common_health' );
+        $this->common_healthy_model = D( 'Common_healthy' );
     }
 
     //首页
@@ -64,6 +66,15 @@ class IndexController extends HomebaseController {
     public function register_patient() {
         $id = (int)session('login_id');
         if ( IS_POST ) {
+            $healthy = $_POST['healthy'];
+            if (!empty($healthy)){
+                $data = array();
+                foreach ($healthy as $h){
+                    $data['user_id'] = $id;
+                    $data['healthy'] = $h;
+                    $this->common_healthy_model->add($data);
+                }
+            }
             $result = $this->common_user_model->where(array('id' => $id))->save($_POST);
             $data = array();
             $data['user_id'] = $id;
@@ -85,7 +96,14 @@ class IndexController extends HomebaseController {
             $where_h['up_id'] = array('eq',0);
             $where_h['del_flg'] = array('eq',0);
             $list = $this->common_health_model->where($where_h)->select();
+            //所有疾病
+            $where_s = array();
+            $where_s['up_id'] = array('eq',2);
+            $where_s['del_flg'] = array('eq',0);
+            $lists = $this->common_health_model->where($where_s)->select();
+
             $this->assign( 'list', $list );
+            $this->assign( 'lists', $lists );
             if (empty($user['m_card_id'])){
                 $this->display('../Tieqiao/register_patient');
             }else{
