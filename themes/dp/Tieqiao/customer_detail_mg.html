@@ -253,11 +253,13 @@
 				</div>
 			</notempty>
 			<notempty name="msg.manager_id">
-				<div style="text-align: center;">
-					<a id="forward" class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" style="line-height: 27px;">群发</a>
-					<a id="send_show" class="mui-btn mui-btn-warning footer-btn" href="javascript:void(0);" style="line-height: 27px;">转发</a>
-					<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')" style="line-height: 27px;">立即查看</a>
-				</div>
+				<if condition="$msg.manager_id eq $login_id">
+					<div style="text-align: center;">
+						<a id="forward" class="mui-btn mui-btn-success footer-btn" href="javascript:void(0);" style="line-height: 27px;">群发</a>
+						<a id="send_show" class="mui-btn mui-btn-warning footer-btn" href="javascript:void(0);" style="line-height: 27px;">转发</a>
+						<a class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" ng-click="setconversation('{$msg.id}')" style="line-height: 27px;">立即查看</a>
+					</div>
+				</if>
 				<else />
 				<div style="text-align: center;">
 					<a id="handle" class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" style="line-height: 27px;width: 50% !important;">确认受理</a>

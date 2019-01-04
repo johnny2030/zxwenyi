@@ -68,15 +68,41 @@ class MessagesController extends CheckController  {
             $_POST['user_id'] = (int)session('login_id');
             $_POST['user_time'] = date('Y-m-d H:i:s',time());
             $this->common_evaluate_model->where(array('msg_id' => $_POST['msg_id']))->save($_POST);
-            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,d.open_id as open_id,d.status as status')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id')->where(array('m.id' => $_POST['msg_id']))->find();
-            if ($msg_info['status'] == 0){
-                require_once 'today/Wechat_tq.php';
-                $wechat = new \Wechat_tq( $this );
+            $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.name as name')->join('__COMMON_USER__ u ON m.user_id=u.id')->where(array('m.id' => $_POST['msg_id']))->find();
+            if (empty($msg_info['doctor_id'])){
+                $manager_user = $this->common_user_model->find($msg_info['manager_id']);
             }else{
-                require_once 'today/Wechat_zj.php';
-                $wechat = new \Wechat_zj( $this );
+                $doctor_user = $this->common_user_model->find($msg_info['doctor_id']);
+                $manager_user = $this->common_user_model->find($msg_info['manager_id']);
             }
-            $wechat->customSendImg($msg_info['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看');
+            //铁樵
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
+            //专家
+            require_once 'today/Wechat_zj.php';
+            $wechat_zj = new \Wechat_zj( $this );
+            //推送医生
+            if (empty($doctor_user)){
+                //推送管理员
+                if ($manager_user['status'] == 0){
+                    $wechat->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }else{
+                    $wechat_zj->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }
+            }else{
+                //推送管理员
+                if ($manager_user['status'] == 0){
+                    $wechat->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$_POST['msg_id'],$doctor_user['name'].'收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }else{
+                    $wechat_zj->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$_POST['msg_id'],$doctor_user['name'].'收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }
+                //推送医生
+                if ($doctor_user['status'] == 0){
+                    $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }else{
+                    $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$_POST['msg_id'],'您收到了'.$msg_info['name'].'的评价','点击这里查看详情');
+                }
+            }
             $this->redirect('Messages/detail', array('id' => $_POST['msg_id']));
         }
     }
@@ -114,7 +140,11 @@ class MessagesController extends CheckController  {
         //咨询问题
         $id = $_GET['id'];
         $msg_Info = $this->common_messages_model->find($id);
-        session('send_id',$msg_Info['doctor_id']);
+        if (empty($msg_Info['doctor_id'])){
+            session('send_id',$msg_Info['manager_id']);
+        }else{
+            session('send_id',$msg_Info['doctor_id']);
+        }
         $this->assign( 'msg', $msg_Info );
         $this->display('../Tieqiao/chat_p');
     }
@@ -144,7 +174,11 @@ class MessagesController extends CheckController  {
             $chat_list = $this->common_chat_model->where($where)->select();
         }
         if ($type == 0){
-            session('send_id',$msg_Info['doctor_id']);
+            if (empty($msg_Info['doctor_id'])){
+                session('send_id',$msg_Info['manager_id']);
+            }else{
+                session('send_id',$msg_Info['doctor_id']);
+            }
         }else{
             session('send_id',$msg_Info['user_id']);
         }
@@ -162,6 +196,7 @@ class MessagesController extends CheckController  {
         $where = array();
         $where['m.id'] = array('eq',$id);
         $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
+        //病例图片
         $where_r = array();
         $where_r['message_id'] = array('eq',$msg_Info['id']);
         $where_r['user_id'] = array('eq',$msg_Info['user_id']);
@@ -185,6 +220,7 @@ class MessagesController extends CheckController  {
         $this->assign( 'chat_list', $chat_list );
         $this->assign( 'elte_info', $elte_info );
         $this->assign( 'type', session('type') );
+        $this->assign( 'login_id', session('login_id') );
         $this->display('../Tieqiao/customer_detail_mg');
     }
     //接受咨询
@@ -298,7 +334,7 @@ class MessagesController extends CheckController  {
             'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
             'keyword1'=>array('value'=>urlencode($name),'color'=>'#36648B'),
             'keyword2'=>array('value'=>urlencode($title),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
         );
         $wechat->templateForward($open_id,$url,$data);
     }
@@ -310,7 +346,7 @@ class MessagesController extends CheckController  {
             'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
             'keyword1'=>array('value'=>urlencode($title),'color'=>'#36648B'),
             'keyword2'=>array('value'=>urlencode($time),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
         );
         $wechat->templateForward($open_id,$url,$data);
     }

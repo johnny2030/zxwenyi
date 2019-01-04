@@ -354,6 +354,17 @@
                 $("#health").css("border-color","red");
                 return false;
             } else{
+                if (health == 2){
+                    var healthy = $('#healthy option:selected').val();
+                    if (healthy.length==0){
+                        alert("请选择具体疾病，如病名未在栏目中，请选择“其他疾病”");
+                        $("#healthy").css("border-color","red");
+                        return false;
+                    }else{
+                        $("#healthy").css("border-color","");
+                        return true;
+					}
+				}
                 $("#health").css("border-color","");
                 return true;
             }

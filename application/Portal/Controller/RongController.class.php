@@ -157,14 +157,36 @@ class RongController extends CheckController {
             require_once 'today/Wechat_tq.php';
             $wechat = new \Wechat_tq( $this );
             $patient_user = $this->common_user_model->find($_GET['userId']);
-            $doctor_user = $this->common_user_model->find($id);
-            if ($doctor_user['status'] == 0){
-                $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
-                $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
+            if (empty($msg_info['doctor_id'])){
+                $manager_user = $this->common_user_model->find($id);
             }else{
-                require_once 'today/Wechat_zj.php';
-                $wechat_zj = new \Wechat_zj( $this );
-                $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看总结');
+                $doctor_user = $this->common_user_model->find($id);
+                $manager_user = $this->common_user_model->find($msg_info['manager_id']);
+            }
+            require_once 'today/Wechat_zj.php';
+            $wechat_zj = new \Wechat_zj( $this );
+            //推送用户
+            $wechat->customSendImg($patient_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,'本次咨询已结束，期待下次为您服务','请为本次服务做出评价');
+            if (empty($doctor_user)){
+                //推送管理员
+                if ($manager_user['status'] == 0){
+                    $wechat->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看详情');
+                }else{
+                    $wechat_zj->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看详情');
+                }
+            }else{
+                //推送医生
+                if ($doctor_user['status'] == 0){
+                    $wechat->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看详情');
+                }else{
+                    $wechat_zj->customSendImg($doctor_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id,$patient_user['name'].'发起的咨询已被您关闭','点击这里查看详情');
+                }
+                //推送管理员
+                if ($manager_user['status'] == 0){
+                    $wechat->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id,$patient_user['name'].'发起的咨询已被'.$doctor_user['name'].'关闭','点击这里查看详情');
+                }else{
+                    $wechat_zj->customSendImg($manager_user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id,$patient_user['name'].'发起的咨询已被'.$doctor_user['name'].'关闭','点击这里查看详情');
+                }
             }
             $this->ajaxReturn(1);
         }
@@ -251,7 +273,7 @@ class RongController extends CheckController {
                     'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
                     'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
                     'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
                 );
                 $wechat->templateSend($sendUser['open_id'],$url,$data);
             }else{
@@ -267,7 +289,7 @@ class RongController extends CheckController {
                     'first'=>array('value'=>urlencode("您好，有患者向您提出咨询，请及时应答。"),'color'=>"#36648B"),
                     'keyword1'=>array('value'=>urlencode($msg_info[0]['title']),'color'=>'#36648B'),
                     'keyword2'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
                 );
                 $wechat_zj->templateSend($sendUser['open_id'],$url,$data);
             }
@@ -277,7 +299,7 @@ class RongController extends CheckController {
                 'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
                 'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
                 'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF3030'),
             );
             $wechat->templateSend($sendUser['open_id'],$url,$data);
         }
@@ -293,7 +315,7 @@ class RongController extends CheckController {
                     'serviceType'=>array('value'=>urlencode('客户回访'),'color'=>'#36648B'),
                     'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
                     'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
                 );
                 $wechat->templateSend($sendUser['open_id'],$url,$data);
             }else{
@@ -309,7 +331,7 @@ class RongController extends CheckController {
                     'first'=>array('value'=>urlencode("您好，有患者回复了回访消息，请及时应答。"),'color'=>"#36648B"),
                     'keyword1'=>array('value'=>urlencode($msg_info[0]['title']),'color'=>'#36648B'),
                     'keyword2'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+                    'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
                 );
                 $wechat_zj->templateSend($sendUser['open_id'],$url,$data);
             }
@@ -319,7 +341,7 @@ class RongController extends CheckController {
                 'serviceType'=>array('value'=>urlencode('客户回访'),'color'=>'#36648B'),
                 'serviceStatus'=>array('value'=>urlencode('处理中'),'color'=>'#36648B'),
                 'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF3030'),
             );
             $wechat->templateSend($sendUser['open_id'],$url,$data);
         }
@@ -333,7 +355,7 @@ class RongController extends CheckController {
             'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
             'serviceStatus'=>array('value'=>urlencode('问题返回'),'color'=>'#36648B'),
             'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF3030'),
         );
         $wechat->templateSend($sendUser['open_id'],$url,$data);
     }
@@ -358,7 +380,7 @@ class RongController extends CheckController {
             }
         }else{//用户咨询
             $msg_info = $this->common_messages_model->find($msg_id);
-            if ($msg_info['status'] == 0 || empty($msg_info['doctor_id'])){
+            if ($msg_info['status'] == 0){
                 //记录聊天时间
                 $data = array();
                 $data['chat_time'] = date('Y-m-d H:i:s',time());
@@ -442,30 +464,12 @@ class RongController extends CheckController {
     }
     //点击用户头像查看详情
     public function show_msg(){
-        $id=session('login_id');
-        $user = $this->common_user_model->find($id);
-        $where = array();
-        if ($user['type'] == 0){
-            $where['m.user_id'] = array('eq',$id);
-            $where['m.doctor_id'] = array('eq',$_GET['userId']);
-            $where['m.status'] = array('eq',1);
-            $where['m.del_flg'] = array('eq',0);
-        }else{
-            $where['m.user_id'] = array('eq',$_GET['userId']);
-            $where['m.doctor_id'] = array('eq',$id);
-            $where['m.status'] = array('eq',1);
-            $where['m.del_flg'] = array('eq',0);
-        }
-        $msg_Info = $this->common_messages_model->alias('m')->field('m.*,u.name as name,u.photo as photo,u.sex as sex,u.age as age')->join('__COMMON_USER__ u ON m.user_id=u.id')->where($where)->find();
-
-        $where_r = array();
-        $where_r['message_id'] = array('eq',$msg_Info['id']);
-        $where_r['user_id'] = array('eq',$msg_Info['user_id']);
-        $list = $this->common_record_model->where($where_r)->select();
-        session('send_id',$msg_Info['user_id']);
-        $this->assign( 'list', $list );
-        $this->assign( 'msg', $msg_Info );
-        $this->display('../Tieqiao/customer_detail');
+        $user_id = $_GET['user_id'];
+        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
+        session('send_id',$user_id);
+        $this->assign( 'msg_id', session('msg_id') );
+        $this->assign( 'patient', $user );
+        $this->display('../Tieqiao/user_detail');
     }
         /**
      * 生成毫秒级时间戳

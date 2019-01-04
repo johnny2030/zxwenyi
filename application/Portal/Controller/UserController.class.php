@@ -155,6 +155,7 @@ class UserController extends CheckController {
         $user_id = $_GET['user_id'];
         $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
         session('send_id',$user_id);
+        $this->assign( 'msg_id', 0 );
         $this->assign( 'patient', $user );
         $this->display('../Tieqiao/user_detail');
     }
@@ -384,7 +385,7 @@ class UserController extends CheckController {
             'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
             'keyword1'=>array('value'=>urlencode($name),'color'=>'#36648B'),
             'keyword2'=>array('value'=>urlencode($title),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
         );
         $wechat->templateForward($open_id,$url,$data);
     }
@@ -396,7 +397,7 @@ class UserController extends CheckController {
             'first'=>array('value'=>urlencode("有新的咨询问题了。"),'color'=>"#36648B"),
             'keyword1'=>array('value'=>urlencode($msg_info['title']),'color'=>'#36648B'),
             'keyword2'=>array('value'=>urlencode($time),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#36648B'),
+            'remark'=>array('value'=>urlencode('点击进入咨询页面'),'color'=>'#FF3030'),
         );
         $wechat->templateForward($sendUser['open_id'],$url,$data);
     }

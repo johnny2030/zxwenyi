@@ -426,7 +426,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }).success(function (res) {
                             if (res == 0){
                                 mui.alert('返回管理员成功！', '温馨提醒', function() {
-                                    window.location.href='{:U("portal/user/question")}';
+                                    window.location.href='index.php?g=portal&m=user&a=question';
                                 });
                             }else {
                                 mui.alert('返回失败，请再次尝试或者联系技术人员！', '温馨提醒');
@@ -473,7 +473,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 }
             }, 'div');
             $('.mui-popup-input').html('');
-            $('.mui-popup-input').append('<textarea placeholder="请输入总结" style="height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;"></textarea>');
+            $('.mui-popup-input').append('<textarea placeholder="请输入咨询小结" contenteditable="true" style="height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;-webkit-user-select: auto;"></textarea>');
         });
         $scope.$watch("currentConversation.messageContent", function (newVal, oldVal) {
             if (newVal === oldVal)
