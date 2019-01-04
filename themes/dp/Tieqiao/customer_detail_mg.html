@@ -282,114 +282,117 @@
 <script type="text/javascript" charset="utf-8">
     mui.previewImage();//图片点击放大预览主要js
     $("#show").css('display','block');
-    if ("{$msg['manager_id']}" != ""){
-        document.getElementById("forward").addEventListener('tap', function() {
-            var btnArray = ['确定', '取消'];
-            mui.confirm('确定发送给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
-                if (e.index == 0) {
-                    var id = parseInt("{$msg['id']}");
-                    $.ajax({
-                        async:false,
-                        type : "get",
-                        url : "index.php?g=portal&m=messages&a=check_fq",
-                        data : {
-                            'id' : id
-                        },
-                        dataType : "json",
-                        success : function(data) {
-                            if(data == 0){
-                                $.ajax({
-                                    async:false,
-                                    type : "get",
-                                    url : "index.php?g=portal&m=messages&a=forward_handle",
-                                    data : {
-                                        'id' : id
-                                    },
-                                    dataType : "json",
-                                    success : function(data) {
-                                        if(data == 0){
-                                            mui.alert('群发成功！', '温馨提醒', function() {
-                                                window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                                            });
-                                        }else{
-                                            mui.alert('群发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
-                                                window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                                            });
+    debugger;
+    if ("{$msg['status']}" != "2"){
+        if ("{$msg['manager_id']}" != ""){
+            document.getElementById("forward").addEventListener('tap', function() {
+                var btnArray = ['确定', '取消'];
+                mui.confirm('确定发送给所有医生？', '铁樵健康提醒您', btnArray, function(e) {
+                    if (e.index == 0) {
+                        var id = parseInt("{$msg['id']}");
+                        $.ajax({
+                            async:false,
+                            type : "get",
+                            url : "index.php?g=portal&m=messages&a=check_fq",
+                            data : {
+                                'id' : id
+                            },
+                            dataType : "json",
+                            success : function(data) {
+                                if(data == 0){
+                                    $.ajax({
+                                        async:false,
+                                        type : "get",
+                                        url : "index.php?g=portal&m=messages&a=forward_handle",
+                                        data : {
+                                            'id' : id
+                                        },
+                                        dataType : "json",
+                                        success : function(data) {
+                                            if(data == 0){
+                                                mui.alert('群发成功！', '温馨提醒', function() {
+                                                    window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                                                });
+                                            }else{
+                                                mui.alert('群发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
+                                                    window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                                                });
+                                            }
                                         }
-                                    }
-                                });
-                            }else if (data == 1){
-                                mui.alert('处理次数已达上限，请转线下处理！', '温馨提醒');
-                            }else{
-                                mui.alert('群发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
-                                    window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                                });
+                                    });
+                                }else if (data == 1){
+                                    mui.alert('处理次数已达上限，请转线下处理！', '温馨提醒');
+                                }else{
+                                    mui.alert('群发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
+                                        window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                                    });
+                                }
                             }
-                        }
-                    });
-                } else {
-                    return;
-                }
-            });
-        });
-        document.getElementById("send_show").addEventListener('tap', function() {
-            var id = parseInt("{$msg['id']}");
-            $.ajax({
-                async:false,
-                type : "get",
-                url : "index.php?g=portal&m=messages&a=check_fq",
-                data : {
-                    'id' : id
-                },
-                dataType : "json",
-                success : function(data) {
-                    if(data == 0){
-                        window.location.href='{:U("portal/messages/send_show",array("id"=>$msg["id"]))}';
-                    }else if (data == 1){
-                        mui.alert('处理次数已达上限，请转线下处理！', '温馨提醒');
-                    }else{
-                        mui.alert('转发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
-                            window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
                         });
+                    } else {
+                        return;
                     }
-                }
+                });
             });
-        });
-    }else{
-        document.getElementById("handle").addEventListener('tap', function() {
-            var btnArray = ['确定', '取消'];
-            mui.confirm('确定受理此次咨询？', '铁樵健康提醒您', btnArray, function(e) {
+            document.getElementById("send_show").addEventListener('tap', function() {
                 var id = parseInt("{$msg['id']}");
-                if (e.index == 0) {
-                    $.ajax({
-                        async:false,
-                        type : "get",
-                        url : "index.php?g=portal&m=messages&a=handle",
-                        data : {
-                            'msg_id' : id
-                        },
-                        dataType : "json",
-                        success : function(data) {
-                            if(data == 0){
-                                mui.alert('您已成功受理此次咨询，请尽快处理！', '温馨提醒', function() {
-                                    window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                                });
-                            }else if (data == 1){
-                                mui.alert('此次咨询已被受理！', '温馨提醒', function() {
-                                    window.location.href='{:U("portal/user/question")}';
-                                });
-                            }else{
-                                mui.alert('咨询受理失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
-                                    window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
-                                });
-                            }
+                $.ajax({
+                    async:false,
+                    type : "get",
+                    url : "index.php?g=portal&m=messages&a=check_fq",
+                    data : {
+                        'id' : id
+                    },
+                    dataType : "json",
+                    success : function(data) {
+                        if(data == 0){
+                            window.location.href='{:U("portal/messages/send_show",array("id"=>$msg["id"]))}';
+                        }else if (data == 1){
+                            mui.alert('处理次数已达上限，请转线下处理！', '温馨提醒');
+                        }else{
+                            mui.alert('转发失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
+                                window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                            });
                         }
-                    });
-                } else {
-                    return;
-                }
-            })
-        });
+                    }
+                });
+            });
+        }else{
+            document.getElementById("handle").addEventListener('tap', function() {
+                var btnArray = ['确定', '取消'];
+                mui.confirm('确定受理此次咨询？', '铁樵健康提醒您', btnArray, function(e) {
+                    var id = parseInt("{$msg['id']}");
+                    if (e.index == 0) {
+                        $.ajax({
+                            async:false,
+                            type : "get",
+                            url : "index.php?g=portal&m=messages&a=handle",
+                            data : {
+                                'msg_id' : id
+                            },
+                            dataType : "json",
+                            success : function(data) {
+                                if(data == 0){
+                                    mui.alert('您已成功受理此次咨询，请尽快处理！', '温馨提醒', function() {
+                                        window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                                    });
+                                }else if (data == 1){
+                                    mui.alert('此次咨询已被受理！', '温馨提醒', function() {
+                                        window.location.href='{:U("portal/user/question")}';
+                                    });
+                                }else{
+                                    mui.alert('咨询受理失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
+                                        window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        return;
+                    }
+                })
+            });
+        }
 	}
     $(function(){
         var index = 8;
