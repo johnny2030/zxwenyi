@@ -436,7 +436,7 @@ class RongController extends CheckController {
         $msg_id = session('msg_id');
         $type = session('type');
         $userId = $_GET['userId'];
-        $msg = $_GET['msg'];
+        $msg = urlencode($_GET['msg']);
         $photo = $_GET['photo'];
         $data = array();
         $data['msg_id'] = $msg_id;
@@ -464,14 +464,14 @@ class RongController extends CheckController {
     }
     //点击用户头像查看详情
     public function show_msg(){
-        $user_id = $_GET['user_id'];
+        $user_id = $_GET['userId'];
         $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h,y.name as name_y')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->join('__COMMON_HEALTH__ y ON u.healthy=y.id','left')->where(array('u.id' => $user_id))->find();
         session('send_id',$user_id);
         $this->assign( 'msg_id', session('msg_id') );
         $this->assign( 'patient', $user );
         $this->display('../Tieqiao/user_detail');
     }
-        /**
+    /**
      * 生成毫秒级时间戳
      */
     public function msectime(){
