@@ -3,6 +3,7 @@
 <admintpl file="head" />
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/simpleboot/rongCloud/vendor/jqueryrebox/jquery-rebox-0.1.0.css"/>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/simpleboot/rongCloud/css/RongIMWidget.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/simpleboot/rongCloud/demo/main.css"/>
 </head>
 <body ng-controller="main">
 	<div class="wrap js-check-wrap">
@@ -82,22 +83,26 @@
 						<td>{$vo.name_d}</td>
 						<td>
 							<if condition="$vo.status eq 0">
-								未处理
+								<span style="color:#CD2626;">未处理</span>
 							</if>
 							<if condition="$vo.status eq 1">
-								处理中
+								<span style="color:#5CACEE;">处理中</span>
 							</if>
 							<if condition="$vo.status eq 2">
-								处理完毕
+								<span style="color:#66CD00;">处理完毕</span>
 							</if>
 						</td>
 						<td>{$vo.start_time}</td>
 						<td>{$vo.end_time}</td>
 						<td>
-							<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定发送给所有的医生吗？">群发</a>
-							<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many',array('id'=>$vo['id']))}','转发')" class="btn btn-success btn-small">转发</a>
-							<a style="margin-top: 5px;" ng-click="setconversation('{$vo.user_id}','{$vo.name_u}')" class="btn btn-primary btn-small ">立即处理</a>
-							<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+							<notempty name="vo.manager_id">
+								<a style="margin-top: 5px;" href="{:U('messages/forward',array('id'=>$vo['id']))}" class="btn btn-success btn-small js-ajax-delete" data-msg="确定发送给所有的医生吗？">群发</a>
+								<a style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('messages/sends_many',array('id'=>$vo['id']))}','转发')" class="btn btn-success btn-small">转发</a>
+								<a style="margin-top: 5px;" ng-click="setconversation('{$vo.user_id}','{$vo.name_u}')" class="btn btn-primary btn-small ">立即处理</a>
+								<a style="margin-top: 5px;" href="{:U('messages/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
+								<else/>
+								<a style="margin-top: 5px;" ng-click="setconversation('{$vo.user_id}','{$vo.name_u}')" class="btn btn-primary btn-small ">确定受理</a>
+							</notempty>
 						</td>
 					</tr>
 				</foreach>

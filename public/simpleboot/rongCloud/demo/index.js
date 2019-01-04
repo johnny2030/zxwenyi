@@ -8,6 +8,7 @@ demo.controller("main", ["$scope", "WebIMWidget", "$http", function($scope, WebI
         url:"http://tieqiao.zzzpsj.com/index.php?g=Admin&m=Chat&a=get_data",
         params:{}
     }).success(function (res) {
+        debugger;
         $scope.targetId = res.manager_user.id;
         $scope.name = res.manager_user.name;
         var config = stat(res);

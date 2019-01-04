@@ -35,7 +35,7 @@ class MessagesController extends AdminbaseController {
         $where['m.del_flg'] = array('eq',0);
         $count = $this->common_messages_model->alias('m')->where($where)->count();
         $page = $this->page($count, 20);
-        $list = $this->common_messages_model->alias('m')->field('m.*,u.name as name_u,d.name as name_d')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id','left')->where($where)->order('m.create_time desc')->select();
+        $list = $this->common_messages_model->alias('m')->field('m.*,u.name as name_u,d.name as name_d')->join('__COMMON_USER__ u ON m.user_id=u.id')->join('__COMMON_USER__ d ON m.doctor_id=d.id','left')->where($where)->order('m.status,m.create_time desc')->select();
         $this->assign("page", $page->show('Admin'));
         $this->assign( 'list', $list );
 		$this->display();

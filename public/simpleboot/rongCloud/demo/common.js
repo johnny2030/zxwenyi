@@ -14,17 +14,21 @@ window.RongDemo = {
                     'userId':targetId
                 }
             }).success(function (res) {
+                debugger;
                 obj.onSuccess({name:res.name,userId:res.id,portraitUri:res.photo});
             }).error(function (error) {
                 alert("请求失败");
             })
         });
 
-        $scope.setconversation = function () {
-            if (!!$scope.targetId) {
+        $scope.setconversation = function (id,name) {
+            debugger;
+            if (id != ""){
+                WebIMWidget.setConversation(Number($scope.targetType), id, name);
+            }else {
                 WebIMWidget.setConversation(Number($scope.targetType), $scope.targetId, $scope.name);
-                WebIMWidget.show();
             }
+            WebIMWidget.show();
         };
 
         $scope.show = function() {
