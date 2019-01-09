@@ -4,7 +4,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     $scope.targetType = 1; //1：私聊 更多会话类型查看http://www.rongcloud.cn/docs/api/js/global.html#ConversationType
     $http({
         method:'GET',
-        url:'/index.php',
+        url:'/zxwenyi/index.php',
         params:{
             'g':'portal',
             'm':'rong',
@@ -27,7 +27,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     $scope.setconversation = function(id) {
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -37,6 +37,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
         }).success(function (res) {
             if(res == 0){
                 $("#show").css("display","none");
+                document.body.style.backgroundColor="#fff";
                 WebIMWidget.setConversation($scope.targetType, $scope.targetId, $scope.name);
             } else if (res == 1){
                 alert("聊天对接失败");
@@ -54,7 +55,7 @@ demo.controller("main", ["$scope",'$http', "WebIMWidget", function($scope,$http,
     WebIMWidget.setUserInfoProvider(function(targetId,obj){
         $http({
             method:'GET',
-            url:'/index.php',
+            url:'/zxwenyi/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',

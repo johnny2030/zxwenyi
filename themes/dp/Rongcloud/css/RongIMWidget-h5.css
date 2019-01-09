@@ -1103,7 +1103,7 @@ body{
     background: #fff;
     width: 100%;
     padding: 0 0.4rem;
-    height: 169px;
+    height: 5.3rem;
     /*padding: 25px 0 17px;*/
 }
 .rongcloud-pub-faces .rongcloud-ui-carousel {
@@ -1267,8 +1267,8 @@ li {
     height: 1.2rem;
 }
 .rongcloud-footerBtn .rongcloud-shortWord>a>li:first-child{
-    background-position: 0.45rem 0.3rem;
-    background-size: 2.1rem auto;
+    background-position: 0.4rem 0.2rem;
+    background-size: 0.8rem auto;
 }
 .rongcloud-footerBtn .rongcloud-voices{
     position: absolute;
@@ -1286,7 +1286,7 @@ li {
     background-size: 0.7rem auto;
 }
 .rongcloud-send_btn{
-    width: 1.8rem;
+    width: 2rem;
     line-height:44px;
     padding:0 0.4rem;
     color: #fff;
@@ -1294,6 +1294,9 @@ li {
     right: 0;
     bottom: 0;
     text-decoration: none;
+}
+.rongcloud-sprite-swd{
+    background: url(../images/star_on.png) no-repeat;
 }
 .rongcloud-star-on{
   display: inline-block;
@@ -1365,11 +1368,11 @@ li {
   margin-left: -2rem;
 }
 .shortWord{
-    width: 23%;
-    height: 1.2rem;
-    margin: 0.1rem 5% 0.1rem 5%;
-    text-align: center;
-    line-height: 1.2rem;
+    width: 25%;
+    height: 1.4rem;
+    margin: 0.1rem 4% 0.1rem 4%;
+    float: left;
+    line-height: 2rem;
     display:inline-block;
     word-break:keep-all;
     white-space:nowrap;

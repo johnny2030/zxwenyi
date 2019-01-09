@@ -160,18 +160,27 @@ class MessagesController extends CheckController  {
         $where_r['message_id'] = array('eq',$msg_Info['id']);
         $where_r['user_id'] = array('eq',$msg_Info['user_id']);
         $list = $this->common_record_model->where($where_r)->select();
+        $chat_list = array();
         //咨询记录
         if ($msg_Info['status'] == 2){
             $where = array();
             $where['msg_id'] = array('eq',$id);
-            $chat_list = $this->common_chat_model->where($where)->select();
+            $chat_lists = $this->common_chat_model->where($where)->select();
+            foreach ($chat_lists as $chat) {
+                $content = urldecode($chat['content']);
+                $chat['content'] = $content;
+                $chat_list[] = $chat;
+            }
             $elte_info = $this->common_evaluate_model->where($where)->find();
-        }
-        //问题返回记录
-        if ($type != 0 && !empty($msg_Info['operation_reason'])){
+        } elseif ($type != 0 && !empty($msg_Info['operation_reason'])){
+            //问题返回记录
             $where = array();
             $where['msg_id'] = array('eq',$id);
-            $chat_list = $this->common_chat_model->where($where)->select();
+            $chat_lists = $this->common_chat_model->where($where)->select();
+            foreach ($chat_lists as $chat) {
+                $chat['content'] = urldecode($chat['content']);
+                $chat_list[] = $chat;
+            }
         }
         if ($type == 0){
             if (empty($msg_Info['doctor_id'])){
@@ -213,13 +222,12 @@ class MessagesController extends CheckController  {
                 $chat_list[] = $chat;
             }
             $elte_info = $this->common_evaluate_model->where($where)->find();
-        }
-        //问题返回记录
-        if (!empty($msg_Info['operation_reason'])){
+        } elseif (!empty($msg_Info['operation_reason'])){
+            //问题返回记录
             $where = array();
             $where['msg_id'] = array('eq',$id);
-            $chat_list = $this->common_chat_model->where($where)->select();
-            foreach ($chat_list as $chat) {
+            $chat_lists = $this->common_chat_model->where($where)->select();
+            foreach ($chat_lists as $chat) {
                 $chat['content'] = urldecode($chat['content']);
                 $chat_list[] = $chat;
             }

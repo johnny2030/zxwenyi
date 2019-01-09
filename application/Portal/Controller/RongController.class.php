@@ -15,6 +15,7 @@ class RongController extends CheckController {
     private $common_chat_model;
     private $common_health_model;
     private $common_healthy_model;
+    private $common_shortword_model;
 
     public function _initialize() {
         parent::_initialize();
@@ -27,6 +28,7 @@ class RongController extends CheckController {
         $this->common_chat_model = D( 'Common_chat' );
         $this->common_health_model = D( 'Common_health' );
         $this->common_healthy_model = D( 'Common_healthy' );
+        $this->common_shortword_model = D( 'Common_shortword' );
     }
     /**
      * 获取token
@@ -156,7 +158,7 @@ class RongController extends CheckController {
             $data['doctor_id'] = $id;
             $data['content'] = $_GET['msg'];
             $data['doctor_time'] = date('Y-m-d H:i:s',time());
-            $result = $this->common_evaluate_model->add($data);
+            $this->common_evaluate_model->add($data);
             //推送通知
             require_once 'today/Wechat_tq.php';
             $wechat = new \Wechat_tq( $this );
@@ -213,6 +215,137 @@ class RongController extends CheckController {
         }else{
             $this->ajaxReturn(1);
         }
+    }
+    public function set_time(){
+        $id=session('login_id');
+        $type=(int)session('type');
+        $msg_id = $_GET['msgId'];
+        if ($msg_id == 0){//用户回访
+            //记录聊天时间
+            $data = array();
+            $data['chat_time'] = date('Y-m-d H:i:s',time());
+            $data['d_id'] = session('login_id');
+            $data['p_id'] = session('send_id');
+            $result = $this->common_chattime_model->add($data);
+            if ($result){
+                $user = $this->common_user_model->find($id);
+                $sendUser = $this->common_user_model->find(session('send_id'));
+                $this->template_sends($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index&send_id='.session('send_id'));
+                $this->ajaxReturn('0');
+            }else{
+                $this->ajaxReturn('1');
+            }
+        }else{//用户咨询
+            $msg_info = $this->common_messages_model->find($msg_id);
+            if ($msg_info['status'] == 0){
+                //记录聊天时间
+                $data = array();
+                $data['chat_time'] = date('Y-m-d H:i:s',time());
+                $data['d_id'] = session('login_id');
+                $data['p_id'] = session('send_id');
+                $this->common_chattime_model->add($data);
+                //修改咨询状态
+                if ($type != 3){
+                    $data_msg = array();
+                    $data_msg['doctor_id'] = session('login_id');
+                    $data_msg['status'] = 1;
+                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+                }else{
+                    $data_msg = array();
+                    if ($msg_info['type'] == 3){
+                        $data_msg['type'] = 0;
+                    }
+                    $data_msg['status'] = 1;
+                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
+                }
+                if ($result){
+                    session('msg_id',$msg_id);
+                    $user = $this->common_user_model->find($msg_info['doctor_id']);
+                    $sendUser = $this->common_user_model->find($msg_info['user_id']);
+                    if ($type == 0){
+                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+                    }else{
+                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
+                    }
+                    $this->template_send($user,$sendUser,$url);
+                    $this->ajaxReturn('0');
+                }else{
+                    $this->ajaxReturn('1');
+                }
+            }elseif ($msg_info['doctor_id'] == $id){
+                session('msg_id',$msg_id);
+                $this->ajaxReturn('0');
+            }elseif ($msg_info['user_id'] == $id){
+                session('msg_id',$msg_id);
+                $this->ajaxReturn('0');
+            }else{
+                $this->ajaxReturn('2');
+            }
+            /*elseif ($type == 3){
+                session('msg_id',$msg_id);
+                $this->ajaxReturn('0');
+            }*/
+        }
+    }
+    public function chat_history(){
+        $login_id = session('login_id');
+        $msg_id = session('msg_id');
+        $type = session('type');
+        $userId = $_GET['userId'];
+        $msg = urlencode($_GET['msg']);
+        $photo = $_GET['photo'];
+        $data = array();
+        $data['msg_id'] = $msg_id;
+        if (empty($type)){
+            $data['user_id'] = $login_id;
+            $data['doctor_id'] = $userId;
+            $data['status'] = 1;
+        }else{
+            $data['user_id'] = $userId;
+            $data['doctor_id'] = $login_id;
+            $data['status'] = 2;
+        }
+        if (empty($msg)){
+            $data['photo'] = $photo;
+        }else{
+            $data['content'] = $msg;
+        }
+        $data['create_time'] = date('Y-m-d H:i:s',time());
+        $result = $this->common_chat_model->add($data);
+        if ($result){
+            $this->ajaxReturn('0');
+        }else{
+            $this->ajaxReturn('1');
+        }
+    }
+    //点击用户头像查看详情
+    public function show_msg(){
+        $user_id = $_GET['userId'];
+        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->where(array('u.id' => $user_id))->find();
+        //我的疾病
+        $where = array();
+        $where['y.user_id'] = array('eq',$user_id);
+        $lists = $this->common_healthy_model->alias('y')->field('h.*')->join('__COMMON_HEALTH__ h ON h.id=y.healthy')->where($where)->select();
+
+        $this->assign( 'msg_id', session('msg_id') );
+        $this->assign( 'lists', $lists );
+        $this->assign( 'patient', $user );
+        $this->display('../Tieqiao/user_detail');
+    }
+    //获取快捷回复
+    public function getShortWord(){
+        $type = session('type');
+        $where = array();
+        $where['del_flg'] = array('eq',0);
+        if ($type == 3){
+            $list = $this->common_shortword_model->where($where)->select();
+        }else{
+            $where['status'] = array('eq',1);
+            $list = $this->common_shortword_model->where($where)->select();
+        }
+        $this->ajaxReturn($list);
     }
     public function checkUser() {
         $id = session('login_id');
@@ -363,123 +496,7 @@ class RongController extends CheckController {
         );
         $wechat->templateSend($sendUser['open_id'],$url,$data);
     }
-    public function set_time(){
-        $id=session('login_id');
-        $type=(int)session('type');
-        $msg_id = $_GET['msgId'];
-        if ($msg_id == 0){//用户回访
-            //记录聊天时间
-            $data = array();
-            $data['chat_time'] = date('Y-m-d H:i:s',time());
-            $data['d_id'] = session('login_id');
-            $data['p_id'] = session('send_id');
-            $result = $this->common_chattime_model->add($data);
-            if ($result){
-                $user = $this->common_user_model->find($id);
-                $sendUser = $this->common_user_model->find(session('send_id'));
-                $this->template_sends($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index&send_id='.session('send_id'));
-                $this->ajaxReturn('0');
-            }else{
-                $this->ajaxReturn('1');
-            }
-        }else{//用户咨询
-            $msg_info = $this->common_messages_model->find($msg_id);
-            if ($msg_info['status'] == 0){
-                //记录聊天时间
-                $data = array();
-                $data['chat_time'] = date('Y-m-d H:i:s',time());
-                $data['d_id'] = session('login_id');
-                $data['p_id'] = session('send_id');
-                $this->common_chattime_model->add($data);
-                //修改咨询状态
-                if ($type != 3){
-                    $data_msg = array();
-                    $data_msg['doctor_id'] = session('login_id');
-                    $data_msg['status'] = 1;
-                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
-                }else{
-                    $data_msg = array();
-                    if ($msg_info['type'] == 3){
-                        $data_msg['type'] = 0;
-                    }
-                    $data_msg['status'] = 1;
-                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
-                }
-                if ($result){
-                    session('msg_id',$msg_id);
-                    $user = $this->common_user_model->find($msg_info['doctor_id']);
-                    $sendUser = $this->common_user_model->find($msg_info['user_id']);
-                    if ($type == 0){
-                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
-                    }else{
-                        $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
-                    }
-                    $this->template_send($user,$sendUser,$url);
-                    $this->ajaxReturn('0');
-                }else{
-                    $this->ajaxReturn('1');
-                }
-            }elseif ($type == 3){
-                session('msg_id',$msg_id);
-                $this->ajaxReturn('0');
-            }elseif ($msg_info['doctor_id'] == $id){
-                session('msg_id',$msg_id);
-                $this->ajaxReturn('0');
-            }elseif ($msg_info['user_id'] == $id){
-                session('msg_id',$msg_id);
-                $this->ajaxReturn('0');
-            }else{
-                $this->ajaxReturn('2');
-            }
-        }
-    }
-    public function chat_history(){
-        $login_id = session('login_id');
-        $msg_id = session('msg_id');
-        $type = session('type');
-        $userId = $_GET['userId'];
-        $msg = urlencode($_GET['msg']);
-        $photo = $_GET['photo'];
-        $data = array();
-        $data['msg_id'] = $msg_id;
-        if (empty($type)){
-            $data['user_id'] = $login_id;
-            $data['doctor_id'] = $userId;
-            $data['status'] = 1;
-        }else{
-            $data['user_id'] = $userId;
-            $data['doctor_id'] = $login_id;
-            $data['status'] = 2;
-        }
-        if (empty($msg)){
-            $data['photo'] = $photo;
-        }else{
-            $data['content'] = $msg;
-        }
-        $data['create_time'] = date('Y-m-d H:i:s',time());
-        $result = $this->common_chat_model->add($data);
-        if ($result){
-            $this->ajaxReturn('0');
-        }else{
-            $this->ajaxReturn('1');
-        }
-    }
-    //点击用户头像查看详情
-    public function show_msg(){
-        $user_id = $_GET['userId'];
-        $user = $this->common_user_model->alias('u')->field('u.*,h.name as name_h')->join('__COMMON_HEALTH__ h ON u.health=h.id','left')->where(array('u.id' => $user_id))->find();
-        //我的疾病
-        $where = array();
-        $where['y.user_id'] = array('eq',$user_id);
-        $lists = $this->common_healthy_model->alias('y')->field('h.*')->join('__COMMON_HEALTH__ h ON h.id=y.healthy')->where($where)->select();
 
-        $this->assign( 'msg_id', session('msg_id') );
-        $this->assign( 'lists', $lists );
-        $this->assign( 'patient', $user );
-        $this->display('../Tieqiao/user_detail');
-    }
     /**
      * 生成毫秒级时间戳
      */
