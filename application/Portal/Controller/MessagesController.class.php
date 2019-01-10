@@ -292,6 +292,7 @@ class MessagesController extends CheckController  {
         $data = array();
         $data['type'] = 2;
         $data['status'] = 0;
+        $data['doctor_id'] = '';
         $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $msg_id))->save($data);
@@ -324,6 +325,7 @@ class MessagesController extends CheckController  {
         $data = array();
         $data['type'] = 1;
         $data['status'] = 0;
+        $data['doctor_id'] = '';
         $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $id))->save($data);
