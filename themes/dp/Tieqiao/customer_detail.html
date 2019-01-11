@@ -259,11 +259,19 @@
 					</div>
 				</nav>
 				<elseif condition="$type neq 0 && $msg.type neq 3"/>
-				<nav class="mui-bar mui-bar-tab">
-					<div class="zixun-nav">
-						<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即查看</button>
+				<notempty name="msg.doctor_id">
+					<if condition="$msg.doctor_id eq $login_id">
+						<nav class="mui-bar mui-bar-tab">
+							<div class="zixun-nav">
+								<button type="button" class="mui-pull-right" ng-click="setconversation('{$msg.id}')">立即查看</button>
+							</div>
+						</nav>
+					</if>
+					<else />
+					<div style="text-align: center;">
+						<a id="handle" class="mui-btn mui-btn-primary footer-btn" href="javascript:void(0);" style="line-height: 27px;width: 50% !important;">确认受理</a>
 					</div>
-				</nav>
+				</notempty>
 			</if>
 		</if>
 	</div>
@@ -281,6 +289,43 @@
     mui('.mui-scroll-wrapper').scroll();
 </script>
 <script type="text/javascript">
+    if ("{$msg['doctor_id']}" == ""){
+        document.getElementById("handle").addEventListener('tap', function() {
+            var btnArray = ['确定', '取消'];
+            mui.confirm('确定受理此次咨询？', '铁樵健康提醒您', btnArray, function(e) {
+                var id = parseInt("{$msg['id']}");
+                if (e.index == 0) {
+                    $.ajax({
+                        async:false,
+                        type : "get",
+                        url : "index.php?g=portal&m=messages&a=handle",
+                        data : {
+                            'msg_id' : id
+                        },
+                        dataType : "json",
+                        success : function(data) {
+                            if(data == 0){
+                                mui.alert('您已成功受理此次咨询，请尽快处理！', '温馨提醒', function() {
+                                    window.location.href='{:U("portal/messages/detail",array("id"=>$msg["id"]))}';
+                                });
+                            }else if (data == 1){
+                                mui.alert('此次咨询已被受理！', '温馨提醒', function() {
+                                    window.location.href='{:U("portal/messages/detail",array("id"=>$msg["id"]))}';
+                                });
+                            }else{
+                                mui.alert('咨询受理失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {
+                                    window.location.href='{:U("portal/messages/detail",array("id"=>$msg["id"]))}';
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    return;
+                }
+            })
+        });
+    }
+
     $(function(){
         var index = 8;
         if ("{$elte_info['elte']}" != ""){

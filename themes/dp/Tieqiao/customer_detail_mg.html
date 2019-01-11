@@ -378,7 +378,7 @@
                                     });
                                 }else if (data == 1){
                                     mui.alert('此次咨询已被受理！', '温馨提醒', function() {
-                                        window.location.href='{:U("portal/user/question")}';
+                                        window.location.href='{:U("portal/messages/detail_mg",array("id"=>$msg["id"]))}';
                                     });
                                 }else{
                                     mui.alert('咨询受理失败，请再次尝试或者联系技术人员！', '温馨提醒', function() {

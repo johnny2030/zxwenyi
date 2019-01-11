@@ -196,6 +196,7 @@ class MessagesController extends CheckController  {
         $this->assign( 'chat_list', $chat_list );
         $this->assign( 'elte_info', $elte_info );
         $this->assign( 'type', $type );
+        $this->assign( 'login_id', session('login_id') );
         $this->display('../Tieqiao/customer_detail');
     }
     //问题详情（管理员）
@@ -245,18 +246,34 @@ class MessagesController extends CheckController  {
     function handle(){
         $msg_id = $_GET['msg_id'];
         $id = (int)session('login_id');
+        $type = (int)session('type');
         $msg_info = $this->common_messages_model->find($msg_id);
-        if (empty($msg_info['manager_id'])){
-            $data = array();
-            $data['manager_id'] = $id;
-            $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data);
-            if ($result){
-                $this->ajaxReturn('0');
+        if ($type != 3){
+            if (empty($msg_info['doctor_id'])){
+                $data = array();
+                $data['doctor_id'] = $id;
+                $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data);
+                if ($result){
+                    $this->ajaxReturn('0');
+                }else{
+                    $this->ajaxReturn('2');
+                }
             }else{
-                $this->ajaxReturn('2');
+                $this->ajaxReturn('1');
             }
         }else{
-            $this->ajaxReturn('1');
+            if (empty($msg_info['manager_id'])){
+                $data = array();
+                $data['manager_id'] = $id;
+                $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data);
+                if ($result){
+                    $this->ajaxReturn('0');
+                }else{
+                    $this->ajaxReturn('2');
+                }
+            }else{
+                $this->ajaxReturn('1');
+            }
         }
     }
     //判断处理次数
@@ -292,7 +309,6 @@ class MessagesController extends CheckController  {
         $data = array();
         $data['type'] = 2;
         $data['status'] = 0;
-        $data['doctor_id'] = '';
         $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $msg_id))->save($data);
@@ -325,7 +341,6 @@ class MessagesController extends CheckController  {
         $data = array();
         $data['type'] = 1;
         $data['status'] = 0;
-        $data['doctor_id'] = '';
         $data['operation_fq'] = $msg_info['operation_fq'] + 1;
         $data['operation_time'] = date('Y-m-d H:i:s',time());
         $this->common_messages_model->where(array('id' => $id))->save($data);

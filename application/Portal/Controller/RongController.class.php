@@ -94,48 +94,99 @@ class RongController extends CheckController {
         $msg_id = session('msg_id');
         $type = session('type');
         $user = $this->common_user_model->find($id);
-        $msg_info = $this->common_messages_model->find($msg_id);
-        if ($msg_info['status'] != 2){
+        //用户回访
+        if ($msg_id == 0){
             //暂时使用
             $where = array();
-            //接收人
-            $sendId = $_GET['userId'];
-            $sendUser = $this->common_user_model->find($sendId);
             if ($type == 0){
                 $where['d_id'] = array('eq',$_GET['userId']);
-                $where['p_id'] = array('eq',session('login_id'));
-                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+                $where['p_id'] = array('eq',$id);
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=user_detail&user_id='.$id;
             }else{
                 $where['p_id'] = array('eq',$_GET['userId']);
-                $where['d_id'] = array('eq',session('login_id'));
+                $where['d_id'] = array('eq',$id);
                 $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
             }
+            $where['msg_id'] = array('eq',$msg_id);
+            $where['del_flg'] = array('eq',0);
             $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
-            $time = strtotime(date('Y-m-d H:i:s',time()));
-            if (empty($chat['chat_end_time'])){
-                $data = array();
-                $data['chat_end_time'] = date('Y-m-d H:i:s',time());
-                $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
-                $this->template_send($user,$sendUser,$url);
-            }else{
-                $chat_end_time = strtotime($chat['chat_end_time']);
-                $timediff = $time-$chat_end_time;
-                $remain = $timediff%86400;
-                $remain = $remain%3600;
-                $mins = intval($remain/60);
-                if ($mins>5){
-                    $this->template_send($user,$sendUser,$url);
-                }
-                $data = array();
-                $data['chat_end_time'] = date('Y-m-d H:i:s',time());
-                $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
-            }
-            $this->ajaxReturn(1);
-        }else{
-            if ($type == 3){
-                $this->ajaxReturn(1);
-            }else{
+            if (empty($chat)){
                 $this->ajaxReturn(0);
+            }else{
+                //接收人
+                $sendId = $_GET['userId'];
+                $sendUser = $this->common_user_model->find($sendId);
+                $time = strtotime(date('Y-m-d H:i:s',time()));
+                if (empty($chat['chat_end_time'])){
+                    $data = array();
+                    $data['chat_end_time'] = date('Y-m-d H:i:s',time());
+                    $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
+                    $this->template_sends($user,$sendUser,$url);
+                }else{
+                    $chat_end_time = strtotime($chat['chat_end_time']);
+                    $timediff = $time-$chat_end_time;
+                    $remain = $timediff%86400;
+                    $remain = $remain%3600;
+                    $mins = intval($remain/60);
+                    if ($mins>5){
+                        $this->template_sends($user,$sendUser,$url);
+                    }
+                    $data = array();
+                    $data['chat_end_time'] = date('Y-m-d H:i:s',time());
+                    $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
+                }
+                $this->ajaxReturn(1);
+            }
+        }else{
+            $msg_info = $this->common_messages_model->find($msg_id);
+            if ($msg_info['status'] != 2){
+                //暂时使用
+                $where = array();
+                if ($type == 0){
+                    $where['d_id'] = array('eq',$_GET['userId']);
+                    $where['p_id'] = array('eq',session('login_id'));
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+                }else{
+                    $where['p_id'] = array('eq',$_GET['userId']);
+                    $where['d_id'] = array('eq',session('login_id'));
+                    $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
+                }
+                $where['msg_id'] = array('eq',$msg_id);
+                $where['del_flg'] = array('eq',0);
+                $chat = $this->common_chattime_model->where($where)->order('chat_time desc')->find();
+                if (empty($chat)){
+                    $this->ajaxReturn(0);
+                }else{
+                    //接收人
+                    $sendId = $_GET['userId'];
+                    $sendUser = $this->common_user_model->find($sendId);
+                    $time = strtotime(date('Y-m-d H:i:s',time()));
+                    if (empty($chat['chat_end_time'])){
+                        $data = array();
+                        $data['chat_end_time'] = date('Y-m-d H:i:s',time());
+                        $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
+                        $this->template_send($user,$sendUser,$url);
+                    }else{
+                        $chat_end_time = strtotime($chat['chat_end_time']);
+                        $timediff = $time-$chat_end_time;
+                        $remain = $timediff%86400;
+                        $remain = $remain%3600;
+                        $mins = intval($remain/60);
+                        if ($mins>5){
+                            $this->template_send($user,$sendUser,$url);
+                        }
+                        $data = array();
+                        $data['chat_end_time'] = date('Y-m-d H:i:s',time());
+                        $this->common_chattime_model->where(array('id' => $chat['id']))->save($data);
+                    }
+                    $this->ajaxReturn(1);
+                }
+            }else{
+                if ($type == 3){
+                    $this->ajaxReturn(1);
+                }else{
+                    $this->ajaxReturn(0);
+                }
             }
         }
     }
@@ -152,6 +203,10 @@ class RongController extends CheckController {
             $msgInfo['status'] = 2;
             $msgInfo['end_time'] = date('Y-m-d H:i:s',time());
             $this->common_messages_model->where(array('id' => $msg_id))->save($msgInfo);
+            //聊天失效
+            $data = array();
+            $data['del_flg'] = 1;
+            $this->common_chattime_model->where(array('msg_id' => $msg_id))->save($data);
             //添加总结
             $data = array();
             $data['msg_id'] = $msg_id;
@@ -208,9 +263,19 @@ class RongController extends CheckController {
         $msgInfo['operation_reason'] = $_GET['msg'];
         $result = $this->common_messages_model->where(array('id' => $msg_id))->save($msgInfo);
         if ($result){
+            //聊天失效
+            $data = array();
+            $data['del_flg'] = 1;
+            $this->common_chattime_model->where(array('msg_id' => $msg_id))->save($data);
+            //推送
             $msg_info = $this->common_messages_model->find($msg_id);
             $sendUser = $this->common_user_model->find($msg_info['manager_id']);
-            $this->template_send_r($sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id);
+            if ($sendUser['type'] == 0){
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
+            }else{
+                $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail_mg&id='.$msg_id;
+            }
+            $this->template_send_r($sendUser,$url);
             $this->ajaxReturn(0);
         }else{
             $this->ajaxReturn(1);
@@ -223,14 +288,15 @@ class RongController extends CheckController {
         if ($msg_id == 0){//用户回访
             //记录聊天时间
             $data = array();
+            $data['msg_id'] = $msg_id;
             $data['chat_time'] = date('Y-m-d H:i:s',time());
             $data['d_id'] = session('login_id');
             $data['p_id'] = session('send_id');
             $result = $this->common_chattime_model->add($data);
             if ($result){
-                $user = $this->common_user_model->find($id);
+                /*$user = $this->common_user_model->find($id);
                 $sendUser = $this->common_user_model->find(session('send_id'));
-                $this->template_sends($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index&send_id='.session('send_id'));
+                $this->template_sends($user,$sendUser,'http://tieqiao.zzzpsj.com/index.php?g=portal&m=rong&a=index&send_id='.session('send_id'));*/
                 $this->ajaxReturn('0');
             }else{
                 $this->ajaxReturn('1');
@@ -240,36 +306,32 @@ class RongController extends CheckController {
             if ($msg_info['status'] == 0){
                 //记录聊天时间
                 $data = array();
+                $data['msg_id'] = $msg_id;
                 $data['chat_time'] = date('Y-m-d H:i:s',time());
                 $data['d_id'] = session('login_id');
                 $data['p_id'] = session('send_id');
                 $this->common_chattime_model->add($data);
                 //修改咨询状态
-                if ($type != 3){
-                    $data_msg = array();
-                    $data_msg['doctor_id'] = session('login_id');
-                    $data_msg['status'] = 1;
-                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
-                }else{
-                    $data_msg = array();
+                if ($type == 3){
                     if ($msg_info['type'] == 3){
                         $data_msg['type'] = 0;
                     }
-                    $data_msg['status'] = 1;
-                    $data_msg['start_time'] = date('Y-m-d H:i:s',time());
-                    $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
                 }
+                $data_msg = array();
+                $data_msg['doctor_id'] = session('login_id');
+                $data_msg['status'] = 1;
+                $data_msg['start_time'] = date('Y-m-d H:i:s',time());
+                $result = $this->common_messages_model->where(array('id' => $msg_id))->save($data_msg);
                 if ($result){
                     session('msg_id',$msg_id);
-                    $user = $this->common_user_model->find($msg_info['doctor_id']);
+                    /*$user = $this->common_user_model->find($msg_info['doctor_id']);
                     $sendUser = $this->common_user_model->find($msg_info['user_id']);
                     if ($type == 0){
                         $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=detail&id='.$msg_id;
                     }else{
                         $url = 'http://tieqiao.zzzpsj.com/index.php?g=portal&m=messages&a=chat_p&id='.$msg_id;
                     }
-                    $this->template_send($user,$sendUser,$url);
+                    $this->template_send($user,$sendUser,$url);*/
                     $this->ajaxReturn('0');
                 }else{
                     $this->ajaxReturn('1');
@@ -487,13 +549,24 @@ class RongController extends CheckController {
         //发送模板消息
         require_once 'today/Wechat_tq.php';
         $wechat = new \Wechat_tq( $this );
-        $data=array(
-            'serviceInfo'=>array('value'=>urlencode("您好，有医生返回了咨询问题，请及时查看。"),'color'=>"#36648B"),
-            'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
-            'serviceStatus'=>array('value'=>urlencode('问题返回'),'color'=>'#36648B'),
-            'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
-            'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF3030'),
-        );
+        if ($sendUser['type'] == 0){
+            $data=array(
+                'serviceInfo'=>array('value'=>urlencode("您好，您的咨询正在转发中，转发完成后将会再次推送提醒您，给您造成的不便敬请谅解。"),'color'=>"#36648B"),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
+                'serviceStatus'=>array('value'=>urlencode('问题转发'),'color'=>'#36648B'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击这里查看问题详情'),'color'=>'#FF3030'),
+            );
+        }else{
+            $data=array(
+                'serviceInfo'=>array('value'=>urlencode("您好，有医生返回了咨询问题，请及时查看。"),'color'=>"#36648B"),
+                'serviceType'=>array('value'=>urlencode('问题咨询'),'color'=>'#36648B'),
+                'serviceStatus'=>array('value'=>urlencode('问题返回'),'color'=>'#36648B'),
+                'time'=>array('value'=>urlencode(date('Y-m-d H:i:s',time())),'color'=>'#36648B'),
+                'remark'=>array('value'=>urlencode('点击这里查看回复'),'color'=>'#FF3030'),
+            );
+        }
+
         $wechat->templateSend($sendUser['open_id'],$url,$data);
     }
 
