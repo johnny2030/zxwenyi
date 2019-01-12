@@ -332,7 +332,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -366,7 +366,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         });
         $http({
             method:'GET',
-            url:'/zxwenyi/index.php',
+            url:'/index.php',
             params:{
                 'g':'portal',
                 'm':'rong',
@@ -411,7 +411,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             var shtw = document.getElementById("shtw");
             $http({
                 method:'GET',
-                url:'/zxwenyi/index.php',
+                url:'/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -447,7 +447,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
         $scope.show_msg = function () {
             $http({
                 method:'GET',
-                url:'/zxwenyi/index.php',
+                url:'/index.php',
                 params:{
                     'g':'portal',
                     'm':'rong',
@@ -472,7 +472,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                     }else{
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -494,7 +494,14 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 }
             }, 'div');
             $('.mui-popup-input').html('');
-            $('.mui-popup-input').append('<textarea placeholder="请输入返回原因" style="height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;"></textarea>');
+            $('.mui-popup-input').append('<textarea placeholder="请输入返回原因" contenteditable="true" style="-webkit-user-select: auto;height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;"></textarea>');
+            /*var mpi = document.getElementById("mui-popup-input");
+            var compileFns=$compile('');
+            var $doms=compileFns($scope);
+            $doms.appendTo(mpi);
+            var compileFn=$compile('<textarea placeholder="请输入返回原因" style="height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;"></textarea>');
+            var $dom=compileFn($scope);
+            $dom.appendTo(mpi);*/
         });
         document.getElementById("endChat").addEventListener('tap', function (e) {
             e.detail.gesture.preventDefault();
@@ -507,7 +514,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                     }else{
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -529,7 +536,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                 }
             }, 'div');
             $('.mui-popup-input').html('');
-            $('.mui-popup-input').append('<textarea placeholder="请输入咨询小结" contenteditable="true" style="height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;-webkit-user-select: auto;"></textarea>');
+            $('.mui-popup-input').append('<textarea placeholder="请输入咨询小结" contenteditable="true" style="-webkit-user-select: auto;height: 3rem;padding:0.2rem 0.2rem;border:1px solid rgba(0,0,0,.2);margin-top:0.3rem;"></textarea>');
         });
         $scope.$watch("currentConversation.messageContent", function (newVal, oldVal) {
             if (newVal === oldVal)
@@ -924,7 +931,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
             }else {
                 $http({
                     method:'GET',
-                    url:'/zxwenyi/index.php',
+                    url:'/index.php',
                     params:{
                         'g':'portal',
                         'm':'rong',
@@ -961,7 +968,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -1108,7 +1115,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                         }
                         $http({
                             method:'GET',
-                            url:'/zxwenyi/index.php',
+                            url:'/index.php',
                             params:{
                                 'g':'portal',
                                 'm':'rong',
@@ -1138,7 +1145,7 @@ conversationController.controller("conversationController", ["$scope",'$compile'
                                     $scope.refreshiScroll();
                                     $http({
                                         method:'GET',
-                                        url:'/zxwenyi/index.php',
+                                        url:'/index.php',
                                         params:{
                                             'g':'portal',
                                             'm':'rong',

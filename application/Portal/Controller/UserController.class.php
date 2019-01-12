@@ -20,6 +20,8 @@ class UserController extends CheckController {
     private $common_result_model;
     private $common_result_rel_model;
     private $common_operation_model;
+    private $common_schedule_model;
+    private $common_schedule_info_model;
 
 	function _initialize() {
 		parent::_initialize();
@@ -38,6 +40,8 @@ class UserController extends CheckController {
         $this->common_result_model = D( 'Common_result' );
         $this->common_result_rel_model = D( 'Common_result_rel' );
         $this->common_operation_model = D( 'Common_operation' );
+        $this->common_schedule_model = D( 'Common_schedule' );
+        $this->common_schedule_info_model = D( 'Common_schedule_info' );
 	}
     //用户身份判断
     public function user_info() {
@@ -160,6 +164,11 @@ class UserController extends CheckController {
     public function doctor_detail() {
         $user_id = $_GET['user_id'];
         $doctor = $this->common_user_model->alias('u')->field('u.*,o.name as office_n,t.name as tag_n')->join('__COMMON_OFFICE__ o ON u.office=o.id','left')->join('__COMMON_TAG__ t ON u.tag=t.id','left')->where(array('u.id' => $user_id))->find();
+        //排班表
+        $where = array();
+        $where['si.user_id'] = array('eq',$user_id);
+        $scd_list = $this->common_schedule_model->alias('s')->field('s.*,si.hospital as hospital,si.time as time,si.office as office,si.nature as nature')->join('__COMMON_SCHEDULE_INFO__ si ON si.scd_id=s.id','left')->where($where)->order("s.week asc")->select();
+        $this->assign( 'scd_list', $scd_list );
         $this->assign( 'doctor', $doctor );
         $this->display('../Tieqiao/doctor_detail');
     }

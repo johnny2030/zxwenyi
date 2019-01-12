@@ -9,11 +9,15 @@ use Common\Controller\AdminbaseController;
 class DoctorController extends AdminbaseController {
 
     private $common_user_model;
+    private $common_schedule_model;
+    private $common_schedule_info_model;
 	
 	function _initialize() {
 		parent::_initialize();
 
         $this->common_user_model = D( 'Common_user' );
+        $this->common_schedule_model = D( 'Common_schedule' );
+        $this->common_schedule_info_model = D( 'Common_schedule_info' );
 	}
 	//医生信息列表
 	function index() {
@@ -102,40 +106,88 @@ class DoctorController extends AdminbaseController {
     }
     //审核通过/驳回
     function check(){
-	    if ( IS_POST ){
-
+        $id = $_GET['id'];
+        $user = $this->common_user_model->find($id);
+        if ($user['status'] == 0){
+            require_once 'today/Wechat_tq.php';
+            $wechat = new \Wechat_tq( $this );
         }else{
-	        $id = $_GET['id'];
-            $user = $this->common_user_model->find($id);
-            if ($user['status'] == 0){
-                require_once 'today/Wechat_tq.php';
-                $wechat = new \Wechat_tq( $this );
+            require_once 'today/Wechat_zj.php';
+            $wechat = new \Wechat_zj( $this );
+        }
+        $reason = $_GET['reason'];
+        $check = $_GET['check'];
+        $data = array();
+        $data['check'] = $check;
+        if (!empty($reason)){
+            $data['reason'] = $reason;
+            $result = $this->common_user_model->where(array('id' => $id))->save($data);
+            if ($result){
+                $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=info_doctor','您的审核被驳回','驳回原因：'.$reason);
+                $this->ajaxReturn(0);
             }else{
-                require_once 'today/Wechat_zj.php';
-                $wechat = new \Wechat_zj( $this );
+                $this->ajaxReturn(1);
             }
-            $reason = $_GET['reason'];
-            $check = $_GET['check'];
-            $data = array();
-            $data['check'] = $check;
-            if (!empty($reason)){
-                $data['reason'] = $reason;
-                $result = $this->common_user_model->where(array('id' => $id))->save($data);
-                if ($result){
-                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=info_doctor','您的审核被驳回','驳回原因：'.$reason);
-                    $this->ajaxReturn(0);
-                }else{
-                    $this->ajaxReturn(1);
+        }else{
+            $result = $this->common_user_model->where(array('id' => $id))->save($data);
+            if ($result) {
+                $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question','您已成为中西医结合学会医生联盟咨询专家，欢迎您参与咨询活动','点击这里立即查看');
+                $this->success('医生审核成功！');
+            } else {
+                $this->error('医生审核失败！');
+            }
+        }
+    }
+    //排班
+    function submenu() {
+        if ( IS_POST ) {
+            $id = $_POST['id'];
+            $ids = $_POST['ids'];
+            $hospital = $_POST['hospital'];
+            $time = $_POST['time'];
+            $office = $_POST['office'];
+            $nature = $_POST['nature'];
+            $info = $this->common_schedule_info_model->where(array('user_id' => $id))->select();
+            if (empty($info)){
+                for ($i = 0; $i < count($ids);$i++){
+                    $data = array();
+                    $data['user_id'] = $id;
+                    $data['scd_id'] = $ids[$i];
+                    $data['hospital'] = $hospital[$i];
+                    $data['time'] = $time[$i];
+                    $data['office'] = $office[$i];
+                    $data['nature'] = $nature[$i];
+                    $this->common_schedule_info_model->add($data);
                 }
             }else{
-                $result = $this->common_user_model->where(array('id' => $id))->save($data);
-                if ($result) {
-                    $wechat->customSendImg($user['open_id'],'http://tieqiao.zzzpsj.com/index.php?g=portal&m=user&a=question','您已成为中西医结合学会医生联盟咨询专家，欢迎您参与咨询活动','点击这里立即查看');
-                    $this->success('医生审核成功！');
-                } else {
-                    $this->error('医生审核失败！');
+                for ($i = 0; $i < count($ids);$i++){
+                    $data = array();
+                    $data['user_id'] = $id;
+                    $data['scd_id'] = $ids[$i];
+                    $data['hospital'] = $hospital[$i];
+                    $data['time'] = $time[$i];
+                    $data['office'] = $office[$i];
+                    $data['nature'] = $nature[$i];
+                    $where = array();
+                    $where['user_id'] = array('eq',$id);
+                    $where['scd_id'] = array('eq',$ids[$i]);
+                    $this->common_schedule_info_model->where($where)->save($data);
                 }
             }
+            $this->display();
+        }else{
+            $id = $_GET['id'];
+            $where = array();
+            $where['si.user_id'] = array('eq',$id);
+            $scd_list = $this->common_schedule_model->alias('s')->field('s.*,si.hospital as hospital,si.time as time,si.office as office,si.nature as nature')->join('__COMMON_SCHEDULE_INFO__ si ON si.scd_id=s.id','left')->where($where)->order("s.week asc,s.times asc")->select();
+            if (empty($scd_list)){
+                $list = $this->common_schedule_model->order("week asc,times asc")->select();
+                $this->assign( 'list', $list );
+            }else{
+                $this->assign( 'list', $scd_list );
+            }
+            $this->assign( 'id', $id );
+            $this->display();
         }
     }
 }

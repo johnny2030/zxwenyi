@@ -38,39 +38,92 @@
 				<span>工作时间</span>
 			</div>
 			<div class="mui-card-content briefing mui-row">
-				<p class="doc-p">{$l.hospital}</p>
-				<ul class="mui-table-view doc-work-sw doc-work-lr mui-col-sm-4 mui-col-xs-4">
-					<li class="doc-work-lt"></li>
-					<li>周一</li>
-					<li>周二</li>
-					<li>周三</li>
-					<li>周四</li>
-					<li>周五</li>
-					<li>周六</li>
-					<li class="doc-work-bt doc-work-lb">周日</li>
-				</ul>
-				<ul class="mui-table-view doc-work-sw doc-work-ct mui-col-sm-4 mui-col-xs-4">
-					<li>上午</li>
-					<li></li>
-					<li></li>
-					<li class="doc-active">特需门诊</li>
-					<li></li>
-					<li></li>
-					<li class="doc-active">专家门诊</li>
-					<li class="doc-work-bt"></li>
-				</ul>
-				<ul class="mui-table-view doc-work-sw doc-work-lr mui-col-sm-4 mui-col-xs-4">
-					<li class="doc-work-rt">下午</li>
-					<li class="doc-active">专家门诊</li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li class="doc-active">特需门诊</li>
-					<li></li>
-					<li class="doc-work-bt doc-work-rb"></li>
-				</ul>
+				<notempty name="scd_list">
+					<ul class="mui-table-view doc-work-sw doc-work-lr mui-col-sm-4 mui-col-xs-4">
+						<li class="doc-work-lt"></li>
+						<li>周一</li>
+						<li>周二</li>
+						<li>周三</li>
+						<li>周四</li>
+						<li>周五</li>
+						<li>周六</li>
+						<li class="doc-work-bt doc-work-lb">周日</li>
+					</ul>
+					<ul class="mui-table-view doc-work-sw doc-work-ct mui-col-sm-4 mui-col-xs-4">
+						<li>上午</li>
+						<foreach name="scd_list" item="sl_m">
+							<if condition="$sl_m.times eq 1">
+								<if condition="$sl_m.week eq 7">
+									<notempty name="sl_m.nature">
+										<li class="doc-active doc-work-bt">
+											<!--<p>{$sl_m.hospital}</p>
+											<p>{$sl_m.time}</p>
+											<p>{$sl_m.office}</p>-->
+											{$sl_m.nature}
+										</li>
+										<else />
+										<li class="doc-work-bt"></li>
+									</notempty>
+									<else />
+									<notempty name="sl_m.nature">
+										<li class="doc-active">
+											<!--<p>{$sl_m.hospital}</p>
+											<p>{$sl_m.time}</p>
+											<p>{$sl_m.office}</p>-->
+											{$sl_m.nature}
+										</li>
+										<else />
+										<li></li>
+									</notempty>
+								</if>
+							</if>
+						</foreach>
+					</ul>
+					<ul class="mui-table-view doc-work-sw doc-work-lr mui-col-sm-4 mui-col-xs-4">
+						<li class="doc-work-rt">下午</li>
+						<foreach name="scd_list" item="sl_a">
+							<if condition="$sl_a.times eq 2">
+								<if condition="$sl_a.week eq 7">
+									<notempty name="sl_a.nature">
+										<li class="doc-active doc-work-bt">
+											<!--<p>{$sl_a.hospital}</p>
+											<p>{$sl_a.time}</p>
+											<p>{$sl_a.office}</p>-->
+											{$sl_a.nature}
+										</li>
+										<else />
+										<li class="doc-work-bt"></li>
+									</notempty>
+									<else />
+									<notempty name="sl_a.nature">
+										<li class="doc-active">
+											<!--<p>{$sl_a.hospital}</p>
+											<p>{$sl_a.time}</p>
+											<p>{$sl_a.office}</p>-->
+											{$sl_a.nature}
+										</li>
+										<else />
+										<li></li>
+									</notempty>
+								</if>
+							</if>
+						</foreach>
+					</ul>
+					<else />
+					暂无记录
+				</notempty>
 			</div>
 		</div>
+	</div>
+	<div class="mui-popover" id="familyData" style="margin-top:10px; margin-left: 6%; width: 80%;">
+		<ul class="mui-table-view" id="areaData" style="max-height: 500px;">
+			<div class="mui-card">
+				<div class="mui-card-header mui-card-media" id="hp_of">
+				</div>
+				<div class="mui-card-content" id="tm">
+				</div>
+			</div>
+		</ul>
 	</div>
 	</body>
 </html>

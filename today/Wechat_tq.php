@@ -760,6 +760,25 @@ class Wechat_tq {
                 $info = sprintf($template, $toUser, $fromUser, $time, $news_arr['news1']['title'], $news_arr['news1']['decription'], $news_arr['news1']['PicUrl'], $news_arr['news1']['Url'], $news_arr['news2']['title'], $news_arr['news2']['decription'], $news_arr['news2']['PicUrl'], $news_arr['news2']['Url'], $news_arr['news3']['title'], $news_arr['news3']['decription'], $news_arr['news3']['PicUrl'], $news_arr['news3']['Url'], $news_arr['news4']['title'], $news_arr['news4']['decription'], $news_arr['news4']['PicUrl'], $news_arr['news4']['Url'], $news_arr['news5']['title'], $news_arr['news5']['decription'], $news_arr['news5']['PicUrl'], $news_arr['news5']['Url'], $news_arr['news6']['title'], $news_arr['news6']['decription'], $news_arr['news6']['PicUrl'], $news_arr['news6']['Url'], $news_arr['news7']['title'], $news_arr['news7']['decription'], $news_arr['news7']['PicUrl'], $news_arr['news7']['Url'], $news_arr['news8']['title'], $news_arr['news8']['decription'], $news_arr['news8']['PicUrl'], $news_arr['news8']['Url']);
                 echo $info;
             }
+        }elseif(strtolower($postObj->MsgType) == 'text') {
+            $content = trim($postObj->Content);//消息内容
+            if (!empty($content)){
+                $toUser		= $postObj->FromUserName;
+                $fromUser	= $postObj->ToUserName;
+                $time = time();
+                //回复文本信息
+                $template = "<xml>
+                              <ToUserName><![CDATA[%s]]></ToUserName>
+                              <FromUserName><![CDATA[%s]]></FromUserName>
+                              <CreateTime>%s</CreateTime>
+                              <MsgType><![CDATA[%s]]></MsgType>
+                              <Content><![CDATA[%s]]></Content>
+                              <FuncFlag>0</FuncFlag>
+                              </xml>";
+                $contentStr = '温馨提醒：本窗口不接受任何咨询服务，如需咨询请点击右下角“会员中心”（会员注册后点击我的咨询即可为您服务）！';
+                $info = sprintf($template, $toUser, $fromUser, $time, 'text', $contentStr);
+                echo $info;
+            }
         }
     }
 }

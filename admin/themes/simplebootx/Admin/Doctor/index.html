@@ -79,6 +79,7 @@
 								<button style="margin-top: 5px;" class="btn btn-warning btn-small" data-toggle="modal" data-target="#myModal" onclick="set_bk('{$vo.id}')">驳回</button>
 								<!--<a style="margin-top: 5px;" href="{:U('doctor/check',array('id'=>$vo['id'],'check'=>2))}" class="btn btn-warning btn-small js-ajax-delete" data-toggle="modal" data-target="#myModal" data-msg="确定驳回？">驳回</a>-->
 							</if>
+							<a class="btn btn-primary btn-small js-ajax-submit" style="margin-top: 5px;" href="javascript:open_iframe_dialog('{:U('doctor/submenu',array('id'=>$vo['id']))}')">排班</a>
 							<a style="margin-top: 5px;" href="{:U('doctor/delete',array('id'=>$vo['id']))}" class="btn btn-danger btn-small js-ajax-delete" data-msg="确定删除？">删除</a>
 						</td>
 					</tr>
