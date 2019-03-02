@@ -18,6 +18,7 @@
 				<thead>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="50">类别</th>
 						<th width="100">用户姓名</th>
 						<th width="50">年龄</th>
 						<th width="50">性别</th>
@@ -35,6 +36,13 @@
 				<foreach name="list" item="vo">
 					<tr>
 						<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+						<td>
+							<notempty name="vo.m_card_id">
+								会员
+								<else />
+								非会员
+							</notempty>
+						</td>
 						<td>{$vo.name}</td>
 						<td>{$vo.age}</td>
 						<td>
@@ -76,6 +84,7 @@
 				<tfoot>
 					<tr>
 						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="50">类别</th>
 						<th width="100">用户姓名</th>
 						<th width="100">年龄</th>
 						<th width="100">性别</th>

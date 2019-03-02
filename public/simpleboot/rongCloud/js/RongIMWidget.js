@@ -1722,6 +1722,9 @@ var RongWebIMWidget;
                     eleminbtn.style["right"] = defaultStyle.right + defaultStyle.width / 2 - eleminbtnWidth / 2 + "px";
                 }
             }
+            eleminbtn.style["left"] = "";
+            eleminbtn.style["right"] = "20px";
+            eleminbtn.style["top"] = "6px";
             if (_this.widgetConfig.displayMinButton == false) {
                 eleminbtn.style["display"] = "none";
             }
