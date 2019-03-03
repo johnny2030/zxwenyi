@@ -218,7 +218,7 @@ class RongController extends CheckController {
             require_once 'today/Wechat_tq.php';
             $wechat = new \Wechat_tq( $this );
             $patient_user = $this->common_user_model->find($_GET['userId']);
-            if (empty($msg_info['doctor_id'])){
+            if ($id = $msg_info['manager_id']){
                 $manager_user = $this->common_user_model->find($id);
             }else{
                 $doctor_user = $this->common_user_model->find($id);

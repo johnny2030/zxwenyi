@@ -69,7 +69,7 @@ class MessagesController extends CheckController  {
             $_POST['user_time'] = date('Y-m-d H:i:s',time());
             $this->common_evaluate_model->where(array('msg_id' => $_POST['msg_id']))->save($_POST);
             $msg_info = $this->common_messages_model->alias('m')->field('m.*,u.name as name')->join('__COMMON_USER__ u ON m.user_id=u.id')->where(array('m.id' => $_POST['msg_id']))->find();
-            if (empty($msg_info['doctor_id'])){
+            if ($msg_info['doctor_id'] = $msg_info['manager_id']){
                 $manager_user = $this->common_user_model->find($msg_info['manager_id']);
             }else{
                 $doctor_user = $this->common_user_model->find($msg_info['doctor_id']);
